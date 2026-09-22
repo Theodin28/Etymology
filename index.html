@@ -133,6 +133,9 @@
   .srcline a:hover{ color:#7c5c1c; border-color:#7c5c1c; }
 
   .doc-foot{ display:flex; align-items:center; gap:14px; margin-top:32px; padding-top:20px; border-top:1px solid var(--paper-line); flex-wrap:wrap; }
+  .cachetag{ font-family:"Spline Sans Mono",monospace; font-size:10.5px; letter-spacing:.04em; color:var(--brass-deep); border:1px solid var(--paper-line); border-radius:999px; padding:4px 11px; display:inline-flex; align-items:center; gap:2px; }
+  .cachetag button{ font:inherit; color:#7c5c1c; background:none; border:none; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+  .cachetag button:hover{ color:#5f4614; }
   .stamp{ font-size:12px; color:var(--on-paper-soft); line-height:1.6; }
   .stamp a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.4); }
   .again{ margin-left:auto; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:14px; color:var(--ink); background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:9px; padding:10px 18px; cursor:pointer; box-shadow:0 6px 14px -8px rgba(154,115,39,.7); }
@@ -245,6 +248,7 @@
       overview:"概要", name:"地名の由来", history:"歴史", sights:"見どころ", food:"名物・特産",
       approx:"おおよその位置", contOn:"Wikipedia で続きを読む",
       source:"出典：Wikipedia（", license:"CC BY-SA 4.0", sourceEnd:"）", another:"別の町を調べる",
+      cached:"保存済み", refresh:"最新に更新", offline:"オフラインです。保存済みの町のみ表示できます。",
       untitled:"不明"
     },
     en: {
@@ -263,6 +267,7 @@
       overview:"Overview", name:"The name", history:"History", sights:"Worth seeing", food:"Local food",
       approx:"Approx. position", contOn:"Continue on Wikipedia",
       source:"Source: Wikipedia (", license:"CC BY-SA 4.0", sourceEnd:")", another:"Trace another town",
+      cached:"saved", refresh:"refresh", offline:"You're offline — only saved towns are available.",
       untitled:"Unknown"
     }
   };
@@ -280,6 +285,47 @@
          sights:["tourism","sights","landmark","points of interest","attractions","places of interest","main sights","culture"],
          food:["cuisine","food","local special","specialit","gastronomy","delicac"] }
   };
+
+  // ---------- cache (localStorage + in-memory fallback) ----------
+  var CACHE = (function(){
+    var PREFIX = "meridian.v1:";
+    var mem = {};
+    var ls = null;
+    try { ls = window.localStorage; ls.setItem(PREFIX+"__t","1"); ls.removeItem(PREFIX+"__t"); }
+    catch(e){ ls = null; }
+    function norm(l, q){ return PREFIX + l + "|" + String(q||"").trim().toLowerCase().replace(/\s+/g," "); }
+    function prune(){
+      if(!ls) return;
+      try{
+        var items = [];
+        for(var i=0;i<ls.length;i++){ var k = ls.key(i); if(k && k.indexOf(PREFIX)===0){
+          var ts = 0; try{ ts = (JSON.parse(ls.getItem(k))||{}).ts||0; }catch(e){}
+          items.push([k, ts]);
+        } }
+        items.sort(function(a,b){ return a[1]-b[1]; });
+        var drop = Math.max(1, Math.ceil(items.length/3));
+        for(var j=0;j<drop && j<items.length;j++){ ls.removeItem(items[j][0]); }
+      }catch(e){}
+    }
+    return {
+      get: function(l, q){
+        var key = norm(l,q);
+        if(mem[key]) return mem[key];
+        if(ls){ try{ var raw = ls.getItem(key); if(raw){ var v = JSON.parse(raw); mem[key]=v; return v; } }catch(e){} }
+        return null;
+      },
+      put: function(l, q, dossier){
+        var entry = { d: dossier, ts: Date.now() };
+        var keys = [ norm(l,q) ];
+        if(dossier && dossier.place){ var nk = norm(l, dossier.place); if(keys.indexOf(nk)===-1) keys.push(nk); }
+        keys.forEach(function(key){
+          mem[key] = entry;
+          if(ls){ try{ ls.setItem(key, JSON.stringify(entry)); }
+                  catch(e){ prune(); try{ ls.setItem(key, JSON.stringify(entry)); }catch(e2){} } }
+        });
+      }
+    };
+  })();
 
   var lang = "ja";
   var busy = false, controller = null, stepTimer = null, lastQuery = "";
@@ -398,11 +444,26 @@
   }
   function stopSteps(){ if(stepTimer){ clearInterval(stepTimer); stepTimer=null; } }
 
-  async function run(place){
+  async function run(place, force){
     place = (place||"").trim();
     var t = I18N[lang];
     if(!place){ setHint(t.typeFirst); $("q").focus(); return; }
     if(busy) return;
+
+    // cache-first: instant, and works with no connection (skipped on a forced refresh)
+    if(!force){
+      var cachedEntry = CACHE.get(lang, place);
+      if(cachedEntry && cachedEntry.d){
+        lastQuery = place; $("q2").value = place; setHint("");
+        render(cachedEntry.d, true);
+        show("result");
+        window.scrollTo({ top:0, behavior:"smooth" });
+        return;
+      }
+    }
+    // offline with no saved copy: don't spin on a request that can't succeed
+    if(navigator && navigator.onLine === false){ setHint(t.offline, true); return; }
+
     busy = true; lastQuery = place; setHint("");
     $("go").disabled = true; $("go2").disabled = true;
     $("q2").value = place;
@@ -451,8 +512,9 @@
         url: pageUrl
       };
 
+      CACHE.put(lang, place, dossier);
       stopSteps();
-      render(dossier);
+      render(dossier, false);
       show("result");
       window.scrollTo({ top:0, behavior:"smooth" });
     } catch(e){
@@ -488,7 +550,7 @@
     return '<div class="block"><div class="sec-eyebrow">'+esc(eyebrow)+'</div>'+body+link+"</div>";
   }
 
-  function render(d){
+  function render(d, fromCache){
     var t = I18N[lang];
     var photo = d.thumb ? '<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(d.place)+'" loading="lazy">' : "";
     var coord = d.coords ? '<div class="coord"><b>'+t.approx+"</b>"+esc(d.coords)+"</div>" : "";
@@ -513,7 +575,10 @@
       + renderSection(d.food, t.food, d.url)
       + renderSection(d.sights, t.sights, d.url);
 
-    var foot = '<div class="doc-foot"><span class="stamp">'+t.source+
+    var badge = fromCache
+      ? '<span class="cachetag">\u2913 '+t.cached+' · <button type="button" id="refresh">'+t.refresh+"</button></span>"
+      : "";
+    var foot = '<div class="doc-foot">'+badge+'<span class="stamp">'+t.source+
       '<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.place)+"</a> · "+
       '<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+
       '</span><button class="again" id="again">'+t.another+"</button></div>";
@@ -525,6 +590,7 @@
     paper.innerHTML = html;
     paper.classList.remove("reveal"); void paper.offsetWidth; paper.classList.add("reveal");
     $("again").addEventListener("click", function(){ show("idle"); setHint(""); $("q").value=""; $("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); });
+    var rf = $("refresh"); if(rf){ rf.addEventListener("click", function(){ run(lastQuery || d.place, true); }); }
   }
 
   // ---------- wire up ----------
