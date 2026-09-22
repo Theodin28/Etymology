@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Meridian — 土地の物語 / a place explorer</title>
-<meta name="description" content="Look up any town's name origin, history, sights, and local food — live from Wikipedia.">
+<title>Meridian — 日本の市町村 / a place explorer</title>
+<meta name="description" content="Look up any Japanese town or city: name origin, history, sights, and local food — live from Wikipedia.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,140 +17,124 @@
     --brass:#c69749; --brass-bright:#e0b666; --brass-deep:#9a7327;
     --sea:#7cb4a8; --fog:#94a89b; --fog-dim:#61756a;
     --shadow: 0 30px 70px -30px rgba(0,0,0,.75), 0 8px 24px -12px rgba(0,0,0,.6);
-    box-sizing:border-box;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing:border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   *,*::before,*::after{ box-sizing:inherit; }
   html{ scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust:100%; }
   html,body{ height:100%; }
-  body{
-    margin:0;
-    font-family:"Instrument Sans","Noto Serif JP", system-ui, sans-serif;
-    color:var(--fog);
+  body{ margin:0; font-family:"Instrument Sans","Noto Serif JP", system-ui, sans-serif; color:var(--fog);
     background: radial-gradient(120% 90% at 50% -10%, #14261f 0%, var(--ink) 55%, #0a1512 100%);
-    min-height:100%; position:relative; overflow-x:hidden;
-  }
-  body::before{
-    content:""; position:fixed; inset:-20%;
+    min-height:100%; position:relative; overflow-x:hidden; }
+  body::before{ content:""; position:fixed; inset:-20%;
     background: repeating-radial-gradient(circle at 78% 18%, transparent 0 38px, rgba(198,151,73,.045) 38px 39px, transparent 39px 78px);
     pointer-events:none; z-index:0;
-    -webkit-mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%);
-            mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%);
-  }
-  body::after{
-    content:""; position:fixed; inset:0;
-    background: radial-gradient(120% 120% at 50% 120%, transparent 55%, rgba(0,0,0,.35) 100%);
-    pointer-events:none; z-index:0;
-  }
+    -webkit-mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%); mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%); }
+  body::after{ content:""; position:fixed; inset:0; background: radial-gradient(120% 120% at 50% 120%, transparent 55%, rgba(0,0,0,.35) 100%); pointer-events:none; z-index:0; }
   .wrap{ position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 22px 90px; }
 
-  header.bar{ display:flex; align-items:center; gap:12px; padding:22px 2px 0; max-width:1080px; margin:0 auto; position:relative; z-index:2; }
+  header.bar{ display:flex; align-items:center; gap:12px; padding:22px 2px 0; max-width:1080px; margin:0 auto; position:relative; z-index:5; }
   .mark{ display:flex; align-items:center; gap:10px; }
   .mark svg{ width:26px; height:26px; display:block; color:var(--brass); }
   .mark .name{ font-family:"Fraunces", serif; font-weight:500; font-size:19px; letter-spacing:.01em; color:var(--paper); }
   .mark .name b{ color:var(--brass-bright); font-weight:600; }
-
   .lang{ margin-left:auto; display:inline-flex; border:1px solid var(--ink-line); border-radius:999px; overflow:hidden; background:rgba(124,180,168,.05); }
   .lang button{ font-family:"Spline Sans Mono", monospace; font-size:12px; letter-spacing:.03em; color:var(--fog-dim); background:none; border:none; padding:7px 13px; cursor:pointer; transition:all .2s; }
   .lang button[aria-pressed="true"]{ color:#20180a; background:linear-gradient(180deg,var(--brass-bright),var(--brass)); }
 
-  .hero{ text-align:center; padding: clamp(38px, 8vh, 88px) 0 18px; }
+  .hero{ text-align:center; padding: clamp(36px, 7.5vh, 84px) 0 18px; }
   .hero .kicker{ font-family:"Spline Sans Mono", monospace; font-size:12px; color:var(--sea); letter-spacing:.06em; margin:0 0 18px; display:inline-flex; align-items:center; gap:9px; }
   .hero .kicker::before, .hero .kicker::after{ content:""; width:26px; height:1px; background:linear-gradient(90deg,transparent,var(--fog-dim)); }
   .hero .kicker::after{ background:linear-gradient(90deg,var(--fog-dim),transparent); }
-  .hero h1{ font-family:"Fraunces","Noto Serif JP", serif; font-weight:400; font-variation-settings:"opsz" 108; font-size: clamp(34px, 7.6vw, 68px); line-height:1.08; letter-spacing:-.01em; color:var(--paper); margin:0 auto; max-width:18ch; }
+  .hero h1{ font-family:"Fraunces","Noto Serif JP", serif; font-weight:400; font-variation-settings:"opsz" 108; font-size: clamp(34px, 7.4vw, 66px); line-height:1.08; letter-spacing:-.01em; color:var(--paper); margin:0 auto; max-width:18ch; }
   .hero h1 em{ font-style:italic; color:var(--brass-bright); }
-  html[lang="ja"] .hero h1{ font-weight:500; letter-spacing:.01em; line-height:1.28; }
+  html[lang="ja"] .hero h1{ font-weight:500; letter-spacing:.01em; line-height:1.3; }
   html[lang="ja"] .hero h1 em{ font-style:normal; }
-  .hero p.sub{ margin:22px auto 0; max-width:54ch; font-size:16px; line-height:1.7; color:var(--fog); }
+  .hero p.sub{ margin:22px auto 0; max-width:52ch; font-size:16px; line-height:1.7; color:var(--fog); }
 
-  .finder{ max-width:600px; margin:32px auto 0; }
+  .finder{ max-width:600px; margin:30px auto 0; position:relative; z-index:4; }
+  .ac{ position:relative; }
   .field{ display:flex; align-items:center; gap:10px; background:linear-gradient(180deg, var(--ink-3), var(--ink-2)); border:1px solid var(--ink-line); border-radius:15px; padding:8px 8px 8px 18px; box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -26px #000; transition:border-color .25s, box-shadow .25s; }
   .field:focus-within{ border-color:var(--brass-deep); box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 0 0 3px rgba(198,151,73,.16), 0 18px 40px -26px #000; }
   .field svg.loc{ width:19px; height:19px; color:var(--sea); flex:none; }
   .field input{ flex:1; min-width:0; background:none; border:none; outline:none; color:var(--paper); font-family:inherit; font-size:17px; padding:12px 2px; }
   .field input::placeholder{ color:#63776b; }
   .field button.go{ flex:none; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:15px; color:#20180a; background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:10px; padding:12px 20px; cursor:pointer; box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 8px 18px -8px rgba(198,151,73,.6); transition:transform .12s ease, filter .2s; }
-  .field button.go:hover{ filter:brightness(1.05); }
-  .field button.go:active{ transform:translateY(1px); }
+  .field button.go:hover{ filter:brightness(1.05); } .field button.go:active{ transform:translateY(1px); }
   .field button.go:disabled{ opacity:.5; cursor:default; filter:grayscale(.3); }
+
+  .ac-list{ position:absolute; left:0; right:0; top:calc(100% + 8px); margin:0; padding:6px; list-style:none; z-index:20;
+    background:linear-gradient(180deg,#16292322,#0f201c); background-color:#12231e; border:1px solid var(--ink-line); border-radius:13px;
+    box-shadow: var(--shadow); max-height:340px; overflow-y:auto; display:none; }
+  .ac-list.on{ display:block; }
+  .ac-item{ display:flex; align-items:baseline; gap:10px; padding:10px 12px; border-radius:9px; cursor:pointer; }
+  .ac-item .aj{ font-family:"Noto Serif JP","Fraunces",serif; font-weight:500; font-size:16px; color:var(--paper); }
+  .ac-item .am{ font-size:12.5px; color:var(--fog-dim); font-family:"Spline Sans Mono",monospace; letter-spacing:.01em; margin-left:auto; text-align:right; white-space:nowrap; }
+  .ac-item.active, .ac-item:hover{ background:rgba(124,180,168,.12); }
+  .ac-item.active .aj{ color:#fff; }
+  .ac-empty{ padding:12px 14px; color:var(--fog-dim); font-size:13.5px; }
 
   .chips{ display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin:20px 0 0; }
   .chips .lbl{ font-size:13px; color:var(--fog-dim); align-self:center; margin-right:2px; }
   .chip{ font-family:inherit; font-size:13.5px; color:var(--fog); background:rgba(124,180,168,.06); border:1px solid var(--ink-line); border-radius:999px; padding:7px 14px; cursor:pointer; transition:all .2s; }
   .chip:hover{ color:var(--paper); border-color:var(--sea); background:rgba(124,180,168,.12); }
+  .tools{ display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin:12px 0 0; }
+  .tool{ font-family:inherit; font-size:13.5px; color:var(--fog); background:rgba(124,180,168,.06); border:1px solid var(--ink-line); border-radius:999px; padding:8px 15px; cursor:pointer; transition:all .2s; }
+  .tool:hover{ color:var(--paper); border-color:var(--sea); background:rgba(124,180,168,.12); }
+  .tool:disabled{ opacity:.55; cursor:default; }
+  .tool.select{ -webkit-appearance:none; appearance:none; padding-right:32px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%237cb4a8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; }
+  .tool.select option{ color:var(--paper); background:#12231e; }
+  .browse{ max-width:600px; margin:12px auto 0; padding:6px; background-color:#12231e; border:1px solid var(--ink-line); border-radius:13px; box-shadow:var(--shadow); max-height:344px; overflow-y:auto; display:none; position:relative; z-index:3; }
+  .browse.on{ display:block; }
+  .browse .bhead{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 10px 10px; font-family:"Spline Sans Mono",monospace; font-size:11.5px; color:var(--fog-dim); letter-spacing:.03em; position:sticky; top:0; background:#12231e; }
+  .browse .bhead button{ background:none; border:none; color:var(--sea); cursor:pointer; font:inherit; }
+  .browse .bhead button:hover{ color:var(--paper); }
+  .browse .dist{ color:var(--brass); }
   .hint{ text-align:center; margin-top:16px; font-size:13.5px; color:var(--fog-dim); min-height:18px; }
   .hint.err{ color:#e0a05f; }
 
   .scope{ display:none; flex-direction:column; align-items:center; padding: clamp(30px,7vh,66px) 0 10px; }
   .scope.on{ display:flex; }
-  .radar{ width:148px; height:148px; }
-  .radar svg{ width:100%; height:100%; display:block; }
-  .sweep{ transform-origin:100px 100px; animation:spin 2.1s linear infinite; }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
-  .ping{ transform-origin:100px 100px; animation:ping 2.1s ease-out infinite; }
-  @keyframes ping{ 0%{ r:4; opacity:.9; } 70%{ opacity:0; } 100%{ r:70; opacity:0; } }
+  .radar{ width:148px; height:148px; } .radar svg{ width:100%; height:100%; display:block; }
+  .sweep{ transform-origin:100px 100px; animation:spin 2.1s linear infinite; } @keyframes spin{ to{ transform:rotate(360deg); } }
+  .ping{ transform-origin:100px 100px; animation:ping 2.1s ease-out infinite; } @keyframes ping{ 0%{ r:4; opacity:.9; } 70%{ opacity:0; } 100%{ r:70; opacity:0; } }
   .scope .place{ font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-size:22px; color:var(--paper); margin:24px 0 4px; }
   html[lang="ja"] .scope .place{ font-style:normal; }
-  .status{ font-family:"Spline Sans Mono", monospace; font-size:13px; color:var(--sea); min-height:20px; }
-  .status .dim{ color:var(--fog-dim); }
+  .status{ font-family:"Spline Sans Mono", monospace; font-size:13px; color:var(--sea); min-height:20px; } .status .dim{ color:var(--fog-dim); }
   .stop{ margin-top:24px; background:none; border:1px solid var(--ink-line); color:var(--fog); font-family:"Spline Sans Mono",monospace; font-size:12px; letter-spacing:.04em; padding:8px 16px; border-radius:8px; cursor:pointer; transition:all .2s; }
   .stop:hover{ color:var(--paper); border-color:var(--fog); }
 
-  .sheet{ display:none; margin:30px auto 0; }
-  .sheet.on{ display:block; }
-  .reprise{ margin:0 auto 20px; max-width:600px; }
+  .sheet{ display:none; margin:30px auto 0; } .sheet.on{ display:block; }
+  .reprise{ margin:0 auto 20px; max-width:600px; position:relative; z-index:4; }
   .paper{ background:linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); color:var(--on-paper); border-radius:6px; box-shadow: var(--shadow); padding: clamp(26px, 4.4vw, 54px); position:relative; border:1px solid #d9ccaf; }
   html[lang="ja"] .paper{ font-family:"Noto Serif JP", serif; }
   .paper::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:linear-gradient(90deg,var(--brass-deep),var(--brass-bright),var(--brass-deep)); border-radius:6px 6px 0 0; }
-
   .doc-head{ display:grid; grid-template-columns:1fr auto; gap:20px 24px; align-items:start; }
   .doc-head .loc{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--brass-deep); letter-spacing:.03em; }
   .doc-head .place{ font-family:"Fraunces","Noto Serif JP",serif; font-weight:500; font-variation-settings:"opsz" 120; font-size: clamp(30px, 6vw, 52px); line-height:1.05; letter-spacing:-.01em; color:var(--on-paper); margin:6px 0 0; }
-  .doc-head .coord{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--on-paper-soft); line-height:1.6; margin-top:12px; }
-  .doc-head .coord b{ color:var(--brass-deep); font-weight:500; display:block; font-size:10.5px; letter-spacing:.06em; }
+  .doc-head .coord{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--on-paper-soft); line-height:1.6; margin-top:12px; } .doc-head .coord b{ color:var(--brass-deep); font-weight:500; display:block; font-size:10.5px; letter-spacing:.06em; }
   .photo{ grid-row:1 / span 3; width:clamp(96px,20vw,150px); aspect-ratio:4/5; object-fit:cover; border:5px solid #fbf6ea; border-radius:3px; box-shadow:0 10px 22px -12px rgba(20,15,5,.55); transform:rotate(1.4deg); background:#d8cbac; }
   .essence{ grid-column:1 / -1; font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-weight:400; font-size: clamp(16px,2.3vw,20px); line-height:1.6; color:#3a473f; margin:6px 0 0; max-width:60ch; }
   html[lang="ja"] .essence{ font-style:normal; }
   .rule{ height:1px; background:linear-gradient(90deg,var(--paper-line),transparent); margin:26px 0; border:0; }
-
   .cols{ display:grid; grid-template-columns: 1.5fr 1fr; gap: clamp(28px,4vw,52px); }
   .sec-eyebrow{ font-family:"Spline Sans Mono",monospace; font-size:11.5px; letter-spacing:.06em; color:var(--brass-deep); margin:0 0 10px; display:flex; align-items:center; gap:10px; }
   html[lang="ja"] .sec-eyebrow{ font-family:"Noto Serif JP",serif; font-weight:600; font-size:13px; letter-spacing:.02em; }
   .sec-eyebrow::after{ content:""; flex:1; height:1px; background:var(--paper-line-soft); }
-  .block{ margin:0 0 30px; }
-  .block:last-child{ margin-bottom:0; }
-  .prose p{ font-size:15.5px; line-height:1.75; color:#333f37; margin:0 0 13px; max-width:66ch; }
-  .prose p:last-child{ margin-bottom:0; }
+  .block{ margin:0 0 30px; } .block:last-child{ margin-bottom:0; }
+  .prose p{ font-size:15.5px; line-height:1.75; color:#333f37; margin:0 0 13px; max-width:66ch; } .prose p:last-child{ margin-bottom:0; }
   .wlist{ list-style:none; margin:0; padding:0; }
-  .wlist li{ position:relative; padding:8px 0 8px 20px; border-bottom:1px solid var(--paper-line-soft); font-size:15px; line-height:1.6; color:#333f37; }
-  .wlist li:last-child{ border-bottom:0; }
+  .wlist li{ position:relative; padding:8px 0 8px 20px; border-bottom:1px solid var(--paper-line-soft); font-size:15px; line-height:1.6; color:#333f37; } .wlist li:last-child{ border-bottom:0; }
   .wlist li::before{ content:""; position:absolute; left:2px; top:16px; width:6px; height:6px; border:1px solid var(--brass-deep); transform:rotate(45deg); }
   .aside .block{ margin-bottom:26px; }
-  .srcline{ margin-top:10px; font-size:12.5px; }
-  .srcline a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.35); padding-bottom:1px; }
-  .srcline a:hover{ color:#7c5c1c; border-color:#7c5c1c; }
-
+  .srcline{ margin-top:10px; font-size:12.5px; } .srcline a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.35); padding-bottom:1px; } .srcline a:hover{ color:#7c5c1c; border-color:#7c5c1c; }
   .doc-foot{ display:flex; align-items:center; gap:14px; margin-top:32px; padding-top:20px; border-top:1px solid var(--paper-line); flex-wrap:wrap; }
   .cachetag{ font-family:"Spline Sans Mono",monospace; font-size:10.5px; letter-spacing:.04em; color:var(--brass-deep); border:1px solid var(--paper-line); border-radius:999px; padding:4px 11px; display:inline-flex; align-items:center; gap:2px; }
-  .cachetag button{ font:inherit; color:#7c5c1c; background:none; border:none; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
-  .cachetag button:hover{ color:#5f4614; }
-  .stamp{ font-size:12px; color:var(--on-paper-soft); line-height:1.6; }
-  .stamp a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.4); }
-  .again{ margin-left:auto; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:14px; color:var(--ink); background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:9px; padding:10px 18px; cursor:pointer; box-shadow:0 6px 14px -8px rgba(154,115,39,.7); }
-  .again:hover{ filter:brightness(1.05); }
-
-  @media (max-width: 720px){
-    .cols{ grid-template-columns:1fr; gap:6px; }
-    .doc-head{ grid-template-columns:1fr; }
-    .photo{ grid-row:auto; order:-1; width:clamp(120px,42vw,190px); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .sweep{ animation:none; } .ping{ animation:none; opacity:0; } .reveal{ animation:none !important; }
-  }
-  .reveal{ animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
-  @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+  .cachetag button{ font:inherit; color:#7c5c1c; background:none; border:none; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; } .cachetag button:hover{ color:#5f4614; }
+  .stamp{ font-size:12px; color:var(--on-paper-soft); line-height:1.6; } .stamp a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.4); }
+  .again{ margin-left:auto; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:14px; color:var(--ink); background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:9px; padding:10px 18px; cursor:pointer; box-shadow:0 6px 14px -8px rgba(154,115,39,.7); } .again:hover{ filter:brightness(1.05); }
+  @media (max-width: 720px){ .cols{ grid-template-columns:1fr; gap:6px; } .doc-head{ grid-template-columns:1fr; } .photo{ grid-row:auto; order:-1; width:clamp(120px,42vw,190px); } .ac-item .am{ font-size:11.5px; } }
+  @media (prefers-reduced-motion: reduce){ .sweep{ animation:none; } .ping{ animation:none; opacity:0; } .reveal{ animation:none !important; } }
+  .reveal{ animation: rise .6s cubic-bezier(.2,.7,.2,1) both; } @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
 </style>
 </head>
 <body>
@@ -176,14 +160,22 @@
     <h1 id="headline"></h1>
     <p class="sub" id="sub"></p>
     <div class="finder">
-      <div class="field">
-        <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
-          <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
-        </svg>
-        <input id="q" type="text" autocomplete="off" spellcheck="false" aria-label="place">
-        <button class="go" id="go"></button>
+      <div class="ac">
+        <div class="field">
+          <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <input id="q" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="acHero" aria-label="place">
+          <button class="go" id="go"></button>
+        </div>
+        <ul class="ac-list" id="acHero" role="listbox"></ul>
       </div>
+      <div class="tools">
+        <button class="tool" id="nearBtn" type="button"></button>
+        <select class="tool select" id="prefSel" aria-label="prefecture"></select>
+      </div>
+      <div class="browse" id="browsePanel"></div>
       <div class="chips" id="chips"><span class="lbl" id="chipsLbl"></span></div>
       <p class="hint" id="hint"></p>
     </div>
@@ -212,13 +204,16 @@
 
   <section class="sheet" id="sheet">
     <div class="reprise">
-      <div class="field">
-        <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
-          <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
-        </svg>
-        <input id="q2" type="text" autocomplete="off" spellcheck="false" aria-label="place">
-        <button class="go" id="go2"></button>
+      <div class="ac">
+        <div class="field">
+          <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <input id="q2" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="acReprise" aria-label="place">
+          <button class="go" id="go2"></button>
+        </div>
+        <ul class="ac-list" id="acReprise" role="listbox"></ul>
       </div>
     </div>
     <article class="paper" id="paper"></article>
@@ -228,382 +223,309 @@
 <script>
 (function(){
   "use strict";
+  var MUNI=[["011002","札幌市","さっぽろし","Sapporo","北海道","Hokkaido",43.05,141.35],["012025","函館市","はこだてし","Hakodate","北海道","Hokkaido",41.767,140.717],["012033","小樽市","おたるし","Otaru","北海道","Hokkaido",43.183,140.983],["012041","旭川市","あさひかわし","Asahikawa","北海道","Hokkaido",43.767,142.35],["012050","室蘭市","むろらんし","Muroran","北海道","Hokkaido",42.3,140.967],["012068","釧路市","くしろし","Kushiro","北海道","Hokkaido",42.983,144.367],["012076","帯広市","おびひろし","Obihiro","北海道","Hokkaido",42.917,143.183],["012084","北見市","きたみし","Kitami","北海道","Hokkaido",43.8,143.883],["012092","夕張市","ゆうばりし","Yubari","北海道","Hokkaido",43.05,141.967],["012106","岩見沢市","いわみざわし","Iwamizawa","北海道","Hokkaido",43.183,141.767],["012114","網走市","あばしりし","Abashiri","北海道","Hokkaido",44.017,144.267],["012122","留萌市","るもいし","Rumoi","北海道","Hokkaido",43.933,141.633],["012131","苫小牧市","とまこまいし","Tomakomai","北海道","Hokkaido",42.633,141.6],["012149","稚内市","わっかないし","Wakkanai","北海道","Hokkaido",45.4,141.667],["012157","美唄市","びばいし","Bibai","北海道","Hokkaido",43.317,141.85],["012165","芦別市","あしべつし","Ashibetsu","北海道","Hokkaido",43.517,142.183],["012173","江別市","えべつし","Ebetsu","北海道","Hokkaido",43.1,141.533],["012181","赤平市","あかびらし","Akabira","北海道","Hokkaido",43.55,142.033],["012190","紋別市","もんべつし","Monbetsu","北海道","Hokkaido",44.35,143.35],["012203","士別市","しべつし","Shibetsu","北海道","Hokkaido",44.167,142.4],["012211","名寄市","なよろし","Nayoro","北海道","Hokkaido",44.35,142.45],["012220","三笠市","みかさし","Mikasa","北海道","Hokkaido",43.233,141.867],["012238","根室市","ねむろし","Nemuro","北海道","Hokkaido",43.317,145.567],["012246","千歳市","ちとせし","Chitose","北海道","Hokkaido",42.817,141.65],["012254","滝川市","たきかわし","Takikawa","北海道","Hokkaido",43.55,141.9],["012262","砂川市","すながわし","Sunagawa","北海道","Hokkaido",43.483,141.9],["012271","歌志内市","うたしないし","Utashinai","北海道","Hokkaido",43.517,142.033],["012289","深川市","ふかがわし","Fukagawa","北海道","Hokkaido",43.717,142.05],["012297","富良野市","ふらのし","Furano","北海道","Hokkaido",43.333,142.383],["012301","登別市","のぼりべつし","Noboribetsu","北海道","Hokkaido",42.4,141.1],["012319","恵庭市","えにわし","Eniwa","北海道","Hokkaido",42.867,141.567],["012335","伊達市","だてし","Date","北海道","Hokkaido",42.467,140.85],["012343","北広島市","きたひろしまし","Kitahiroshima","北海道","Hokkaido",42.983,141.55],["012351","石狩市","いしかりし","Ishikari","北海道","Hokkaido",43.167,141.3],["012360","北斗市","ほくとし","Hokuto","北海道","Hokkaido",41.817,140.65],["013030","当別町","とうべつちょう","Tobetsu","北海道","Hokkaido",43.217,141.517],["013048","新篠津村","しんしのつむら","Shinshinotsu","北海道","Hokkaido",43.217,141.633],["013315","松前町","まつまえちょう","Matsumae","北海道","Hokkaido",41.417,140.1],["013323","福島町","ふくしまちょう","Fukushima","北海道","Hokkaido",41.483,140.25],["013331","知内町","しりうちちょう","Shiriuchi","北海道","Hokkaido",41.583,140.417],["013340","木古内町","きこないちょう","Kikonai","北海道","Hokkaido",41.667,140.433],["013374","七飯町","ななえちょう","Nanae","北海道","Hokkaido",41.883,140.683],["013439","鹿部町","しかべちょう","Shikabe","北海道","Hokkaido",42.033,140.8],["013455","森町","もりまち","Mori","北海道","Hokkaido",42.1,140.567],["013463","八雲町","やくもちょう","Yakumo","北海道","Hokkaido",42.25,140.25],["013471","長万部町","おしゃまんべちょう","Oshamanbe","北海道","Hokkaido",42.5,140.367],["013617","江差町","えさしちょう","Esashi","北海道","Hokkaido",41.867,140.117],["013625","上ノ国町","かみのくにちょう","Kaminokuni","北海道","Hokkaido",41.8,140.117],["013633","厚沢部町","あっさぶちょう","Assabu","北海道","Hokkaido",41.917,140.217],["013641","乙部町","おとべちょう","Otobe","北海道","Hokkaido",41.967,140.133],["013676","奥尻町","おくしりちょう","Okushiri","北海道","Hokkaido",42.167,139.5],["013706","今金町","いまかねちょう","Imakane","北海道","Hokkaido",42.417,140.0],["013714","せたな町","せたなちょう","Setana","北海道","Hokkaido",42.4,139.867],["013919","島牧村","しままきむら","Shimamaki","北海道","Hokkaido",42.7,140.05],["013927","寿都町","すっつちょう","Suttsu","北海道","Hokkaido",42.783,140.217],["013935","黒松内町","くろまつないちょう","Kuromatsunai","北海道","Hokkaido",42.667,140.3],["013943","蘭越町","らんこしちょう","Rankoshi","北海道","Hokkaido",42.8,140.517],["013951","ニセコ町","にせこちょう","Niseko","北海道","Hokkaido",42.8,140.683],["013960","真狩村","まっかりむら","Makkari","北海道","Hokkaido",42.75,140.8],["013978","留寿都村","るすつむら","Rusutsu","北海道","Hokkaido",42.733,140.867],["013986","喜茂別町","きもべつちょう","Kimobetsu","北海道","Hokkaido",42.783,140.933],["013994","京極町","きょうごくちょう","Kyogoku","北海道","Hokkaido",42.85,140.883],["014001","倶知安町","くっちゃんちょう","Kutchan","北海道","Hokkaido",42.9,140.75],["014010","共和町","きょうわちょう","Kyowa","北海道","Hokkaido",42.967,140.6],["014028","岩内町","いわないちょう","Iwanai","北海道","Hokkaido",42.967,140.5],["014036","泊村","とまりむら","Tomari","北海道","Hokkaido",43.05,140.483],["014044","神恵内村","かもえないむら","Kamoenai","北海道","Hokkaido",43.133,140.417],["014052","積丹町","しゃこたんちょう","Shakotan","北海道","Hokkaido",43.283,140.583],["014061","古平町","ふるびらちょう","Furubira","北海道","Hokkaido",43.25,140.633],["014079","仁木町","にきちょう","Niki","北海道","Hokkaido",43.15,140.75],["014087","余市町","よいちちょう","Yoichi","北海道","Hokkaido",43.183,140.783],["014095","赤井川村","あかいがわむら","Akaigawa","北海道","Hokkaido",43.083,140.8],["014231","南幌町","なんぽろちょう","Nanporo","北海道","Hokkaido",43.05,141.65],["014249","奈井江町","ないえちょう","Naie","北海道","Hokkaido",43.417,141.867],["014257","上砂川町","かみすながわちょう","Kamisunagawa","北海道","Hokkaido",43.467,141.967],["014273","由仁町","ゆにちょう","Yuni","北海道","Hokkaido",42.983,141.783],["014281","長沼町","ながぬまちょう","Naganuma","北海道","Hokkaido",43.0,141.683],["014290","栗山町","くりやまちょう","Kuriyama","北海道","Hokkaido",43.05,141.783],["014303","月形町","つきがたちょう","Tsukigata","北海道","Hokkaido",43.333,141.667],["014311","浦臼町","うらうすちょう","Urausu","北海道","Hokkaido",43.417,141.817],["014320","新十津川町","しんとつかわちょう","Shintotsukawa","北海道","Hokkaido",43.533,141.867],["014338","妹背牛町","もせうしちょう","Moseushi","北海道","Hokkaido",43.7,141.95],["014346","秩父別町","ちっぷべつちょう","Chippubetsu","北海道","Hokkaido",43.767,141.95],["014362","雨竜町","うりゅうちょう","Uryu","北海道","Hokkaido",43.633,141.883],["014371","北竜町","ほくりゅうちょう","Hokuryu","北海道","Hokkaido",43.717,141.867],["014389","沼田町","ぬまたちょう","Numata","北海道","Hokkaido",43.8,141.933],["014524","鷹栖町","たかすちょう","Takasu","北海道","Hokkaido",43.833,142.35],["014532","東神楽町","ひがしかぐらちょう","Higashikagura","北海道","Hokkaido",43.683,142.45],["014541","当麻町","とうまちょう","Toma","北海道","Hokkaido",43.817,142.5],["014559","比布町","ぴっぷちょう","Pippu","北海道","Hokkaido",43.867,142.467],["014567","愛別町","あいべつちょう","Aibetsu","北海道","Hokkaido",43.9,142.567],["014575","上川町","かみかわちょう","Kamikawa","北海道","Hokkaido",43.833,142.767],["014583","東川町","ひがしかわちょう","Higashikawa","北海道","Hokkaido",43.683,142.5],["014591","美瑛町","びえいちょう","Biei","北海道","Hokkaido",43.583,142.467],["014605","上富良野町","かみふらのちょう","Kamifurano","北海道","Hokkaido",43.45,142.467],["014613","中富良野町","なかふらのちょう","Nakafurano","北海道","Hokkaido",43.4,142.417],["014621","南富良野町","みなみふらのちょう","Minamifurano","北海道","Hokkaido",43.15,142.567],["014630","占冠村","しむかっぷむら","Shimukappu","北海道","Hokkaido",42.967,142.383],["014648","和寒町","わっさむちょう","Wassamu","北海道","Hokkaido",44.017,142.4],["014656","剣淵町","けんぶちちょう","Kenbuchi","北海道","Hokkaido",44.083,142.35],["014681","下川町","しもかわちょう","Shimokawa","北海道","Hokkaido",44.3,142.633],["014699","美深町","びふかちょう","Bifuka","北海道","Hokkaido",44.467,142.333],["014702","音威子府村","おといねっぷむら","Otoineppu","北海道","Hokkaido",44.717,142.25],["014711","中川町","なかがわちょう","Nakagawa","北海道","Hokkaido",44.8,142.067],["014729","幌加内町","ほろかないちょう","Horokanai","北海道","Hokkaido",44.0,142.15],["014818","増毛町","ましけちょう","Mashike","北海道","Hokkaido",43.85,141.517],["014826","小平町","おびらちょう","Obira","北海道","Hokkaido",44.0,141.65],["014834","苫前町","とままえちょう","Tomamae","北海道","Hokkaido",44.3,141.65],["014842","羽幌町","はぼろちょう","Haboro","北海道","Hokkaido",44.35,141.683],["014851","初山別村","しょさんべつむら","Shosanbetsu","北海道","Hokkaido",44.517,141.75],["014869","遠別町","えんべつちょう","Enbetsu","北海道","Hokkaido",44.717,141.783],["014877","天塩町","てしおちょう","Teshio","北海道","Hokkaido",44.883,141.733],["015113","猿払村","さるふつむら","Sarufutsu","北海道","Hokkaido",45.317,142.1],["015121","浜頓別町","はまとんべつちょう","Hamatonbetsu","北海道","Hokkaido",45.117,142.35],["015130","中頓別町","なかとんべつちょう","Nakatonbetsu","北海道","Hokkaido",44.967,142.283],["015148","枝幸町","えさしちょう","Esashi","北海道","Hokkaido",44.933,142.567],["015164","豊富町","とよとみちょう","Toyotomi","北海道","Hokkaido",45.1,141.767],["015172","礼文町","れぶんちょう","Rebun","北海道","Hokkaido",45.3,141.033],["015181","利尻町","りしりちょう","Rishiri","北海道","Hokkaido",45.183,141.133],["015199","利尻富士町","りしりふじちょう","Rishirifuji","北海道","Hokkaido",45.233,141.2],["015202","幌延町","ほろのべちょう","Horonobe","北海道","Hokkaido",45.017,141.833],["015431","美幌町","びほろちょう","Bihoro","北海道","Hokkaido",43.817,144.1],["015440","津別町","つべつちょう","Tsubetsu","北海道","Hokkaido",43.7,144.017],["015458","斜里町","しゃりちょう","Shari","北海道","Hokkaido",43.9,144.667],["015466","清里町","きよさとちょう","Kiyosato","北海道","Hokkaido",43.833,144.583],["015474","小清水町","こしみずちょう","Koshimizu","北海道","Hokkaido",43.85,144.45],["015491","訓子府町","くんねっぷちょう","Kunneppu","北海道","Hokkaido",43.717,143.733],["015504","置戸町","おけとちょう","Oketo","北海道","Hokkaido",43.667,143.583],["015521","佐呂間町","さろまちょう","Saroma","北海道","Hokkaido",44.017,143.767],["015555","遠軽町","えんがるちょう","Engaru","北海道","Hokkaido",44.05,143.517],["015598","湧別町","ゆうべつちょう","Yubetsu","北海道","Hokkaido",44.217,143.6],["015601","滝上町","たきのうえちょう","Takinoue","北海道","Hokkaido",44.183,143.067],["015610","興部町","おこっぺちょう","Okoppe","北海道","Hokkaido",44.467,143.117],["015628","西興部村","にしおこっぺむら","Nishiokoppe","北海道","Hokkaido",44.317,142.933],["015636","雄武町","おうむちょう","Omu","北海道","Hokkaido",44.567,142.95],["015644","大空町","おおぞらちょう","Ozora","北海道","Hokkaido",43.9,144.167],["015717","豊浦町","とようらちょう","Toyoura","北海道","Hokkaido",42.583,140.7],["015750","壮瞥町","そうべつちょう","Sobetsu","北海道","Hokkaido",42.55,140.883],["015784","白老町","しらおいちょう","Shiraoi","北海道","Hokkaido",42.55,141.35],["015814","厚真町","あつまちょう","Atsuma","北海道","Hokkaido",42.717,141.867],["015849","洞爺湖町","とうやこちょう","Toyako","北海道","Hokkaido",42.55,140.75],["015857","安平町","あびらちょう","Abira","北海道","Hokkaido",42.75,141.817],["015865","むかわ町","むかわちょう","Mukawa","北海道","Hokkaido",42.567,141.917],["016012","日高町","ひだかちょう","Hidaka","北海道","Hokkaido",42.467,142.067],["016021","平取町","びらとりちょう","Biratori","北海道","Hokkaido",42.583,142.117],["016047","新冠町","にいかっぷちょう","Niikappu","北海道","Hokkaido",42.35,142.317],["016071","浦河町","うらかわちょう","Urakawa","北海道","Hokkaido",42.167,142.767],["016080","様似町","さまにちょう","Samani","北海道","Hokkaido",42.117,142.933],["016098","えりも町","えりもちょう","Erimo","北海道","Hokkaido",42.0,143.133],["016101","新ひだか町","しんひだかちょう","Shinhidaka","北海道","Hokkaido",42.333,142.367],["016314","音更町","おとふけちょう","Otofuke","北海道","Hokkaido",42.983,143.183],["016322","士幌町","しほろちょう","Shihoro","北海道","Hokkaido",43.167,143.233],["016331","上士幌町","かみしほろちょう","Kamishihoro","北海道","Hokkaido",43.217,143.283],["016349","鹿追町","しかおいちょう","Shikaoi","北海道","Hokkaido",43.083,142.983],["016357","新得町","しんとくちょう","Shintoku","北海道","Hokkaido",43.067,142.833],["016365","清水町","しみずちょう","Shimizu","北海道","Hokkaido",43.0,142.883],["016373","芽室町","めむろちょう","Memuro","北海道","Hokkaido",42.9,143.05],["016381","中札内村","なかさつないむら","Nakasatsunai","北海道","Hokkaido",42.683,143.117],["016390","更別村","さらべつむら","Sarabetsu","北海道","Hokkaido",42.65,143.183],["016411","大樹町","たいきちょう","Taiki","北海道","Hokkaido",42.483,143.267],["016420","広尾町","ひろおちょう","Hiroo","北海道","Hokkaido",42.283,143.3],["016438","幕別町","まくべつちょう","Makubetsu","北海道","Hokkaido",42.9,143.35],["016446","池田町","いけだちょう","Ikeda","北海道","Hokkaido",42.917,143.433],["016454","豊頃町","とよころちょう","Toyokoro","北海道","Hokkaido",42.8,143.5],["016462","本別町","ほんべつちょう","Honbetsu","北海道","Hokkaido",43.117,143.6],["016471","足寄町","あしょろちょう","Ashoro","北海道","Hokkaido",43.233,143.55],["016489","陸別町","りくべつちょう","Rikubetsu","北海道","Hokkaido",43.467,143.733],["016497","浦幌町","うらほろちょう","Urahoro","北海道","Hokkaido",42.8,143.65],["016616","釧路町","くしろちょう","Kushiro","北海道","Hokkaido",42.983,144.45],["016624","厚岸町","あっけしちょう","Akkeshi","北海道","Hokkaido",43.05,144.833],["016632","浜中町","はまなかちょう","Hamanaka","北海道","Hokkaido",43.067,145.117],["016641","標茶町","しべちゃちょう","Shibecha","北海道","Hokkaido",43.3,144.6],["016659","弟子屈町","てしかがちょう","Teshikaga","北海道","Hokkaido",43.483,144.45],["016675","鶴居村","つるいむら","Tsurui","北海道","Hokkaido",43.217,144.317],["016683","白糠町","しらぬかちょう","Shiranuka","北海道","Hokkaido",42.95,144.067],["016918","別海町","べつかいちょう","Betsukai","北海道","Hokkaido",43.383,145.117],["016926","中標津町","なかしべつちょう","Nakashibetsu","北海道","Hokkaido",43.55,144.967],["016934","標津町","しべつちょう","Shibetsu","北海道","Hokkaido",43.65,145.117],["016942","羅臼町","らうすちょう","Rausu","北海道","Hokkaido",44.017,145.183],["022012","青森市","あおもりし","Aomori","青森県","Aomori",40.817,140.733],["022021","弘前市","ひろさきし","Hirosaki","青森県","Aomori",40.6,140.45],["022039","八戸市","はちのへし","Hachinohe","青森県","Aomori",40.5,141.483],["022047","黒石市","くろいしし","Kuroishi","青森県","Aomori",40.633,140.583],["022055","五所川原市","ごしょがわらし","Goshogawara","青森県","Aomori",40.8,140.433],["022063","十和田市","とわだし","Towada","青森県","Aomori",40.6,141.2],["022071","三沢市","みさわし","Misawa","青森県","Aomori",40.683,141.367],["022080","むつ市","むつし","Mutsu","青森県","Aomori",41.283,141.183],["022098","つがる市","つがるし","Tsugaru","青森県","Aomori",40.8,140.367],["022101","平川市","ひらかわし","Hirakawa","青森県","Aomori",40.583,140.55],["023019","平内町","ひらないまち","Hiranai","青森県","Aomori",40.917,140.95],["023035","今別町","いまべつまち","Imabetsu","青森県","Aomori",41.167,140.467],["023043","蓬田村","よもぎたむら","Yomogita","青森県","Aomori",40.967,140.65],["023078","外ヶ浜町","そとがはままち","Sotogahama","青森県","Aomori",41.033,140.617],["023213","鰺ヶ沢町","","Ajigasawa","青森県","Aomori",40.78,140.209],["023230","深浦町","ふかうらまち","Fukaura","青森県","Aomori",40.633,139.917],["023434","西目屋村","にしめやむら","Nishimeya","青森県","Aomori",40.567,140.283],["023612","藤崎町","ふじさきまち","Fujisaki","青森県","Aomori",40.65,140.5],["023621","大鰐町","おおわにまち","Owani","青森県","Aomori",40.517,140.567],["023671","田舎館村","いなかだてむら","Inakadate","青森県","Aomori",40.617,140.55],["023817","板柳町","いたやなぎまち","Itayanagi","青森県","Aomori",40.683,140.45],["023841","鶴田町","つるたまち","Tsuruta","青森県","Aomori",40.75,140.417],["023876","中泊町","なかどまりまち","Nakadomari","青森県","Aomori",40.95,140.433],["024015","野辺地町","のへじまち","Noheji","青森県","Aomori",40.85,141.117],["024023","七戸町","しちのへまち","Shichinohe","青森県","Aomori",40.733,141.15],["024058","六戸町","ろくのへまち","Rokunohe","青森県","Aomori",40.6,141.317],["024066","横浜町","よこはままち","Yokohama","青森県","Aomori",41.083,141.233],["024082","東北町","とうほくまち","Tohoku","青森県","Aomori",40.717,141.25],["024112","六ヶ所村","ろっかしょむら","Rokkasho","青森県","Aomori",40.967,141.367],["024121","おいらせ町","おいらせちょう","Oirase","青森県","Aomori",40.583,141.383],["024236","大間町","おおままち","Oma","青森県","Aomori",41.517,140.9],["024244","東通村","ひがしどおりむら","Higashidori","青森県","Aomori",41.267,141.317],["024252","風間浦村","かざまうらむら","Kazamaura","青森県","Aomori",41.483,140.983],["024261","佐井村","さいむら","Sai","青森県","Aomori",41.417,140.85],["024414","三戸町","さんのへまち","Sannohe","青森県","Aomori",40.367,141.25],["024422","五戸町","ごのへまち","Gonohe","青森県","Aomori",40.517,141.3],["024431","田子町","たっこまち","Takko","青森県","Aomori",40.333,141.15],["024457","南部町","なんぶちょう","Nanbu","青森県","Aomori",40.467,141.367],["024465","階上町","はしかみちょう","Hashikami","青森県","Aomori",40.45,141.617],["024503","新郷村","しんごうむら","Shingo","青森県","Aomori",40.45,141.167],["032018","盛岡市","もりおかし","Morioka","岩手県","Iwate",39.7,141.15],["032026","宮古市","みやこし","Miyako","岩手県","Iwate",39.633,141.95],["032034","大船渡市","おおふなとし","Ofunato","岩手県","Iwate",39.067,141.7],["032051","花巻市","はなまきし","Hanamaki","岩手県","Iwate",39.383,141.117],["032069","北上市","きたかみし","Kitakami","岩手県","Iwate",39.283,141.1],["032077","久慈市","くじし","Kuji","岩手県","Iwate",40.183,141.767],["032085","遠野市","とおのし","Tono","岩手県","Iwate",39.317,141.533],["032093","一関市","いちのせきし","Ichinoseki","岩手県","Iwate",38.933,141.117],["032107","陸前高田市","りくぜんたかたし","Rikuzentakata","岩手県","Iwate",39.0,141.617],["032115","釜石市","かまいしし","Kamaishi","岩手県","Iwate",39.267,141.883],["032131","二戸市","にのへし","Ninohe","岩手県","Iwate",40.267,141.3],["032140","八幡平市","はちまんたいし","Hachimantai","岩手県","Iwate",39.917,141.083],["032158","奥州市","おうしゅうし","Oshu","岩手県","Iwate",39.133,141.133],["032166","滝沢市","たきざわし","Takizawa","岩手県","Iwate",39.733,141.067],["033014","雫石町","しずくいしちょう","Shizukuishi","岩手県","Iwate",39.683,140.967],["033022","葛巻町","くずまきまち","Kuzumaki","岩手県","Iwate",40.033,141.433],["033031","岩手町","いわてまち","Iwate","岩手県","Iwate",39.967,141.2],["033219","紫波町","しわちょう","Shiwa","岩手県","Iwate",39.55,141.167],["033227","矢巾町","やはばちょう","Yahaba","岩手県","Iwate",39.6,141.133],["033669","西和賀町","にしわがまち","Nishiwaga","岩手県","Iwate",39.317,140.767],["033812","金ケ崎町","かねがさきちょう","Kanegasaki","岩手県","Iwate",39.183,141.1],["034029","平泉町","ひらいずみちょう","Hiraizumi","岩手県","Iwate",38.983,141.1],["034410","住田町","すみたちょう","Sumita","岩手県","Iwate",39.133,141.567],["034614","大槌町","おおつちちょう","Otsuchi","岩手県","Iwate",39.35,141.9],["034827","山田町","やまだまち","Yamada","岩手県","Iwate",39.467,141.933],["034835","岩泉町","いわいずみちょう","Iwaizumi","岩手県","Iwate",39.833,141.783],["034843","田野畑村","たのはたむら","Tanohata","岩手県","Iwate",39.917,141.883],["034851","普代村","ふだいむら","Fudai","岩手県","Iwate",40.0,141.883],["035017","軽米町","かるまいまち","Karumai","岩手県","Iwate",40.317,141.45],["035033","野田村","のだむら","Noda","岩手県","Iwate",40.1,141.817],["035068","九戸村","くのへむら","Kunohe","岩手県","Iwate",40.2,141.417],["035076","洋野町","ひろのちょう","Hirono","岩手県","Iwate",40.4,141.717],["035246","一戸町","いちのへまち","Ichinohe","岩手県","Iwate",40.2,141.283],["041009","仙台市","せんだいし","Sendai","宮城県","Miyagi",38.267,140.867],["042021","石巻市","いしのまきし","Ishinomaki","宮城県","Miyagi",38.417,141.3],["042030","塩竈市","しおがまし","Shiogama","宮城県","Miyagi",38.3,141.017],["042056","気仙沼市","けせんぬまし","Kesennuma","宮城県","Miyagi",38.9,141.567],["042064","白石市","しろいしし","Shiroishi","宮城県","Miyagi",38.0,140.617],["042072","名取市","なとりし","Natori","宮城県","Miyagi",38.167,140.883],["042081","角田市","かくだし","Kakuda","宮城県","Miyagi",37.967,140.767],["042099","多賀城市","たがじょうし","Tagajo","宮城県","Miyagi",38.283,141.0],["042111","岩沼市","いわぬまし","Iwanuma","宮城県","Miyagi",38.1,140.867],["042129","登米市","とめし","Tome","宮城県","Miyagi",38.683,141.183],["042137","栗原市","くりはらし","Kurihara","宮城県","Miyagi",38.717,141.017],["042145","東松島市","ひがしまつしまし","Higashimatsushima","宮城県","Miyagi",38.417,141.2],["042153","大崎市","おおさきし","Osaki","宮城県","Miyagi",38.567,140.95],["042161","富谷市","とみやし","Tomiya","宮城県","Miyagi",38.383,140.883],["043010","蔵王町","ざおうまち","Zao","宮城県","Miyagi",38.083,140.65],["043028","七ヶ宿町","","Shichikashuku","宮城県","Miyagi",37.993,140.442],["043214","大河原町","おおがわらまち","Ogawara","宮城県","Miyagi",38.033,140.717],["043222","村田町","むらたまち","Murata","宮城県","Miyagi",38.117,140.717],["043231","柴田町","しばたまち","Shibata","宮城県","Miyagi",38.05,140.75],["043249","川崎町","かわさきまち","Kawasaki","宮城県","Miyagi",38.167,140.633],["043419","丸森町","まるもりまち","Marumori","宮城県","Miyagi",37.9,140.75],["043613","亘理町","わたりちょう","Watari","宮城県","Miyagi",38.033,140.85],["043621","山元町","やまもとちょう","Yamamoto","宮城県","Miyagi",37.95,140.867],["044016","松島町","まつしままち","Matsushima","宮城県","Miyagi",38.367,141.067],["044041","七ヶ浜町","","Shichigahama","宮城県","Miyagi",38.305,141.059],["044067","利府町","りふちょう","Rifu","宮城県","Miyagi",38.317,140.967],["044211","大和町","たいわちょう","Taiwa","宮城県","Miyagi",38.433,140.883],["044229","大郷町","おおさとちょう","Osato","宮城県","Miyagi",38.417,141.0],["044245","大衡村","おおひらむら","Ohira","宮城県","Miyagi",38.467,140.867],["044440","色麻町","しかまちょう","Shikama","宮城県","Miyagi",38.533,140.85],["044458","加美町","かみまち","Kami","宮城県","Miyagi",38.567,140.85],["045012","涌谷町","わくやちょう","Wakuya","宮城県","Miyagi",38.533,141.117],["045055","美里町","みさとまち","Misato","宮城県","Miyagi",38.533,141.05],["045811","女川町","おながわちょう","Onagawa","宮城県","Miyagi",38.433,141.433],["046060","南三陸町","みなみさんりくちょう","Minamisanriku","宮城県","Miyagi",38.667,141.433],["052019","秋田市","あきたし","Akita","秋田県","Akita",39.717,140.1],["052027","能代市","のしろし","Noshiro","秋田県","Akita",40.2,140.017],["052035","横手市","よこてし","Yokote","秋田県","Akita",39.3,140.55],["052043","大館市","おおだてし","Odate","秋田県","Akita",40.267,140.55],["052060","男鹿市","おがし","Oga","秋田県","Akita",39.883,139.833],["052078","湯沢市","ゆざわし","Yuzawa","秋田県","Akita",39.15,140.483],["052094","鹿角市","かづのし","Kazuno","秋田県","Akita",40.2,140.783],["052108","由利本荘市","ゆりほんじょうし","Yurihonjo","秋田県","Akita",39.383,140.033],["052116","潟上市","かたがみし","Katagami","秋田県","Akita",39.883,139.983],["052124","大仙市","だいせんし","Daisen","秋田県","Akita",39.45,140.467],["052132","北秋田市","きたあきたし","Kitaakita","秋田県","Akita",40.217,140.367],["052141","にかほ市","にかほし","Nikaho","秋田県","Akita",39.2,139.9],["052159","仙北市","せんぼくし","Senboku","秋田県","Akita",39.7,140.717],["053031","小坂町","こさかまち","Kosaka","秋田県","Akita",40.317,140.733],["053279","上小阿仁村","かみこあにむら","Kamikoani","秋田県","Akita",40.05,140.283],["053465","藤里町","ふじさとまち","Fujisato","秋田県","Akita",40.267,140.25],["053481","三種町","みたねちょう","Mitane","秋田県","Akita",40.1,140.0],["053490","八峰町","はっぽうちょう","Happo","秋田県","Akita",40.367,140.017],["053619","五城目町","ごじょうめまち","Gojome","秋田県","Akita",39.933,140.1],["053635","八郎潟町","はちろうがたまち","Hachirogata","秋田県","Akita",39.933,140.067],["053660","井川町","いかわまち","Ikawa","秋田県","Akita",39.9,140.067],["053686","大潟村","おおがたむら","Ogata","秋田県","Akita",40.017,139.95],["054348","美郷町","みさとちょう","Misato","秋田県","Akita",39.417,140.533],["054631","羽後町","うごまち","Ugo","秋田県","Akita",39.183,140.4],["054640","東成瀬村","ひがしなるせむら","Higashinaruse","秋田県","Akita",39.167,140.633],["062014","山形市","やまがたし","Yamagata","山形県","Yamagata",38.25,140.333],["062022","米沢市","よねざわし","Yonezawa","山形県","Yamagata",37.917,140.117],["062031","鶴岡市","つるおかし","Tsuruoka","山形県","Yamagata",38.717,139.817],["062049","酒田市","さかたし","Sakata","山形県","Yamagata",38.9,139.833],["062057","新庄市","しんじょうし","Shinjo","山形県","Yamagata",38.75,140.3],["062065","寒河江市","さがえし","Sagae","山形県","Yamagata",38.367,140.267],["062073","上山市","かみのやまし","Kaminoyama","山形県","Yamagata",38.133,140.267],["062081","村山市","むらやまし","Murayama","山形県","Yamagata",38.483,140.367],["062090","長井市","ながいし","Nagai","山形県","Yamagata",38.1,140.033],["062103","天童市","てんどうし","Tendo","山形県","Yamagata",38.35,140.367],["062111","東根市","ひがしねし","Higashine","山形県","Yamagata",38.417,140.383],["062120","尾花沢市","おばなざわし","Obanazawa","山形県","Yamagata",38.6,140.4],["062138","南陽市","なんようし","Nan-yo","山形県","Yamagata",38.05,140.133],["063011","山辺町","やまのべまち","Yamanobe","山形県","Yamagata",38.283,140.25],["063029","中山町","なかやままち","Nakayama","山形県","Yamagata",38.333,140.267],["063215","河北町","かほくちょう","Kahoku","山形県","Yamagata",38.417,140.3],["063223","西川町","にしかわまち","Nishikawa","山形県","Yamagata",38.417,140.133],["063231","朝日町","あさひまち","Asahi","山形県","Yamagata",38.283,140.133],["063240","大江町","おおえまち","Oe","山形県","Yamagata",38.367,140.2],["063410","大石田町","おおいしだまち","Oishida","山形県","Yamagata",38.583,140.367],["063614","金山町","かねやままち","Kaneyama","山形県","Yamagata",38.883,140.333],["063622","最上町","もがみまち","Mogami","山形県","Yamagata",38.75,140.517],["063631","舟形町","ふながたまち","Funagata","山形県","Yamagata",38.683,140.317],["063649","真室川町","まむろがわまち","Mamurogawa","山形県","Yamagata",38.85,140.25],["063657","大蔵村","おおくらむら","Okura","山形県","Yamagata",38.7,140.217],["063665","鮭川村","さけがわむら","Sakegawa","山形県","Yamagata",38.783,140.217],["063673","戸沢村","とざわむら","Tozawa","山形県","Yamagata",38.733,140.133],["063819","高畠町","たかはたまち","Takahata","山形県","Yamagata",38.0,140.183],["063827","川西町","かわにしまち","Kawanishi","山形県","Yamagata",38.0,140.033],["064017","小国町","おぐにまち","Oguni","山形県","Yamagata",38.05,139.733],["064025","白鷹町","しらたかまち","Shirataka","山形県","Yamagata",38.167,140.083],["064033","飯豊町","いいでまち","Iide","山形県","Yamagata",38.033,139.983],["064262","三川町","みかわまち","Mikawa","山形県","Yamagata",38.783,139.833],["064289","庄内町","しょうないまち","Shonai","山形県","Yamagata",38.833,139.9],["064611","遊佐町","ゆざまち","Yuza","山形県","Yamagata",39.0,139.9],["072010","福島市","ふくしまし","Fukushima","福島県","Fukushima",37.75,140.467],["072028","会津若松市","あいづわかまつし","Aizuwakamatsu","福島県","Fukushima",37.483,139.917],["072036","郡山市","こおりやまし","Koriyama","福島県","Fukushima",37.4,140.35],["072044","いわき市","いわきし","Iwaki","福島県","Fukushima",37.05,140.883],["072052","白河市","しらかわし","Shirakawa","福島県","Fukushima",37.117,140.2],["072079","須賀川市","すかがわし","Sukagawa","福島県","Fukushima",37.283,140.367],["072087","喜多方市","きたかたし","Kitakata","福島県","Fukushima",37.65,139.867],["072095","相馬市","そうまし","Soma","福島県","Fukushima",37.783,140.917],["072109","二本松市","にほんまつし","Nihonmatsu","福島県","Fukushima",37.583,140.417],["072117","田村市","たむらし","Tamura","福島県","Fukushima",37.433,140.567],["072125","南相馬市","みなみそうまし","Minamisoma","福島県","Fukushima",37.633,140.95],["072133","伊達市","だてし","Date","福島県","Fukushima",37.817,140.55],["072141","本宮市","もとみやし","Motomiya","福島県","Fukushima",37.5,140.383],["073016","桑折町","こおりまち","Koori","福島県","Fukushima",37.833,140.5],["073032","国見町","くにみまち","Kunimi","福島県","Fukushima",37.867,140.533],["073083","川俣町","かわまたまち","Kawamata","福島県","Fukushima",37.65,140.583],["073229","大玉村","おおたまむら","Otama","福島県","Fukushima",37.533,140.367],["073423","鏡石町","かがみいしまち","Kagamiishi","福島県","Fukushima",37.25,140.333],["073440","天栄村","てんえいむら","Ten-ei","福島県","Fukushima",37.25,140.233],["073628","下郷町","しもごうまち","Shimogo","福島県","Fukushima",37.25,139.867],["073644","檜枝岐村","ひのえまたむら","Hinoemata","福島県","Fukushima",37.017,139.383],["073679","只見町","ただみまち","Tadami","福島県","Fukushima",37.333,139.3],["073687","南会津町","みなみあいづまち","Minamiaizu","福島県","Fukushima",37.2,139.767],["074021","北塩原村","きたしおばらむら","Kitashiobara","福島県","Fukushima",37.65,139.933],["074055","西会津町","にしあいづまち","Nishiaizu","福島県","Fukushima",37.583,139.633],["074071","磐梯町","ばんだいまち","Bandai","福島県","Fukushima",37.55,139.983],["074080","猪苗代町","いなわしろまち","Inawashiro","福島県","Fukushima",37.55,140.1],["074217","会津坂下町","あいづばんげまち","Aizubange","福島県","Fukushima",37.55,139.817],["074225","湯川村","ゆがわむら","Yugawa","福島県","Fukushima",37.55,139.883],["074233","柳津町","やないづまち","Yanaizu","福島県","Fukushima",37.517,139.717],["074446","三島町","みしままち","Mishima","福島県","Fukushima",37.467,139.633],["074454","金山町","かねやままち","Kaneyama","福島県","Fukushima",37.45,139.517],["074462","昭和村","しょうわむら","Showa","福島県","Fukushima",37.333,139.6],["074471","会津美里町","あいづみさとまち","Aizumisato","福島県","Fukushima",37.45,139.833],["074616","西郷村","にしごうむら","Nishigo","福島県","Fukushima",37.133,140.15],["074641","泉崎村","いずみざきむら","Izumizaki","福島県","Fukushima",37.15,140.283],["074659","中島村","なかじまむら","Nakajima","福島県","Fukushima",37.133,140.35],["074667","矢吹町","やぶきまち","Yabuki","福島県","Fukushima",37.2,140.333],["074811","棚倉町","たなぐらまち","Tanagura","福島県","Fukushima",37.017,140.367],["074829","矢祭町","やまつりまち","Yamatsuri","福島県","Fukushima",36.867,140.417],["074837","塙町","はなわまち","Hanawa","福島県","Fukushima",36.95,140.4],["074845","鮫川村","さめがわむら","Samegawa","福島県","Fukushima",37.033,140.5],["075019","石川町","いしかわまち","Ishikawa","福島県","Fukushima",37.133,140.45],["075027","玉川村","たまかわむら","Tamakawa","福島県","Fukushima",37.2,140.4],["075035","平田村","ひらたむら","Hirata","福島県","Fukushima",37.217,140.567],["075043","浅川町","あさかわまち","Asakawa","福島県","Fukushima",37.067,140.4],["075051","古殿町","ふるどのまち","Furudono","福島県","Fukushima",37.083,140.55],["075213","三春町","みはるまち","Miharu","福島県","Fukushima",37.433,140.483],["075221","小野町","おのまち","Ono","福島県","Fukushima",37.283,140.617],["075418","広野町","ひろのまち","Hirono","福島県","Fukushima",37.2,140.983],["075426","楢葉町","ならはまち","Naraha","福島県","Fukushima",37.267,140.983],["075434","富岡町","とみおかまち","Tomioka","福島県","Fukushima",37.333,141.0],["075442","川内村","かわうちむら","Kawauchi","福島県","Fukushima",37.333,140.8],["075451","大熊町","おおくままち","Okuma","福島県","Fukushima",37.4,140.983],["075469","双葉町","ふたばまち","Futaba","福島県","Fukushima",37.433,141.0],["075477","浪江町","なみえまち","Namie","福島県","Fukushima",37.483,141.0],["075485","葛尾村","かつらおむら","Katsurao","福島県","Fukushima",37.5,140.75],["075612","新地町","しんちまち","Shinchi","福島県","Fukushima",37.867,140.917],["075647","飯舘村","いいたてむら","Iitate","福島県","Fukushima",37.667,140.733],["082015","水戸市","みとし","Mito","茨城県","Ibaraki",36.35,140.467],["082023","日立市","ひたちし","Hitachi","茨城県","Ibaraki",36.583,140.65],["082031","土浦市","つちうらし","Tsuchiura","茨城県","Ibaraki",36.067,140.183],["082040","古河市","こがし","Koga","茨城県","Ibaraki",36.167,139.75],["082058","石岡市","いしおかし","Ishioka","茨城県","Ibaraki",36.183,140.283],["082074","結城市","ゆうきし","Yuki","茨城県","Ibaraki",36.3,139.867],["082082","龍ケ崎市","りゅうがさきし","Ryugasaki","茨城県","Ibaraki",35.9,140.167],["082104","下妻市","しもつまし","Shimotsuma","茨城県","Ibaraki",36.183,139.967],["082112","常総市","じょうそうし","Joso","茨城県","Ibaraki",36.017,139.983],["082121","常陸太田市","ひたちおおたし","Hitachiota","茨城県","Ibaraki",36.533,140.517],["082147","高萩市","たかはぎし","Takahagi","茨城県","Ibaraki",36.7,140.7],["082155","北茨城市","きたいばらきし","Kitaibaraki","茨城県","Ibaraki",36.8,140.75],["082163","笠間市","かさまし","Kasama","茨城県","Ibaraki",36.333,140.3],["082171","取手市","とりでし","Toride","茨城県","Ibaraki",35.9,140.05],["082198","牛久市","うしくし","Ushiku","茨城県","Ibaraki",35.967,140.133],["082201","つくば市","つくばし","Tsukuba","茨城県","Ibaraki",36.033,140.067],["082210","ひたちなか市","ひたちなかし","Hitachinaka","茨城県","Ibaraki",36.383,140.533],["082228","鹿嶋市","かしまし","Kashima","茨城県","Ibaraki",35.95,140.633],["082236","潮来市","いたこし","Itako","茨城県","Ibaraki",35.933,140.55],["082244","守谷市","もりやし","Moriya","茨城県","Ibaraki",35.95,139.967],["082252","常陸大宮市","ひたちおおみやし","Hitachiomiya","茨城県","Ibaraki",36.55,140.4],["082261","那珂市","なかし","Naka","茨城県","Ibaraki",36.45,140.483],["082279","筑西市","ちくせいし","Chikusei","茨城県","Ibaraki",36.3,139.967],["082287","坂東市","ばんどうし","Bando","茨城県","Ibaraki",36.033,139.883],["082295","稲敷市","いなしきし","Inashiki","茨城県","Ibaraki",35.95,140.317],["082309","かすみがうら市","かすみがうらし","Kasumigaura","茨城県","Ibaraki",36.15,140.233],["082317","桜川市","さくらがわし","Sakuragawa","茨城県","Ibaraki",36.317,140.083],["082325","神栖市","かみすし","Kamisu","茨城県","Ibaraki",35.883,140.65],["082333","行方市","なめがたし","Namegata","茨城県","Ibaraki",35.983,140.483],["082341","鉾田市","ほこたし","Hokota","茨城県","Ibaraki",36.15,140.5],["082350","つくばみらい市","つくばみらいし","Tsukubamirai","茨城県","Ibaraki",35.95,140.033],["082368","小美玉市","おみたまし","Omitama","茨城県","Ibaraki",36.233,140.35],["083020","茨城町","いばらきまち","Ibaraki","茨城県","Ibaraki",36.283,140.417],["083097","大洗町","おおあらいまち","Oarai","茨城県","Ibaraki",36.3,140.567],["083101","城里町","しろさとまち","Shirosato","茨城県","Ibaraki",36.467,140.367],["083411","東海村","とうかいむら","Tokai","茨城県","Ibaraki",36.467,140.55],["083640","大子町","だいごまち","Daigo","茨城県","Ibaraki",36.767,140.35],["084425","美浦村","みほむら","Miho","茨城県","Ibaraki",36.0,140.3],["084433","阿見町","あみまち","Ami","茨城県","Ibaraki",36.017,140.2],["084476","河内町","かわちまち","Kawachi","茨城県","Ibaraki",35.883,140.233],["085219","八千代町","やちよまち","Yachiyo","茨城県","Ibaraki",36.167,139.883],["085421","五霞町","ごかまち","Goka","茨城県","Ibaraki",36.1,139.733],["085464","境町","さかいまち","Sakai","茨城県","Ibaraki",36.1,139.783],["085642","利根町","とねまち","Tone","茨城県","Ibaraki",35.85,140.133],["092011","宇都宮市","うつのみやし","Utsunomiya","栃木県","Tochigi",36.55,139.867],["092029","足利市","あしかがし","Ashikaga","栃木県","Tochigi",36.333,139.433],["092037","栃木市","とちぎし","Tochigi","栃木県","Tochigi",36.367,139.717],["092045","佐野市","さのし","Sano","栃木県","Tochigi",36.3,139.567],["092053","鹿沼市","かぬまし","Kanuma","栃木県","Tochigi",36.567,139.733],["092061","日光市","にっこうし","Nikko","栃木県","Tochigi",36.717,139.683],["092088","小山市","おやまし","Oyama","栃木県","Tochigi",36.3,139.8],["092096","真岡市","もおかし","Mooka","栃木県","Tochigi",36.433,140.0],["092100","大田原市","おおたわらし","Otawara","栃木県","Tochigi",36.867,140.0],["092118","矢板市","やいたし","Yaita","栃木県","Tochigi",36.8,139.917],["092134","那須塩原市","なすしおばらし","Nasushiobara","栃木県","Tochigi",36.95,140.033],["092142","さくら市","さくらし","Sakura","栃木県","Tochigi",36.683,139.95],["092151","那須烏山市","なすからすやまし","Nasukarasuyama","栃木県","Tochigi",36.65,140.15],["092169","下野市","しもつけし","Shimotsuke","栃木県","Tochigi",36.383,139.833],["093017","上三川町","かみのかわまち","Kaminokawa","栃木県","Tochigi",36.433,139.9],["093424","益子町","ましこまち","Mashiko","栃木県","Tochigi",36.467,140.083],["093432","茂木町","もてぎまち","Motegi","栃木県","Tochigi",36.517,140.183],["093441","市貝町","いちかいまち","Ichikai","栃木県","Tochigi",36.533,140.1],["093459","芳賀町","はがまち","Haga","栃木県","Tochigi",36.533,140.05],["093611","壬生町","みぶまち","Mibu","栃木県","Tochigi",36.417,139.8],["093645","野木町","のぎまち","Nogi","栃木県","Tochigi",36.217,139.733],["093840","塩谷町","しおやまち","Shioya","栃木県","Tochigi",36.767,139.85],["093866","高根沢町","たかねざわまち","Takanezawa","栃木県","Tochigi",36.617,139.983],["094072","那須町","なすまち","Nasu","栃木県","Tochigi",37.017,140.117],["094111","那珂川町","なかがわまち","Nakagawa","栃木県","Tochigi",36.733,140.167],["102016","前橋市","まえばしし","Maebashi","群馬県","Gunma",36.383,139.05],["102024","高崎市","たかさきし","Takasaki","群馬県","Gunma",36.317,139.0],["102032","桐生市","きりゅうし","Kiryu","群馬県","Gunma",36.4,139.317],["102041","伊勢崎市","いせさきし","Isesaki","群馬県","Gunma",36.3,139.183],["102059","太田市","おおたし","Ota","群馬県","Gunma",36.283,139.367],["102067","沼田市","ぬまたし","Numata","群馬県","Gunma",36.633,139.033],["102075","館林市","たてばやしし","Tatebayashi","群馬県","Gunma",36.233,139.533],["102083","渋川市","しぶかわし","Shibukawa","群馬県","Gunma",36.483,139.0],["102091","藤岡市","ふじおかし","Fujioka","群馬県","Gunma",36.25,139.067],["102105","富岡市","とみおかし","Tomioka","群馬県","Gunma",36.25,138.883],["102113","安中市","あんなかし","Annaka","群馬県","Gunma",36.317,138.883],["102121","みどり市","みどりし","Midori","群馬県","Gunma",36.383,139.267],["103446","榛東村","しんとうむら","Shinto","群馬県","Gunma",36.433,138.967],["103454","吉岡町","よしおかまち","Yoshioka","群馬県","Gunma",36.433,139.0],["103667","上野村","うえのむら","Ueno","群馬県","Gunma",36.083,138.767],["103675","神流町","かんなまち","Kanna","群馬県","Gunma",36.1,138.917],["103829","下仁田町","しもにたまち","Shimonita","群馬県","Gunma",36.2,138.783],["103837","南牧村","なんもくむら","Nanmoku","群馬県","Gunma",36.15,138.7],["103845","甘楽町","かんらまち","Kanra","群馬県","Gunma",36.233,138.917],["104213","中之条町","なかのじょうまち","Nakanojo","群馬県","Gunma",36.583,138.833],["104248","長野原町","ながのはらまち","Naganohara","群馬県","Gunma",36.55,138.633],["104256","嬬恋村","つまごいむら","Tsumagoi","群馬県","Gunma",36.5,138.517],["104264","草津町","くさつまち","Kusatsu","群馬県","Gunma",36.617,138.583],["104281","高山村","たかやまむら","Takayama","群馬県","Gunma",36.617,138.933],["104299","東吾妻町","ひがしあがつままち","Higashiagatsuma","群馬県","Gunma",36.567,138.817],["104434","片品村","かたしなむら","Katashina","群馬県","Gunma",36.767,139.217],["104442","川場村","かわばむら","Kawaba","群馬県","Gunma",36.683,139.1],["104485","昭和村","しょうわむら","Showa","群馬県","Gunma",36.633,139.05],["104493","みなかみ町","みなかみまち","Minakami","群馬県","Gunma",36.667,138.983],["104647","玉村町","たまむらまち","Tamamura","群馬県","Gunma",36.3,139.1],["105210","板倉町","いたくらまち","Itakura","群馬県","Gunma",36.217,139.6],["105228","明和町","めいわまち","Meiwa","群馬県","Gunma",36.2,139.533],["105236","千代田町","ちよだまち","Chiyoda","群馬県","Gunma",36.217,139.433],["105244","大泉町","おおいずみまち","Oizumi","群馬県","Gunma",36.233,139.4],["105252","邑楽町","おうらまち","Ora","群馬県","Gunma",36.25,139.467],["111007","さいたま市","さいたまし","Saitama","埼玉県","Saitama",35.85,139.633],["112011","川越市","かわごえし","Kawagoe","埼玉県","Saitama",35.917,139.483],["112020","熊谷市","くまがやし","Kumagaya","埼玉県","Saitama",36.133,139.383],["112038","川口市","かわぐちし","Kawaguchi","埼玉県","Saitama",35.8,139.717],["112062","行田市","ぎょうだし","Gyoda","埼玉県","Saitama",36.133,139.45],["112071","秩父市","ちちぶし","Chichibu","埼玉県","Saitama",35.983,139.083],["112089","所沢市","ところざわし","Tokorozawa","埼玉県","Saitama",35.783,139.467],["112097","飯能市","はんのうし","Hanno","埼玉県","Saitama",35.85,139.317],["112101","加須市","かぞし","Kazo","埼玉県","Saitama",36.117,139.6],["112119","本庄市","ほんじょうし","Honjo","埼玉県","Saitama",36.233,139.183],["112127","東松山市","ひがしまつやまし","Higashimatsuyama","埼玉県","Saitama",36.033,139.4],["112143","春日部市","かすかべし","Kasukabe","埼玉県","Saitama",35.967,139.75],["112151","狭山市","さやまし","Sayama","埼玉県","Saitama",35.85,139.4],["112160","羽生市","はにゅうし","Hanyu","埼玉県","Saitama",36.167,139.533],["112178","鴻巣市","こうのすし","Konosu","埼玉県","Saitama",36.05,139.517],["112186","深谷市","ふかやし","Fukaya","埼玉県","Saitama",36.183,139.267],["112194","上尾市","あげおし","Ageo","埼玉県","Saitama",35.967,139.583],["112216","草加市","そうかし","Soka","埼玉県","Saitama",35.817,139.8],["112224","越谷市","こしがやし","Koshigaya","埼玉県","Saitama",35.883,139.783],["112232","蕨市","わらびし","Warabi","埼玉県","Saitama",35.817,139.667],["112241","戸田市","とだし","Toda","埼玉県","Saitama",35.817,139.667],["112259","入間市","いるまし","Iruma","埼玉県","Saitama",35.833,139.383],["112275","朝霞市","あさかし","Asaka","埼玉県","Saitama",35.783,139.583],["112283","志木市","しきし","Shiki","埼玉県","Saitama",35.833,139.567],["112291","和光市","わこうし","Wako","埼玉県","Saitama",35.767,139.6],["112305","新座市","にいざし","Niiza","埼玉県","Saitama",35.783,139.55],["112313","桶川市","おけがわし","Okegawa","埼玉県","Saitama",36.0,139.55],["112321","久喜市","くきし","Kuki","埼玉県","Saitama",36.05,139.667],["112330","北本市","きたもとし","Kitamoto","埼玉県","Saitama",36.017,139.517],["112348","八潮市","やしおし","Yashio","埼玉県","Saitama",35.817,139.833],["112356","富士見市","ふじみし","Fujimi","埼玉県","Saitama",35.85,139.533],["112372","三郷市","みさとし","Misato","埼玉県","Saitama",35.817,139.867],["112381","蓮田市","はすだし","Hasuda","埼玉県","Saitama",35.983,139.65],["112399","坂戸市","さかどし","Sakado","埼玉県","Saitama",35.95,139.4],["112402","幸手市","さってし","Satte","埼玉県","Saitama",36.067,139.717],["112411","鶴ヶ島市","つるがしまし","Tsurugashima","埼玉県","Saitama",35.933,139.383],["112429","日高市","ひだかし","Hidaka","埼玉県","Saitama",35.9,139.333],["112437","吉川市","よしかわし","Yoshikawa","埼玉県","Saitama",35.883,139.833],["112453","ふじみ野市","ふじみのし","Fujimino","埼玉県","Saitama",35.867,139.517],["112461","白岡市","しらおかし","Shiraoka","埼玉県","Saitama",36.017,139.667],["113018","伊奈町","いなまち","Ina","埼玉県","Saitama",36.0,139.617],["113247","三芳町","みよしまち","Miyoshi","埼玉県","Saitama",35.817,139.517],["113263","毛呂山町","もろやままち","Moroyama","埼玉県","Saitama",35.933,139.3],["113271","越生町","おごせまち","Ogose","埼玉県","Saitama",35.95,139.283],["113417","滑川町","なめがわまち","Namegawa","埼玉県","Saitama",36.05,139.35],["113425","嵐山町","らんざんまち","Ranzan","埼玉県","Saitama",36.05,139.317],["113433","小川町","おがわまち","Ogawa","埼玉県","Saitama",36.05,139.25],["113468","川島町","かわじままち","Kawajima","埼玉県","Saitama",35.967,139.467],["113476","吉見町","よしみまち","Yoshimi","埼玉県","Saitama",36.033,139.45],["113484","鳩山町","はとやままち","Hatoyama","埼玉県","Saitama",35.967,139.333],["113492","ときがわ町","ときがわまち","Tokigawa","埼玉県","Saitama",36.0,139.283],["113611","横瀬町","よこぜまち","Yokoze","埼玉県","Saitama",35.983,139.1],["113620","皆野町","みなのまち","Minano","埼玉県","Saitama",36.067,139.083],["113638","長瀞町","ながとろまち","Nagatoro","埼玉県","Saitama",36.1,139.1],["113654","小鹿野町","おがのまち","Ogano","埼玉県","Saitama",36.017,139.0],["113697","東秩父村","ひがしちちぶむら","Higashichichibu","埼玉県","Saitama",36.05,139.183],["113816","美里町","みさとまち","Misato","埼玉県","Saitama",36.167,139.167],["113832","神川町","かみかわまち","Kamikawa","埼玉県","Saitama",36.2,139.1],["113859","上里町","かみさとまち","Kamisato","埼玉県","Saitama",36.25,139.133],["114081","寄居町","よりいまち","Yorii","埼玉県","Saitama",36.117,139.183],["114421","宮代町","みやしろまち","Miyashiro","埼玉県","Saitama",36.017,139.717],["114642","杉戸町","すぎとまち","Sugito","埼玉県","Saitama",36.017,139.733],["114651","松伏町","まつぶしまち","Matsubushi","埼玉県","Saitama",35.917,139.8],["121002","千葉市","ちばし","Chiba","千葉県","Chiba",35.6,140.1],["122025","銚子市","ちょうしし","Choshi","千葉県","Chiba",35.733,140.817],["122033","市川市","いちかわし","Ichikawa","千葉県","Chiba",35.717,139.917],["122041","船橋市","ふなばしし","Funabashi","千葉県","Chiba",35.683,139.967],["122050","館山市","たてやまし","Tateyama","千葉県","Chiba",34.983,139.867],["122068","木更津市","きさらづし","Kisarazu","千葉県","Chiba",35.367,139.917],["122076","松戸市","まつどし","Matsudo","千葉県","Chiba",35.783,139.9],["122084","野田市","のだし","Noda","千葉県","Chiba",35.95,139.867],["122106","茂原市","もばらし","Mobara","千葉県","Chiba",35.417,140.283],["122114","成田市","なりたし","Narita","千葉県","Chiba",35.767,140.317],["122122","佐倉市","さくらし","Sakura","千葉県","Chiba",35.717,140.217],["122131","東金市","とうがねし","Togane","千葉県","Chiba",35.55,140.35],["122157","旭市","あさひし","Asahi","千葉県","Chiba",35.717,140.633],["122165","習志野市","ならしのし","Narashino","千葉県","Chiba",35.667,140.017],["122173","柏市","かしわし","Kashiwa","千葉県","Chiba",35.867,139.967],["122181","勝浦市","かつうらし","Katsuura","千葉県","Chiba",35.15,140.317],["122190","市原市","いちはらし","Ichihara","千葉県","Chiba",35.483,140.1],["122203","流山市","ながれやまし","Nagareyama","千葉県","Chiba",35.85,139.9],["122211","八千代市","やちよし","Yachiyo","千葉県","Chiba",35.717,140.083],["122220","我孫子市","あびこし","Abiko","千葉県","Chiba",35.85,140.017],["122238","鴨川市","かもがわし","Kamogawa","千葉県","Chiba",35.1,140.083],["122246","鎌ケ谷市","かまがやし","Kamagaya","千葉県","Chiba",35.767,140.0],["122254","君津市","きみつし","Kimitsu","千葉県","Chiba",35.317,139.9],["122262","富津市","ふっつし","Futtsu","千葉県","Chiba",35.3,139.85],["122271","浦安市","うらやすし","Urayasu","千葉県","Chiba",35.65,139.9],["122289","四街道市","よつかいどうし","Yotsukaido","千葉県","Chiba",35.667,140.167],["122297","袖ケ浦市","そでがうらし","Sodegaura","千葉県","Chiba",35.417,139.95],["122301","八街市","やちまたし","Yachimata","千葉県","Chiba",35.65,140.317],["122319","印西市","いんざいし","Inzai","千葉県","Chiba",35.817,140.133],["122327","白井市","しろいし","Shiroi","千葉県","Chiba",35.783,140.05],["122335","富里市","とみさとし","Tomisato","千葉県","Chiba",35.717,140.333],["122343","南房総市","みなみぼうそうし","Minamiboso","千葉県","Chiba",35.033,139.833],["122351","匝瑳市","そうさし","Sosa","千葉県","Chiba",35.7,140.55],["122360","香取市","かとりし","Katori","千葉県","Chiba",35.883,140.483],["122378","山武市","さんむし","Sanmu","千葉県","Chiba",35.6,140.4],["122386","いすみ市","いすみし","Isumi","千葉県","Chiba",35.25,140.383],["122394","大網白里市","おおあみしらさとし","Oamishirasato","千葉県","Chiba",35.517,140.317],["123226","酒々井町","しすいまち","Shisui","千葉県","Chiba",35.717,140.267],["123293","栄町","さかえまち","Sakae","千葉県","Chiba",35.833,140.233],["123421","神崎町","こうざきまち","Kozaki","千葉県","Chiba",35.9,140.4],["123471","多古町","たこまち","Tako","千葉県","Chiba",35.733,140.467],["123498","東庄町","とうのしょうまち","Tonosho","千葉県","Chiba",35.833,140.65],["124036","九十九里町","くじゅうくりまち","Kujukuri","千葉県","Chiba",35.533,140.433],["124095","芝山町","しばやままち","Shibayama","千葉県","Chiba",35.683,140.4],["124109","横芝光町","よこしばひかりまち","Yokoshibahikari","千葉県","Chiba",35.65,140.5],["124214","一宮町","いちのみやまち","Ichinomiya","千葉県","Chiba",35.367,140.367],["124222","睦沢町","むつざわまち","Mutsuzawa","千葉県","Chiba",35.35,140.317],["124231","長生村","ちょうせいむら","Chosei","千葉県","Chiba",35.4,140.35],["124249","白子町","しらこまち","Shirako","千葉県","Chiba",35.45,140.367],["124265","長柄町","ながらまち","Nagara","千葉県","Chiba",35.417,140.217],["124273","長南町","ちょうなんまち","Chonan","千葉県","Chiba",35.383,140.233],["124419","大多喜町","おおたきまち","Otaki","千葉県","Chiba",35.283,140.233],["124435","御宿町","おんじゅくまち","Onjuku","千葉県","Chiba",35.183,140.333],["124630","鋸南町","きょなんまち","Kyonan","千葉県","Chiba",35.1,139.833],["131016","千代田区","","Chiyoda","東京都","Tokyo",35.694,139.754],["131024","中央区","","Chuo","東京都","Tokyo",35.667,139.767],["131032","港区","","Minato","東京都","Tokyo",35.658,139.752],["131041","新宿区","","Shinjuku","東京都","Tokyo",35.701,139.71],["131059","文京区","","Bunkyo","東京都","Tokyo",35.717,139.75],["131067","台東区","","Taito","東京都","Tokyo",35.712,139.78],["131075","墨田区","","Sumida","東京都","Tokyo",35.7,139.817],["131083","江東区","","Koto","東京都","Tokyo",35.667,139.817],["131091","品川区","","Shinagawa","東京都","Tokyo",35.6,139.733],["131105","目黒区","","Meguro","東京都","Tokyo",35.633,139.683],["131113","大田区","","Ota","東京都","Tokyo",35.561,139.716],["131121","世田谷区","","Setagaya","東京都","Tokyo",35.647,139.653],["131130","渋谷区","","Shibuya","東京都","Tokyo",35.659,139.701],["131148","中野区","","Nakano","東京都","Tokyo",35.707,139.664],["131156","杉並区","","Suginami","東京都","Tokyo",35.683,139.617],["131164","豊島区","","Toshima","東京都","Tokyo",35.732,139.715],["131172","北区","","Kita","東京都","Tokyo",35.75,139.733],["131181","荒川区","","Arakawa","東京都","Tokyo",35.733,139.783],["131199","板橋区","","Itabashi","東京都","Tokyo",35.767,139.683],["131202","練馬区","","Nerima","東京都","Tokyo",35.736,139.652],["131211","足立区","","Adachi","東京都","Tokyo",35.783,139.8],["131229","葛飾区","","Katsushika","東京都","Tokyo",35.733,139.85],["131237","江戸川区","","Edogawa","東京都","Tokyo",35.7,139.883],["132012","八王子市","はちおうじし","Hachioji","東京都","Tokyo",35.667,139.3],["132021","立川市","たちかわし","Tachikawa","東京都","Tokyo",35.683,139.417],["132039","武蔵野市","むさしのし","Musashino","東京都","Tokyo",35.717,139.55],["132047","三鷹市","みたかし","Mitaka","東京都","Tokyo",35.683,139.55],["132055","青梅市","おうめし","Ome","東京都","Tokyo",35.783,139.267],["132063","府中市","ふちゅうし","Fuchu","東京都","Tokyo",35.667,139.467],["132071","昭島市","あきしまし","Akishima","東京都","Tokyo",35.7,139.35],["132080","調布市","ちょうふし","Chofu","東京都","Tokyo",35.65,139.533],["132098","町田市","まちだし","Machida","東京都","Tokyo",35.533,139.433],["132101","小金井市","こがねいし","Koganei","東京都","Tokyo",35.683,139.5],["132110","小平市","こだいらし","Kodaira","東京都","Tokyo",35.717,139.467],["132128","日野市","ひのし","Hino","東京都","Tokyo",35.667,139.383],["132136","東村山市","ひがしむらやまし","Higashimurayama","東京都","Tokyo",35.75,139.467],["132144","国分寺市","こくぶんじし","Kokubunji","東京都","Tokyo",35.7,139.45],["132152","国立市","くにたちし","Kunitachi","東京都","Tokyo",35.683,139.433],["132187","福生市","ふっさし","Fussa","東京都","Tokyo",35.733,139.317],["132195","狛江市","こまえし","Komae","東京都","Tokyo",35.633,139.567],["132209","東大和市","ひがしやまとし","Higashiyamato","東京都","Tokyo",35.733,139.417],["132217","清瀬市","きよせし","Kiyose","東京都","Tokyo",35.783,139.517],["132225","東久留米市","ひがしくるめし","Higashikurume","東京都","Tokyo",35.75,139.517],["132233","武蔵村山市","むさしむらやまし","Musashimurayama","東京都","Tokyo",35.75,139.383],["132241","多摩市","たまし","Tama","東京都","Tokyo",35.633,139.433],["132250","稲城市","いなぎし","Inagi","東京都","Tokyo",35.633,139.5],["132276","羽村市","はむらし","Hamura","東京都","Tokyo",35.767,139.3],["132284","あきる野市","あきるのし","Akiruno","東京都","Tokyo",35.717,139.283],["132292","西東京市","にしとうきょうし","Nishitokyo","東京都","Tokyo",35.717,139.533],["133035","瑞穂町","みずほまち","Mizuho","東京都","Tokyo",35.767,139.35],["133051","日の出町","ひのでまち","Hinode","東京都","Tokyo",35.733,139.25],["133078","檜原村","ひのはらむら","Hinohara","東京都","Tokyo",35.717,139.133],["133086","奥多摩町","おくたままち","Okutama","東京都","Tokyo",35.8,139.083],["133612","大島町","おおしままち","Oshima","東京都","Tokyo",34.75,139.35],["133621","利島村","としまむら","Toshima","東京都","Tokyo",34.517,139.267],["133639","新島村","にいじまむら","Niijima","東京都","Tokyo",34.367,139.25],["133647","神津島村","こうづしまむら","Kozushima","東京都","Tokyo",34.2,139.133],["133817","三宅村","みやけむら","Miyake","東京都","Tokyo",34.067,139.55],["133825","御蔵島村","みくらじまむら","Mikurajima","東京都","Tokyo",33.883,139.583],["134015","八丈町","はちじょうまち","Hachijo","東京都","Tokyo",33.1,139.783],["134023","青ヶ島村","","Aogashima","東京都","Tokyo",32.466,139.763],["134210","小笠原村","おがさわらむら","Ogasawara","東京都","Tokyo",27.083,142.183],["141003","横浜市","よこはまし","Yokohama","神奈川県","Kanagawa",35.433,139.633],["141305","川崎市","かわさきし","Kawasaki","神奈川県","Kanagawa",35.517,139.7],["141500","相模原市","さがみはらし","Sagamihara","神奈川県","Kanagawa",35.567,139.367],["142018","横須賀市","よこすかし","Yokosuka","神奈川県","Kanagawa",35.267,139.667],["142034","平塚市","ひらつかし","Hiratsuka","神奈川県","Kanagawa",35.333,139.333],["142042","鎌倉市","かまくらし","Kamakura","神奈川県","Kanagawa",35.317,139.533],["142051","藤沢市","ふじさわし","Fujisawa","神奈川県","Kanagawa",35.333,139.483],["142069","小田原市","おだわらし","Odawara","神奈川県","Kanagawa",35.25,139.15],["142077","茅ヶ崎市","ちがさきし","Chigasaki","神奈川県","Kanagawa",35.333,139.4],["142085","逗子市","ずしし","Zushi","神奈川県","Kanagawa",35.283,139.567],["142107","三浦市","みうらし","Miura","神奈川県","Kanagawa",35.133,139.617],["142115","秦野市","はだのし","Hadano","神奈川県","Kanagawa",35.367,139.217],["142123","厚木市","あつぎし","Atsugi","神奈川県","Kanagawa",35.433,139.35],["142131","大和市","やまとし","Yamato","神奈川県","Kanagawa",35.483,139.45],["142140","伊勢原市","いせはらし","Isehara","神奈川県","Kanagawa",35.4,139.3],["142158","海老名市","えびなし","Ebina","神奈川県","Kanagawa",35.433,139.383],["142166","座間市","ざまし","Zama","神奈川県","Kanagawa",35.483,139.4],["142174","南足柄市","みなみあしがらし","Minamiashigara","神奈川県","Kanagawa",35.317,139.1],["142182","綾瀬市","あやせし","Ayase","神奈川県","Kanagawa",35.433,139.417],["143014","葉山町","はやままち","Hayama","神奈川県","Kanagawa",35.267,139.583],["143219","寒川町","さむかわまち","Samukawa","神奈川県","Kanagawa",35.367,139.383],["143413","大磯町","おおいそまち","Oiso","神奈川県","Kanagawa",35.3,139.3],["143618","中井町","なかいまち","Nakai","神奈川県","Kanagawa",35.317,139.217],["143626","大井町","おおいまち","Oi","神奈川県","Kanagawa",35.317,139.15],["143634","松田町","まつだまち","Matsuda","神奈川県","Kanagawa",35.333,139.133],["143669","開成町","かいせいまち","Kaisei","神奈川県","Kanagawa",35.333,139.117],["143821","箱根町","はこねまち","Hakone","神奈川県","Kanagawa",35.217,139.1],["143839","真鶴町","まなづるまち","Manazuru","神奈川県","Kanagawa",35.15,139.133],["143847","湯河原町","ゆがわらまち","Yugawara","神奈川県","Kanagawa",35.133,139.1],["144011","愛川町","あいかわまち","Aikawa","神奈川県","Kanagawa",35.517,139.317],["144029","清川村","きよかわむら","Kiyokawa","神奈川県","Kanagawa",35.467,139.267],["151009","新潟市","にいがたし","Niigata","新潟県","Niigata",37.9,139.033],["152021","長岡市","ながおかし","Nagaoka","新潟県","Niigata",37.433,138.833],["152048","三条市","さんじょうし","Sanjo","新潟県","Niigata",37.633,138.95],["152056","柏崎市","かしわざきし","Kashiwazaki","新潟県","Niigata",37.367,138.55],["152064","新発田市","しばたし","Shibata","新潟県","Niigata",37.95,139.317],["152081","小千谷市","おぢやし","Ojiya","新潟県","Niigata",37.3,138.783],["152099","加茂市","かもし","Kamo","新潟県","Niigata",37.65,139.033],["152102","十日町市","とおかまちし","Tokamachi","新潟県","Niigata",37.117,138.75],["152111","見附市","みつけし","Mitsuke","新潟県","Niigata",37.517,138.9],["152129","村上市","むらかみし","Murakami","新潟県","Niigata",38.217,139.467],["152137","燕市","つばめし","Tsubame","新潟県","Niigata",37.683,138.867],["152161","糸魚川市","いといがわし","Itoigawa","新潟県","Niigata",37.033,137.85],["152170","妙高市","みょうこうし","Myoko","新潟県","Niigata",37.017,138.25],["152188","五泉市","ごせんし","Gosen","新潟県","Niigata",37.733,139.167],["152226","上越市","じょうえつし","Joetsu","新潟県","Niigata",37.133,138.233],["152234","阿賀野市","あがのし","Agano","新潟県","Niigata",37.833,139.217],["152242","佐渡市","さどし","Sado","新潟県","Niigata",38.017,138.367],["152251","魚沼市","うおぬまし","Uonuma","新潟県","Niigata",37.217,138.95],["152269","南魚沼市","みなみうおぬまし","Minamiuonuma","新潟県","Niigata",37.05,138.867],["152277","胎内市","たいないし","Tainai","新潟県","Niigata",38.05,139.4],["153079","聖籠町","せいろうまち","Seiro","新潟県","Niigata",37.967,139.267],["153427","弥彦村","やひこむら","Yahiko","新潟県","Niigata",37.683,138.85],["153613","田上町","たがみまち","Tagami","新潟県","Niigata",37.683,139.05],["153851","阿賀町","あがまち","Aga","新潟県","Niigata",37.667,139.45],["154059","出雲崎町","いずもざきまち","Izumozaki","新潟県","Niigata",37.517,138.7],["154610","湯沢町","ゆざわまち","Yuzawa","新潟県","Niigata",36.933,138.817],["154822","津南町","つなんまち","Tsunan","新潟県","Niigata",37.0,138.65],["155047","刈羽村","かりわむら","Kariwa","新潟県","Niigata",37.417,138.617],["155811","関川村","せきかわむら","Sekikawa","新潟県","Niigata",38.083,139.55],["155861","粟島浦村","あわしまうらむら","Awashimaura","新潟県","Niigata",38.467,139.25],["162019","富山市","とやまし","Toyama","富山県","Toyama",36.683,137.2],["162027","高岡市","たかおかし","Takaoka","富山県","Toyama",36.75,137.017],["162043","魚津市","うおづし","Uozu","富山県","Toyama",36.817,137.4],["162051","氷見市","ひみし","Himi","富山県","Toyama",36.85,136.983],["162060","滑川市","なめりかわし","Namerikawa","富山県","Toyama",36.75,137.333],["162078","黒部市","くろべし","Kurobe","富山県","Toyama",36.867,137.433],["162086","砺波市","となみし","Tonami","富山県","Toyama",36.633,136.95],["162094","小矢部市","おやべし","Oyabe","富山県","Toyama",36.667,136.867],["162108","南砺市","なんとし","Nanto","富山県","Toyama",36.583,136.917],["162116","射水市","いみずし","Imizu","富山県","Toyama",36.7,137.083],["163210","舟橋村","ふなはしむら","Funahashi","富山県","Toyama",36.7,137.3],["163228","上市町","かみいちまち","Kamiichi","富山県","Toyama",36.683,137.35],["163236","立山町","たてやままち","Tateyama","富山県","Toyama",36.65,137.3],["163422","入善町","にゅうぜんまち","Nyuzen","富山県","Toyama",36.933,137.5],["163431","朝日町","あさひまち","Asahi","富山県","Toyama",36.933,137.55],["172014","金沢市","かなざわし","Kanazawa","石川県","Ishikawa",36.55,136.65],["172022","七尾市","ななおし","Nanao","石川県","Ishikawa",37.033,136.967],["172031","小松市","こまつし","Komatsu","石川県","Ishikawa",36.4,136.433],["172049","輪島市","わじまし","Wajima","石川県","Ishikawa",37.383,136.883],["172057","珠洲市","すずし","Suzu","石川県","Ishikawa",37.433,137.25],["172065","加賀市","かがし","Kaga","石川県","Ishikawa",36.3,136.3],["172073","羽咋市","はくいし","Hakui","石川県","Ishikawa",36.883,136.767],["172090","かほく市","かほくし","Kahoku","石川県","Ishikawa",36.717,136.7],["172103","白山市","はくさんし","Hakusan","石川県","Ishikawa",36.5,136.55],["172111","能美市","のみし","Nomi","石川県","Ishikawa",36.433,136.483],["172120","野々市市","ののいちし","Nonoichi","石川県","Ishikawa",36.517,136.617],["173240","川北町","かわきたまち","Kawakita","石川県","Ishikawa",36.467,136.533],["173614","津幡町","つばたまち","Tsubata","石川県","Ishikawa",36.667,136.717],["173657","内灘町","うちなだまち","Uchinada","石川県","Ishikawa",36.65,136.633],["173843","志賀町","しかまち","Shika","石川県","Ishikawa",37.0,136.767],["173860","宝達志水町","ほうだつしみずちょう","Hodatsushimizu","石川県","Ishikawa",36.85,136.783],["174076","中能登町","なかのとまち","Nakanoto","石川県","Ishikawa",36.983,136.9],["174611","穴水町","あなみずまち","Anamizu","石川県","Ishikawa",37.217,136.9],["174637","能登町","のとちょう","Noto","石川県","Ishikawa",37.3,137.15],["182010","福井市","ふくいし","Fukui","福井県","Fukui",36.05,136.217],["182028","敦賀市","つるがし","Tsuruga","福井県","Fukui",35.633,136.05],["182044","小浜市","おばまし","Obama","福井県","Fukui",35.483,135.733],["182052","大野市","おおのし","Ono","福井県","Fukui",35.967,136.483],["182061","勝山市","かつやまし","Katsuyama","福井県","Fukui",36.05,136.5],["182079","鯖江市","さばえし","Sabae","福井県","Fukui",35.95,136.183],["182087","あわら市","あわらし","Awara","福井県","Fukui",36.2,136.217],["182095","越前市","えちぜんし","Echizen","福井県","Fukui",35.9,136.167],["182109","坂井市","さかいし","Sakai","福井県","Fukui",36.167,136.217],["183229","永平寺町","えいへいじちょう","Eiheiji","福井県","Fukui",36.083,136.283],["183822","池田町","いけだちょう","Ikeda","福井県","Fukui",35.883,136.333],["184047","南越前町","みなみえちぜんちょう","Minamiechizen","福井県","Fukui",35.833,136.183],["184233","越前町","えちぜんちょう","Echizen","福井県","Fukui",35.967,136.117],["184420","美浜町","みはまちょう","Mihama","福井県","Fukui",35.6,135.933],["184811","高浜町","たかはまちょう","Takahama","福井県","Fukui",35.483,135.55],["184837","おおい町","おおいちょう","Oi","福井県","Fukui",35.467,135.617],["185019","若狭町","わかさちょう","Wakasa","福井県","Fukui",35.533,135.9],["192015","甲府市","こうふし","Kofu","山梨県","Yamanashi",35.65,138.567],["192023","富士吉田市","ふじよしだし","Fujiyoshida","山梨県","Yamanashi",35.483,138.8],["192040","都留市","つるし","Tsuru","山梨県","Yamanashi",35.55,138.9],["192058","山梨市","やまなしし","Yamanashi","山梨県","Yamanashi",35.683,138.683],["192066","大月市","おおつきし","Otsuki","山梨県","Yamanashi",35.6,138.933],["192074","韮崎市","にらさきし","Nirasaki","山梨県","Yamanashi",35.7,138.433],["192082","南アルプス市","みなみあるぷすし","Minami-alps","山梨県","Yamanashi",35.6,138.45],["192091","北杜市","ほくとし","Hokuto","山梨県","Yamanashi",35.767,138.417],["192104","甲斐市","かいし","Kai","山梨県","Yamanashi",35.65,138.5],["192112","笛吹市","ふえふきし","Fuefuki","山梨県","Yamanashi",35.633,138.633],["192121","上野原市","うえのはらし","Uenohara","山梨県","Yamanashi",35.617,139.1],["192139","甲州市","こうしゅうし","Koshu","山梨県","Yamanashi",35.7,138.717],["192147","中央市","ちゅうおうし","Chuo","山梨県","Yamanashi",35.583,138.517],["193461","市川三郷町","いちかわみさとちょう","Ichikawamisato","山梨県","Yamanashi",35.55,138.5],["193640","早川町","はやかわちょう","Hayakawa","山梨県","Yamanashi",35.4,138.35],["193658","身延町","みのぶちょう","Minobu","山梨県","Yamanashi",35.467,138.433],["193666","南部町","なんぶちょう","Nanbu","山梨県","Yamanashi",35.233,138.483],["193844","昭和町","しょうわちょう","Showa","山梨県","Yamanashi",35.617,138.533],["194221","道志村","どうしむら","Doshi","山梨県","Yamanashi",35.517,139.033],["194239","西桂町","にしかつらちょう","Nishikatsura","山梨県","Yamanashi",35.517,138.833],["194247","忍野村","おしのむら","Oshino","山梨県","Yamanashi",35.45,138.833],["194255","山中湖村","やまなかこむら","Yamanakako","山梨県","Yamanashi",35.4,138.85],["194298","鳴沢村","なるさわむら","Narusawa","山梨県","Yamanashi",35.467,138.7],["194301","富士河口湖町","ふじかわぐちこまち","Fujikawaguchiko","山梨県","Yamanashi",35.5,138.75],["194425","小菅村","こすげむら","Kosuge","山梨県","Yamanashi",35.75,138.933],["194433","丹波山村","たばやまむら","Tabayama","山梨県","Yamanashi",35.783,138.917],["202011","長野市","ながのし","Nagano","長野県","Nagano",36.633,138.183],["202029","松本市","まつもとし","Matsumoto","長野県","Nagano",36.233,137.967],["202037","上田市","うえだし","Ueda","長野県","Nagano",36.4,138.233],["202045","岡谷市","おかやし","Okaya","長野県","Nagano",36.067,138.033],["202053","飯田市","いいだし","Iida","長野県","Nagano",35.5,137.817],["202061","諏訪市","すわし","Suwa","長野県","Nagano",36.033,138.1],["202070","須坂市","すざかし","Suzaka","長野県","Nagano",36.65,138.3],["202088","小諸市","こもろし","Komoro","長野県","Nagano",36.317,138.417],["202096","伊那市","いなし","Ina","長野県","Nagano",35.817,137.95],["202100","駒ヶ根市","こまがねし","Komagane","長野県","Nagano",35.717,137.933],["202118","中野市","なかのし","Nakano","長野県","Nagano",36.733,138.367],["202126","大町市","おおまちし","Omachi","長野県","Nagano",36.5,137.85],["202134","飯山市","いいやまし","Iiyama","長野県","Nagano",36.85,138.35],["202142","茅野市","ちのし","Chino","長野県","Nagano",35.983,138.15],["202151","塩尻市","しおじりし","Shiojiri","長野県","Nagano",36.1,137.95],["202177","佐久市","さくし","Saku","長野県","Nagano",36.233,138.467],["202185","千曲市","ちくまし","Chikuma","長野県","Nagano",36.533,138.117],["202193","東御市","とうみし","Tomi","長野県","Nagano",36.35,138.317],["202207","安曇野市","あづみのし","Azumino","長野県","Nagano",36.3,137.883],["203033","小海町","こうみまち","Koumi","長野県","Nagano",36.083,138.467],["203041","川上村","かわかみむら","Kawakami","長野県","Nagano",35.967,138.567],["203050","南牧村","みなみまきむら","Minamimaki","長野県","Nagano",36.017,138.483],["203068","南相木村","みなみあいきむら","Minamiaiki","長野県","Nagano",36.033,138.533],["203076","北相木村","きたあいきむら","Kitaaiki","長野県","Nagano",36.05,138.55],["203092","佐久穂町","さくほまち","Sakuho","長野県","Nagano",36.15,138.483],["203211","軽井沢町","かるいざわまち","Karuizawa","長野県","Nagano",36.333,138.583],["203238","御代田町","みよたまち","Miyota","長野県","Nagano",36.317,138.5],["203246","立科町","たてしなまち","Tateshina","長野県","Nagano",36.267,138.3],["203491","青木村","あおきむら","Aoki","長野県","Nagano",36.367,138.117],["203505","長和町","ながわまち","Nagawa","長野県","Nagano",36.25,138.267],["203611","下諏訪町","しもすわまち","Shimosuwa","長野県","Nagano",36.067,138.067],["203629","富士見町","ふじみまち","Fujimi","長野県","Nagano",35.9,138.233],["203637","原村","はらむら","Hara","長野県","Nagano",35.95,138.217],["203823","辰野町","たつのまち","Tatsuno","長野県","Nagano",35.967,137.983],["203831","箕輪町","みのわまち","Minowa","長野県","Nagano",35.9,137.967],["203840","飯島町","いいじままち","Iijima","長野県","Nagano",35.667,137.917],["203858","南箕輪村","みなみみのわむら","Minamiminowa","長野県","Nagano",35.867,137.967],["203866","中川村","なかがわむら","Nakagawa","長野県","Nagano",35.633,137.933],["203882","宮田村","みやだむら","Miyada","長野県","Nagano",35.767,137.933],["204021","松川町","まつかわまち","Matsukawa","長野県","Nagano",35.583,137.9],["204030","高森町","たかもりまち","Takamori","長野県","Nagano",35.55,137.867],["204048","阿南町","あなんちょう","Anan","長野県","Nagano",35.317,137.8],["204072","阿智村","あちむら","Achi","長野県","Nagano",35.433,137.733],["204099","平谷村","ひらやむら","Hiraya","長野県","Nagano",35.317,137.617],["204102","根羽村","ねばむら","Neba","長野県","Nagano",35.25,137.567],["204111","下條村","しもじょうむら","Shimojo","長野県","Nagano",35.383,137.783],["204129","売木村","うるぎむら","Urugi","長野県","Nagano",35.267,137.7],["204137","天龍村","てんりゅうむら","Tenryu","長野県","Nagano",35.267,137.85],["204145","泰阜村","やすおかむら","Yasuoka","長野県","Nagano",35.367,137.833],["204153","喬木村","たかぎむら","Takagi","長野県","Nagano",35.5,137.867],["204161","豊丘村","とよおかむら","Toyooka","長野県","Nagano",35.55,137.883],["204170","大鹿村","おおしかむら","Oshika","長野県","Nagano",35.567,138.033],["204226","上松町","あげまつまち","Agematsu","長野県","Nagano",35.783,137.683],["204234","南木曽町","なぎそまち","Nagiso","長野県","Nagano",35.6,137.6],["204251","木祖村","きそむら","Kiso","長野県","Nagano",35.933,137.767],["204293","王滝村","おうたきむら","Otaki","長野県","Nagano",35.8,137.55],["204307","大桑村","おおくわむら","Okuwa","長野県","Nagano",35.667,137.65],["204323","木曽町","きそまち","Kiso","長野県","Nagano",35.833,137.683],["204463","麻績村","おみむら","Omi","長野県","Nagano",36.45,138.033],["204480","生坂村","いくさかむら","Ikusaka","長野県","Nagano",36.417,137.917],["204501","山形村","やまがたむら","Yamagata","長野県","Nagano",36.167,137.867],["204528","筑北村","ちくほくむら","Chikuhoku","長野県","Nagano",36.417,138.0],["204811","池田町","いけだまち","Ikeda","長野県","Nagano",36.417,137.867],["204820","松川村","まつかわむら","Matsukawa","長野県","Nagano",36.417,137.85],["204854","白馬村","はくばむら","Hakuba","長野県","Nagano",36.683,137.85],["204862","小谷村","おたりむら","Otari","長野県","Nagano",36.767,137.9],["205214","坂城町","さかきまち","Sakaki","長野県","Nagano",36.45,138.167],["205419","小布施町","おぶせまち","Obuse","長野県","Nagano",36.683,138.3],["205435","高山村","たかやまむら","Takayama","長野県","Nagano",36.667,138.35],["205613","山ノ内町","やまのうちまち","Yamanouchi","長野県","Nagano",36.733,138.4],["205621","木島平村","きじまだいらむら","Kijimadaira","長野県","Nagano",36.85,138.4],["205630","野沢温泉村","のざわおんせんむら","Nozawaonsen","長野県","Nagano",36.917,138.433],["205834","信濃町","しなのまち","Shinano","長野県","Nagano",36.8,138.2],["205885","小川村","おがわむら","Ogawa","長野県","Nagano",36.617,137.967],["205907","飯綱町","いいづなまち","Iizuna","長野県","Nagano",36.75,138.233],["206024","栄村","さかえむら","Sakae","長野県","Nagano",36.983,138.567],["212016","岐阜市","ぎふし","Gifu","岐阜県","Gifu",35.417,136.75],["212024","大垣市","おおがきし","Ogaki","岐阜県","Gifu",35.35,136.6],["212032","高山市","たかやまし","Takayama","岐阜県","Gifu",36.133,137.25],["212041","多治見市","たじみし","Tajimi","岐阜県","Gifu",35.317,137.117],["212059","関市","せきし","Seki","岐阜県","Gifu",35.483,136.917],["212067","中津川市","なかつがわし","Nakatsugawa","岐阜県","Gifu",35.483,137.5],["212075","美濃市","みのし","Mino","岐阜県","Gifu",35.533,136.9],["212083","瑞浪市","みずなみし","Mizunami","岐阜県","Gifu",35.35,137.25],["212091","羽島市","はしまし","Hashima","岐阜県","Gifu",35.317,136.7],["212105","恵那市","えなし","Ena","岐阜県","Gifu",35.433,137.4],["212113","美濃加茂市","みのかもし","Minokamo","岐阜県","Gifu",35.433,137.0],["212121","土岐市","ときし","Toki","岐阜県","Gifu",35.35,137.183],["212130","各務原市","かかみがはらし","Kakamigahara","岐阜県","Gifu",35.383,136.833],["212148","可児市","かにし","Kani","岐阜県","Gifu",35.417,137.05],["212156","山県市","やまがたし","Yamagata","岐阜県","Gifu",35.5,136.767],["212164","瑞穂市","みずほし","Mizuho","岐阜県","Gifu",35.383,136.683],["212172","飛騨市","","Hida","岐阜県","Gifu",36.238,137.186],["212181","本巣市","もとすし","Motosu","岐阜県","Gifu",35.467,136.667],["212199","郡上市","ぐじょうし","Gujo","岐阜県","Gifu",35.733,136.95],["212202","下呂市","げろし","Gero","岐阜県","Gifu",35.8,137.233],["212211","海津市","かいづし","Kaizu","岐阜県","Gifu",35.217,136.633],["213021","岐南町","ぎなんちょう","Ginan","岐阜県","Gifu",35.383,136.767],["213039","笠松町","かさまつちょう","Kasamatsu","岐阜県","Gifu",35.367,136.75],["213411","養老町","ようろうちょう","Yoro","岐阜県","Gifu",35.3,136.55],["213616","垂井町","たるいちょう","Tarui","岐阜県","Gifu",35.367,136.517],["213624","関ケ原町","せきがはらちょう","Sekigahara","岐阜県","Gifu",35.35,136.467],["213811","神戸町","ごうどちょう","Godo","岐阜県","Gifu",35.417,136.6],["213829","輪之内町","わのうちちょう","Wanouchi","岐阜県","Gifu",35.283,136.633],["213837","安八町","あんぱちちょう","Anpachi","岐阜県","Gifu",35.333,136.65],["214019","揖斐川町","いびがわちょう","Ibigawa","岐阜県","Gifu",35.483,136.567],["214035","大野町","おおのちょう","Ono","岐阜県","Gifu",35.467,136.617],["214043","池田町","いけだちょう","Ikeda","岐阜県","Gifu",35.433,136.567],["214213","北方町","きたがたちょう","Kitagata","岐阜県","Gifu",35.433,136.683],["215015","坂祝町","さかほぎちょう","Sakahogi","岐阜県","Gifu",35.417,136.983],["215023","富加町","とみかちょう","Tomika","岐阜県","Gifu",35.483,136.967],["215040","七宗町","ひちそうちょう","Hichiso","岐阜県","Gifu",35.533,137.117],["215058","八百津町","やおつちょう","Yaotsu","岐阜県","Gifu",35.467,137.133],["215066","白川町","しらかわちょう","Shirakawa","岐阜県","Gifu",35.567,137.183],["215074","東白川村","ひがししらかわむら","Higashishirakawa","岐阜県","Gifu",35.633,137.317],["215210","御嵩町","みたけちょう","Mitake","岐阜県","Gifu",35.433,137.117],["216046","白川村","しらかわむら","Shirakawa","岐阜県","Gifu",36.267,136.883],["221007","静岡市","しずおかし","Shizuoka","静岡県","Shizuoka",34.967,138.383],["221309","浜松市","はままつし","Hamamatsu","静岡県","Shizuoka",34.7,137.717],["222038","沼津市","ぬまづし","Numazu","静岡県","Shizuoka",35.083,138.85],["222054","熱海市","あたみし","Atami","静岡県","Shizuoka",35.083,139.067],["222062","三島市","みしまし","Mishima","静岡県","Shizuoka",35.117,138.917],["222071","富士宮市","ふじのみやし","Fujinomiya","静岡県","Shizuoka",35.217,138.617],["222089","伊東市","いとうし","Ito","静岡県","Shizuoka",34.95,139.1],["222097","島田市","しまだし","Shimada","静岡県","Shizuoka",34.833,138.167],["222101","富士市","ふじし","Fuji","静岡県","Shizuoka",35.15,138.667],["222119","磐田市","いわたし","Iwata","静岡県","Shizuoka",34.717,137.85],["222127","焼津市","やいづし","Yaizu","静岡県","Shizuoka",34.867,138.317],["222135","掛川市","かけがわし","Kakegawa","静岡県","Shizuoka",34.767,137.983],["222143","藤枝市","ふじえだし","Fujieda","静岡県","Shizuoka",34.867,138.25],["222151","御殿場市","ごてんばし","Gotenba","静岡県","Shizuoka",35.3,138.933],["222160","袋井市","ふくろいし","Fukuroi","静岡県","Shizuoka",34.75,137.917],["222194","下田市","しもだし","Shimoda","静岡県","Shizuoka",34.667,138.933],["222208","裾野市","すそのし","Susono","静岡県","Shizuoka",35.167,138.9],["222216","湖西市","こさいし","Kosai","静岡県","Shizuoka",34.717,137.517],["222224","伊豆市","いずし","Izu","静岡県","Shizuoka",34.967,138.933],["222232","御前崎市","おまえざきし","Omaezaki","静岡県","Shizuoka",34.633,138.117],["222241","菊川市","きくがわし","Kikugawa","静岡県","Shizuoka",34.75,138.083],["222259","伊豆の国市","いずのくにし","Izunokuni","静岡県","Shizuoka",35.017,138.917],["222267","牧之原市","まきのはらし","Makinohara","静岡県","Shizuoka",34.733,138.217],["223018","東伊豆町","ひがしいずちょう","Higashiizu","静岡県","Shizuoka",34.767,139.033],["223026","河津町","かわづちょう","Kawazu","静岡県","Shizuoka",34.75,138.983],["223042","南伊豆町","みなみいずちょう","Minamiizu","静岡県","Shizuoka",34.65,138.85],["223051","松崎町","まつざきちょう","Matsuzaki","静岡県","Shizuoka",34.75,138.767],["223069","西伊豆町","にしいずちょう","Nishiizu","静岡県","Shizuoka",34.767,138.767],["223255","函南町","かんなみちょう","Kannami","静岡県","Shizuoka",35.083,138.933],["223417","清水町","しみずちょう","Shimizu","静岡県","Shizuoka",35.083,138.9],["223425","長泉町","ながいずみちょう","Nagaizumi","静岡県","Shizuoka",35.133,138.883],["223441","小山町","おやまちょう","Oyama","静岡県","Shizuoka",35.35,138.983],["224243","吉田町","よしだちょう","Yoshida","静岡県","Shizuoka",34.767,138.25],["224294","川根本町","かわねほんちょう","Kawanehon","静岡県","Shizuoka",35.033,138.067],["224618","森町","もりまち","Mori","静岡県","Shizuoka",34.833,137.917],["231002","名古屋市","なごやし","Nagoya","愛知県","Aichi",35.167,136.9],["232017","豊橋市","とよはしし","Toyohashi","愛知県","Aichi",34.767,137.383],["232025","岡崎市","おかざきし","Okazaki","愛知県","Aichi",34.95,137.167],["232033","一宮市","いちのみやし","Ichinomiya","愛知県","Aichi",35.3,136.8],["232041","瀬戸市","せとし","Seto","愛知県","Aichi",35.217,137.083],["232050","半田市","はんだし","Handa","愛知県","Aichi",34.883,136.933],["232068","春日井市","かすがいし","Kasugai","愛知県","Aichi",35.233,136.967],["232076","豊川市","とよかわし","Toyokawa","愛知県","Aichi",34.817,137.367],["232084","津島市","つしまし","Tsushima","愛知県","Aichi",35.167,136.733],["232092","碧南市","へきなんし","Hekinan","愛知県","Aichi",34.883,136.983],["232106","刈谷市","かりやし","Kariya","愛知県","Aichi",34.983,137.0],["232114","豊田市","とよたし","Toyota","愛知県","Aichi",35.083,137.15],["232122","安城市","あんじょうし","Anjo","愛知県","Aichi",34.95,137.067],["232131","西尾市","にしおし","Nishio","愛知県","Aichi",34.85,137.05],["232149","蒲郡市","がまごおりし","Gamagori","愛知県","Aichi",34.817,137.217],["232157","犬山市","いぬやまし","Inuyama","愛知県","Aichi",35.367,136.933],["232165","常滑市","とこなめし","Tokoname","愛知県","Aichi",34.883,136.817],["232173","江南市","こうなんし","Konan","愛知県","Aichi",35.317,136.867],["232190","小牧市","こまきし","Komaki","愛知県","Aichi",35.283,136.9],["232203","稲沢市","いなざわし","Inazawa","愛知県","Aichi",35.233,136.767],["232211","新城市","しんしろし","Shinshiro","愛知県","Aichi",34.883,137.483],["232220","東海市","とうかいし","Tokai","愛知県","Aichi",35.017,136.9],["232238","大府市","おおぶし","Obu","愛知県","Aichi",35.0,136.95],["232246","知多市","ちたし","Chita","愛知県","Aichi",34.983,136.85],["232254","知立市","ちりゅうし","Chiryu","愛知県","Aichi",35.0,137.05],["232262","尾張旭市","おわりあさひし","Owariasahi","愛知県","Aichi",35.2,137.033],["232271","高浜市","たかはまし","Takahama","愛知県","Aichi",34.917,136.983],["232289","岩倉市","いわくらし","Iwakura","愛知県","Aichi",35.267,136.867],["232297","豊明市","とよあけし","Toyoake","愛知県","Aichi",35.05,137.0],["232301","日進市","にっしんし","Nisshin","愛知県","Aichi",35.117,137.033],["232319","田原市","たはらし","Tahara","愛知県","Aichi",34.667,137.25],["232327","愛西市","あいさいし","Aisai","愛知県","Aichi",35.15,136.717],["232335","清須市","きよすし","Kiyosu","愛知県","Aichi",35.183,136.85],["232343","北名古屋市","きたなごやし","Kitanagoya","愛知県","Aichi",35.233,136.85],["232351","弥富市","やとみし","Yatomi","愛知県","Aichi",35.1,136.717],["232360","みよし市","みよしし","Miyoshi","愛知県","Aichi",35.083,137.067],["232378","あま市","あまし","Ama","愛知県","Aichi",35.2,136.783],["232386","長久手市","ながくてし","Nagakute","愛知県","Aichi",35.183,137.033],["233021","東郷町","とうごうちょう","Togo","愛知県","Aichi",35.083,137.05],["233421","豊山町","とよやまちょう","Toyoyama","愛知県","Aichi",35.25,136.9],["233617","大口町","おおぐちちょう","Oguchi","愛知県","Aichi",35.317,136.9],["233625","扶桑町","ふそうちょう","Fuso","愛知県","Aichi",35.35,136.9],["234249","大治町","おおはるちょう","Oharu","愛知県","Aichi",35.167,136.817],["234257","蟹江町","かにえちょう","Kanie","愛知県","Aichi",35.117,136.783],["234273","飛島村","とびしまむら","Tobishima","愛知県","Aichi",35.067,136.783],["234419","阿久比町","あぐいちょう","Agui","愛知県","Aichi",34.917,136.9],["234427","東浦町","ひがしうらちょう","Higashiura","愛知県","Aichi",34.967,136.95],["234451","南知多町","みなみちたちょう","Minamichita","愛知県","Aichi",34.7,136.917],["234460","美浜町","みはまちょう","Mihama","愛知県","Aichi",34.767,136.9],["234478","武豊町","たけとよちょう","Taketoyo","愛知県","Aichi",34.85,136.9],["235016","幸田町","こうたちょう","Kota","愛知県","Aichi",34.85,137.15],["235610","設楽町","したらちょう","Shitara","愛知県","Aichi",35.083,137.567],["235628","東栄町","とうえいちょう","Toei","愛知県","Aichi",35.067,137.683],["235636","豊根村","とよねむら","Toyone","愛知県","Aichi",35.133,137.717],["242012","津市","つし","Tsu","三重県","Mie",34.717,136.5],["242021","四日市市","よっかいちし","Yokkaichi","三重県","Mie",34.95,136.617],["242039","伊勢市","いせし","Ise","三重県","Mie",34.483,136.7],["242047","松阪市","まつさかし","Matsusaka","三重県","Mie",34.567,136.517],["242055","桑名市","くわなし","Kuwana","三重県","Mie",35.05,136.683],["242071","鈴鹿市","すずかし","Suzuka","三重県","Mie",34.867,136.583],["242080","名張市","なばりし","Nabari","三重県","Mie",34.617,136.1],["242098","尾鷲市","おわせし","Owase","三重県","Mie",34.067,136.183],["242101","亀山市","かめやまし","Kameyama","三重県","Mie",34.85,136.45],["242110","鳥羽市","とばし","Toba","三重県","Mie",34.467,136.833],["242128","熊野市","くまのし","Kumano","三重県","Mie",33.883,136.1],["242144","いなべ市","いなべし","Inabe","三重県","Mie",35.1,136.55],["242152","志摩市","しまし","Shima","三重県","Mie",34.317,136.817],["242161","伊賀市","いがし","Iga","三重県","Mie",34.767,136.117],["243035","木曽岬町","きそさきちょう","Kisosaki","三重県","Mie",35.067,136.717],["243248","東員町","とういんちょう","Toin","三重県","Mie",35.067,136.583],["243418","菰野町","こものちょう","Komono","三重県","Mie",35.0,136.5],["243434","朝日町","あさひちょう","Asahi","三重県","Mie",35.033,136.65],["243442","川越町","かわごえちょう","Kawagoe","三重県","Mie",35.017,136.667],["244414","多気町","たきちょう","Taki","三重県","Mie",34.483,136.533],["244422","明和町","めいわちょう","Meiwa","三重県","Mie",34.533,136.617],["244431","大台町","おおだいちょう","Odai","三重県","Mie",34.383,136.4],["244619","玉城町","たまきちょう","Tamaki","三重県","Mie",34.483,136.617],["244708","度会町","わたらいちょう","Watarai","三重県","Mie",34.433,136.617],["244716","大紀町","たいきちょう","Taiki","三重県","Mie",34.35,136.4],["244724","南伊勢町","みなみいせちょう","Minamiise","三重県","Mie",34.35,136.7],["245437","紀北町","きほくちょう","Kihoku","三重県","Mie",34.1,136.217],["245615","御浜町","みはまちょう","Mihama","三重県","Mie",33.8,136.033],["245623","紀宝町","きほうちょう","Kiho","三重県","Mie",33.733,136.0],["252018","大津市","おおつし","Otsu","滋賀県","Shiga",35.017,135.85],["252026","彦根市","ひこねし","Hikone","滋賀県","Shiga",35.267,136.25],["252034","長浜市","ながはまし","Nagahama","滋賀県","Shiga",35.367,136.267],["252042","近江八幡市","おうみはちまんし","Omihachiman","滋賀県","Shiga",35.117,136.083],["252069","草津市","くさつし","Kusatsu","滋賀県","Shiga",35.0,135.95],["252077","守山市","もりやまし","Moriyama","滋賀県","Shiga",35.05,135.983],["252085","栗東市","りっとうし","Ritto","滋賀県","Shiga",35.017,135.983],["252093","甲賀市","こうかし","Koka","滋賀県","Shiga",34.95,136.167],["252107","野洲市","やすし","Yasu","滋賀県","Shiga",35.067,136.017],["252115","湖南市","こなんし","Konan","滋賀県","Shiga",35.0,136.083],["252123","高島市","たかしまし","Takashima","滋賀県","Shiga",35.35,136.033],["252131","東近江市","ひがしおうみし","Higashiomi","滋賀県","Shiga",35.1,136.2],["252140","米原市","まいばらし","Maibara","滋賀県","Shiga",35.3,136.283],["253839","日野町","ひのちょう","Hino","滋賀県","Shiga",35.017,136.233],["253847","竜王町","りゅうおうちょう","Ryuo","滋賀県","Shiga",35.05,136.117],["254258","愛荘町","あいしょうちょう","Aisho","滋賀県","Shiga",35.167,136.2],["254410","豊郷町","とよさとちょう","Toyosato","滋賀県","Shiga",35.2,136.217],["254428","甲良町","こうらちょう","Kora","滋賀県","Shiga",35.2,136.25],["254436","多賀町","たがちょう","Taga","滋賀県","Shiga",35.217,136.283],["261009","京都市","きょうとし","Kyoto","京都府","Kyoto",35.0,135.767],["262013","福知山市","ふくちやまし","Fukuchiyama","京都府","Kyoto",35.283,135.117],["262021","舞鶴市","まいづるし","Maizuru","京都府","Kyoto",35.467,135.383],["262030","綾部市","あやべし","Ayabe","京都府","Kyoto",35.283,135.25],["262048","宇治市","うじし","Uji","京都府","Kyoto",34.883,135.783],["262056","宮津市","みやづし","Miyazu","京都府","Kyoto",35.533,135.183],["262064","亀岡市","かめおかし","Kameoka","京都府","Kyoto",35.0,135.567],["262072","城陽市","じょうようし","Joyo","京都府","Kyoto",34.85,135.767],["262081","向日市","むこうし","Muko","京都府","Kyoto",34.933,135.683],["262099","長岡京市","ながおかきょうし","Nagaokakyo","京都府","Kyoto",34.917,135.683],["262102","八幡市","やわたし","Yawata","京都府","Kyoto",34.867,135.7],["262111","京田辺市","きょうたなべし","Kyotanabe","京都府","Kyoto",34.8,135.767],["262129","京丹後市","きょうたんごし","Kyotango","京都府","Kyoto",35.617,135.05],["262137","南丹市","なんたんし","Nantan","京都府","Kyoto",35.1,135.467],["262145","木津川市","きづがわし","Kizugawa","京都府","Kyoto",34.733,135.817],["263036","大山崎町","おおやまざきちょう","Oyamazaki","京都府","Kyoto",34.9,135.683],["263222","久御山町","くみやまちょう","Kumiyama","京都府","Kyoto",34.867,135.717],["263435","井手町","いでちょう","Ide","京都府","Kyoto",34.783,135.8],["263443","宇治田原町","うじたわらちょう","Ujitawara","京都府","Kyoto",34.85,135.85],["263648","笠置町","かさぎちょう","Kasagi","京都府","Kyoto",34.75,135.933],["263656","和束町","わづかちょう","Wazuka","京都府","Kyoto",34.783,135.9],["263664","精華町","せいかちょう","Seika","京都府","Kyoto",34.75,135.783],["263672","南山城村","みなみやましろむら","Minamiyamashiro","京都府","Kyoto",34.767,135.983],["264075","京丹波町","きょうたんばちょう","Kyotanba","京都府","Kyoto",35.15,135.417],["264636","伊根町","いねちょう","Ine","京都府","Kyoto",35.667,135.283],["264652","与謝野町","よさのちょう","Yosano","京都府","Kyoto",35.55,135.15],["271004","大阪市","おおさかし","Osaka","大阪府","Osaka",34.683,135.5],["271403","堺市","さかいし","Sakai","大阪府","Osaka",34.567,135.467],["272027","岸和田市","きしわだし","Kishiwada","大阪府","Osaka",34.45,135.367],["272035","豊中市","とよなかし","Toyonaka","大阪府","Osaka",34.767,135.467],["272043","池田市","いけだし","Ikeda","大阪府","Osaka",34.817,135.417],["272051","吹田市","すいたし","Suita","大阪府","Osaka",34.75,135.517],["272060","泉大津市","いずみおおつし","Izumiotsu","大阪府","Osaka",34.5,135.4],["272078","高槻市","たかつきし","Takatsuki","大阪府","Osaka",34.833,135.617],["272086","貝塚市","かいづかし","Kaizuka","大阪府","Osaka",34.433,135.35],["272094","守口市","もりぐちし","Moriguchi","大阪府","Osaka",34.733,135.55],["272108","枚方市","ひらかたし","Hirakata","大阪府","Osaka",34.8,135.65],["272116","茨木市","いばらきし","Ibaraki","大阪府","Osaka",34.8,135.567],["272124","八尾市","やおし","Yao","大阪府","Osaka",34.617,135.6],["272132","泉佐野市","いずみさのし","Izumisano","大阪府","Osaka",34.4,135.317],["272141","富田林市","とんだばやしし","Tondabayashi","大阪府","Osaka",34.483,135.583],["272159","寝屋川市","ねやがわし","Neyagawa","大阪府","Osaka",34.75,135.617],["272167","河内長野市","かわちながのし","Kawachinagano","大阪府","Osaka",34.45,135.55],["272175","松原市","まつばらし","Matsubara","大阪府","Osaka",34.567,135.55],["272183","大東市","だいとうし","Daito","大阪府","Osaka",34.7,135.617],["272191","和泉市","いずみし","Izumi","大阪府","Osaka",34.483,135.417],["272205","箕面市","みのおし","Minoo","大阪府","Osaka",34.817,135.467],["272213","柏原市","かしわらし","Kashiwara","大阪府","Osaka",34.567,135.617],["272221","羽曳野市","はびきのし","Habikino","大阪府","Osaka",34.55,135.6],["272230","門真市","かどまし","Kadoma","大阪府","Osaka",34.733,135.583],["272248","摂津市","せっつし","Settsu","大阪府","Osaka",34.767,135.55],["272256","高石市","たかいしし","Takaishi","大阪府","Osaka",34.517,135.433],["272264","藤井寺市","ふじいでらし","Fujiidera","大阪府","Osaka",34.567,135.583],["272272","東大阪市","ひがしおおさかし","Higashiosaka","大阪府","Osaka",34.667,135.6],["272281","泉南市","せんなんし","Sennan","大阪府","Osaka",34.35,135.267],["272299","四條畷市","しじょうなわてし","Shijonawate","大阪府","Osaka",34.733,135.633],["272302","交野市","かたのし","Katano","大阪府","Osaka",34.783,135.667],["272311","大阪狭山市","おおさかさやまし","Osakasayama","大阪府","Osaka",34.5,135.55],["272329","阪南市","はんなんし","Hannan","大阪府","Osaka",34.35,135.233],["273015","島本町","しまもとちょう","Shimamoto","大阪府","Osaka",34.883,135.65],["273210","豊能町","とよのちょう","Toyono","大阪府","Osaka",34.917,135.483],["273228","能勢町","のせちょう","Nose","大阪府","Osaka",34.967,135.4],["273414","忠岡町","ただおかちょう","Tadaoka","大阪府","Osaka",34.483,135.4],["273619","熊取町","くまとりちょう","Kumatori","大阪府","Osaka",34.4,135.35],["273627","田尻町","たじりちょう","Tajiri","大阪府","Osaka",34.383,135.283],["273660","岬町","みさきちょう","Misaki","大阪府","Osaka",34.317,135.133],["273813","太子町","たいしちょう","Taishi","大阪府","Osaka",34.517,135.633],["273821","河南町","かなんちょう","Kanan","大阪府","Osaka",34.483,135.617],["273830","千早赤阪村","ちはやあかさかむら","Chihayaakasaka","大阪府","Osaka",34.45,135.617],["281000","神戸市","こうべし","Kobe","兵庫県","Hyōgo",34.683,135.183],["282014","姫路市","ひめじし","Himeji","兵庫県","Hyōgo",34.8,134.683],["282022","尼崎市","あまがさきし","Amagasaki","兵庫県","Hyōgo",34.733,135.4],["282031","明石市","あかしし","Akashi","兵庫県","Hyōgo",34.633,134.983],["282049","西宮市","にしのみやし","Nishinomiya","兵庫県","Hyōgo",34.733,135.333],["282057","洲本市","すもとし","Sumoto","兵庫県","Hyōgo",34.333,134.883],["282065","芦屋市","あしやし","Ashiya","兵庫県","Hyōgo",34.717,135.3],["282073","伊丹市","いたみし","Itami","兵庫県","Hyōgo",34.783,135.4],["282081","相生市","あいおいし","Aioi","兵庫県","Hyōgo",34.8,134.467],["282090","豊岡市","とよおかし","Toyooka","兵庫県","Hyōgo",35.533,134.817],["282103","加古川市","かこがわし","Kakogawa","兵庫県","Hyōgo",34.75,134.833],["282120","赤穂市","あこうし","Ako","兵庫県","Hyōgo",34.75,134.383],["282138","西脇市","にしわきし","Nishiwaki","兵庫県","Hyōgo",34.983,134.967],["282146","宝塚市","たからづかし","Takarazuka","兵庫県","Hyōgo",34.8,135.35],["282154","三木市","みきし","Miki","兵庫県","Hyōgo",34.783,134.983],["282162","高砂市","たかさごし","Takasago","兵庫県","Hyōgo",34.75,134.783],["282171","川西市","かわにしし","Kawanishi","兵庫県","Hyōgo",34.817,135.417],["282189","小野市","おのし","Ono","兵庫県","Hyōgo",34.85,134.917],["282197","三田市","さんだし","Sanda","兵庫県","Hyōgo",34.883,135.217],["282201","加西市","かさいし","Kasai","兵庫県","Hyōgo",34.917,134.833],["282219","篠山市","ささやまし","Sasayama","兵庫県","Hyōgo",35.067,135.217],["282227","養父市","やぶし","Yabu","兵庫県","Hyōgo",35.4,134.767],["282235","丹波市","たんばし","Tanba","兵庫県","Hyōgo",35.167,135.033],["282243","南あわじ市","みなみあわじし","Minamiawaji","兵庫県","Hyōgo",34.283,134.767],["282251","朝来市","あさごし","Asago","兵庫県","Hyōgo",35.333,134.85],["282260","淡路市","あわじし","Awaji","兵庫県","Hyōgo",34.433,134.9],["282278","宍粟市","しそうし","Shiso","兵庫県","Hyōgo",35.0,134.533],["282286","加東市","かとうし","Kato","兵庫県","Hyōgo",34.917,134.967],["282294","たつの市","たつのし","Tatsuno","兵庫県","Hyōgo",34.85,134.533],["283011","猪名川町","いながわちょう","Inagawa","兵庫県","Hyōgo",34.883,135.367],["283657","多可町","たかちょう","Taka","兵庫県","Hyōgo",35.05,134.917],["283819","稲美町","いなみちょう","Inami","兵庫県","Hyōgo",34.733,134.9],["283827","播磨町","はりまちょう","Harima","兵庫県","Hyōgo",34.7,134.867],["284424","市川町","いちかわちょう","Ichikawa","兵庫県","Hyōgo",34.983,134.75],["284432","福崎町","ふくさきちょう","Fukusaki","兵庫県","Hyōgo",34.95,134.75],["284467","神河町","かみかわちょう","Kamikawa","兵庫県","Hyōgo",35.05,134.733],["284645","太子町","たいしちょう","Taishi","兵庫県","Hyōgo",34.833,134.567],["284815","上郡町","かみごおりちょう","Kamigori","兵庫県","Hyōgo",34.867,134.35],["285013","佐用町","さようちょう","Sayo","兵庫県","Hyōgo",35.0,134.35],["285854","香美町","かみちょう","Kami","兵庫県","Hyōgo",35.633,134.617],["285862","新温泉町","しんおんせんちょう","Shin-onsen","兵庫県","Hyōgo",35.617,134.433],["292010","奈良市","ならし","Nara","奈良県","Nara",34.683,135.8],["292028","大和高田市","やまとたかだし","Yamatotakada","奈良県","Nara",34.5,135.733],["292036","大和郡山市","やまとこおりやまし","Yamatokoriyama","奈良県","Nara",34.633,135.767],["292044","天理市","てんりし","Tenri","奈良県","Nara",34.583,135.833],["292052","橿原市","かしはらし","Kashihara","奈良県","Nara",34.5,135.783],["292061","桜井市","さくらいし","Sakurai","奈良県","Nara",34.517,135.833],["292079","五條市","ごじょうし","Gojo","奈良県","Nara",34.35,135.683],["292087","御所市","ごせし","Gose","奈良県","Nara",34.45,135.733],["292095","生駒市","いこまし","Ikoma","奈良県","Nara",34.683,135.7],["292109","香芝市","かしばし","Kashiba","奈良県","Nara",34.533,135.683],["292117","葛城市","かつらぎし","Katsuragi","奈良県","Nara",34.483,135.717],["292125","宇陀市","うだし","Uda","奈良県","Nara",34.517,135.95],["293229","山添村","やまぞえむら","Yamazoe","奈良県","Nara",34.667,136.033],["293423","平群町","へぐりちょう","Heguri","奈良県","Nara",34.617,135.7],["293431","三郷町","さんごうちょう","Sango","奈良県","Nara",34.6,135.683],["293440","斑鳩町","いかるがちょう","Ikaruga","奈良県","Nara",34.6,135.717],["293458","安堵町","あんどちょう","Ando","奈良県","Nara",34.6,135.75],["293610","川西町","かわにしちょう","Kawanishi","奈良県","Nara",34.583,135.767],["293628","三宅町","みやけちょう","Miyake","奈良県","Nara",34.567,135.767],["293636","田原本町","たわらもとちょう","Tawaramoto","奈良県","Nara",34.55,135.783],["293857","曽爾村","そにむら","Soni","奈良県","Nara",34.5,136.117],["293865","御杖村","みつえむら","Mitsue","奈良県","Nara",34.483,136.15],["294012","高取町","たかとりちょう","Takatori","奈良県","Nara",34.433,135.783],["294021","明日香村","あすかむら","Asuka","奈良県","Nara",34.467,135.817],["294241","上牧町","かんまきちょう","Kanmaki","奈良県","Nara",34.55,135.717],["294250","王寺町","おうじちょう","Oji","奈良県","Nara",34.583,135.7],["294268","広陵町","こうりょうちょう","Koryo","奈良県","Nara",34.533,135.75],["294276","河合町","かわいちょう","Kawai","奈良県","Nara",34.567,135.733],["294411","吉野町","よしのちょう","Yoshino","奈良県","Nara",34.383,135.85],["294420","大淀町","おおよどちょう","Oyodo","奈良県","Nara",34.383,135.783],["294438","下市町","しもいちちょう","Shimoichi","奈良県","Nara",34.35,135.783],["294446","黒滝村","くろたきむら","Kurotaki","奈良県","Nara",34.3,135.85],["294462","天川村","てんかわむら","Tenkawa","奈良県","Nara",34.233,135.85],["294471","野迫川村","のせがわむら","Nosegawa","奈良県","Nara",34.15,135.617],["294497","十津川村","とつかわむら","Totsukawa","奈良県","Nara",33.983,135.783],["294501","下北山村","しもきたやまむら","Shimokitayama","奈良県","Nara",34.0,135.95],["294519","上北山村","かみきたやまむら","Kamikitayama","奈良県","Nara",34.133,136.0],["294527","川上村","かわかみむら","Kawakami","奈良県","Nara",34.333,135.95],["294535","東吉野村","ひがしよしのむら","Higashiyoshino","奈良県","Nara",34.4,135.967],["302015","和歌山市","わかやまし","Wakayama","和歌山県","Wakayama",34.217,135.167],["302023","海南市","かいなんし","Kainan","和歌山県","Wakayama",34.15,135.2],["302031","橋本市","はしもとし","Hashimoto","和歌山県","Wakayama",34.3,135.6],["302040","有田市","ありだし","Arida","和歌山県","Wakayama",34.067,135.117],["302058","御坊市","ごぼうし","Gobo","和歌山県","Wakayama",33.883,135.15],["302066","田辺市","たなべし","Tanabe","和歌山県","Wakayama",33.717,135.367],["302074","新宮市","しんぐうし","Shingu","和歌山県","Wakayama",33.717,135.983],["302082","紀の川市","きのかわし","Kinokawa","和歌山県","Wakayama",34.267,135.35],["302091","岩出市","いわでし","Iwade","和歌山県","Wakayama",34.25,135.3],["303046","紀美野町","きみのちょう","Kimino","和歌山県","Wakayama",34.167,135.3],["303411","かつらぎ町","かつらぎちょう","Katsuragi","和歌山県","Wakayama",34.283,135.5],["303437","九度山町","くどやまちょう","Kudoyama","和歌山県","Wakayama",34.283,135.55],["303445","高野町","こうやちょう","Koya","和歌山県","Wakayama",34.2,135.583],["303615","湯浅町","ゆあさちょう","Yuasa","和歌山県","Wakayama",34.017,135.167],["303623","広川町","ひろがわちょう","Hirogawa","和歌山県","Wakayama",34.017,135.167],["303666","有田川町","ありだがわちょう","Aridagawa","和歌山県","Wakayama",34.05,135.2],["303810","美浜町","みはまちょう","Mihama","和歌山県","Wakayama",33.883,135.117],["303828","日高町","ひだかちょう","Hidaka","和歌山県","Wakayama",33.917,135.133],["303836","由良町","ゆらちょう","Yura","和歌山県","Wakayama",33.95,135.117],["303909","印南町","いなみちょう","Inami","和歌山県","Wakayama",33.817,135.217],["303917","みなべ町","みなべちょう","Minabe","和歌山県","Wakayama",33.767,135.317],["303925","日高川町","ひだかがわちょう","Hidakagawa","和歌山県","Wakayama",33.9,135.183],["304018","白浜町","しらはまちょう","Shirahama","和歌山県","Wakayama",33.667,135.333],["304042","上富田町","かみとんだちょう","Kamitonda","和歌山県","Wakayama",33.683,135.417],["304069","すさみ町","すさみちょう","Susami","和歌山県","Wakayama",33.55,135.483],["304212","那智勝浦町","なちかつうらちょう","Nachikatsuura","和歌山県","Wakayama",33.617,135.933],["304221","太地町","たいじちょう","Taiji","和歌山県","Wakayama",33.583,135.933],["304247","古座川町","こざがわちょう","Kozagawa","和歌山県","Wakayama",33.517,135.8],["304271","北山村","きたやまむら","Kitayama","和歌山県","Wakayama",33.917,135.967],["304280","串本町","くしもとちょう","Kushimoto","和歌山県","Wakayama",33.467,135.767],["312011","鳥取市","とっとりし","Tottori","鳥取県","Tottori",35.5,134.233],["312029","米子市","よなごし","Yonago","鳥取県","Tottori",35.417,133.317],["312037","倉吉市","くらよしし","Kurayoshi","鳥取県","Tottori",35.417,133.817],["312045","境港市","さかいみなとし","Sakaiminato","鳥取県","Tottori",35.533,133.217],["313025","岩美町","いわみちょう","Iwami","鳥取県","Tottori",35.567,134.317],["313254","若桜町","わかさちょう","Wakasa","鳥取県","Tottori",35.333,134.4],["313289","智頭町","ちづちょう","Chizu","鳥取県","Tottori",35.25,134.217],["313297","八頭町","やずちょう","Yazu","鳥取県","Tottori",35.4,134.25],["313645","三朝町","みささちょう","Misasa","鳥取県","Tottori",35.4,133.85],["313700","湯梨浜町","ゆりはまちょう","Yurihama","鳥取県","Tottori",35.483,133.85],["313718","琴浦町","ことうらちょう","Kotoura","鳥取県","Tottori",35.483,133.683],["313726","北栄町","ほくえいちょう","Hokuei","鳥取県","Tottori",35.483,133.75],["313840","日吉津村","ひえづそん","Hiezu","鳥取県","Tottori",35.433,133.367],["313866","大山町","だいせんちょう","Daisen","鳥取県","Tottori",35.5,133.483],["313891","南部町","なんぶちょう","Nanbu","鳥取県","Tottori",35.333,133.317],["313904","伯耆町","ほうきちょう","Hoki","鳥取県","Tottori",35.383,133.4],["314013","日南町","にちなんちょう","Nichinan","鳥取県","Tottori",35.167,133.317],["314021","日野町","ひのちょう","Hino","鳥取県","Tottori",35.233,133.433],["314030","江府町","こうふちょう","Kofu","鳥取県","Tottori",35.267,133.483],["322016","松江市","まつえし","Matsue","島根県","Shimane",35.467,133.033],["322024","浜田市","はまだし","Hamada","島根県","Shimane",34.883,132.067],["322032","出雲市","いずもし","Izumo","島根県","Shimane",35.367,132.75],["322041","益田市","ますだし","Masuda","島根県","Shimane",34.667,131.833],["322059","大田市","おおだし","Oda","島根県","Shimane",35.183,132.483],["322067","安来市","やすぎし","Yasugi","島根県","Shimane",35.417,133.25],["322075","江津市","ごうつし","Gotsu","島根県","Shimane",35.0,132.217],["322091","雲南市","うんなんし","Unnan","島根県","Shimane",35.283,132.9],["323438","奥出雲町","おくいずもちょう","Okuizumo","島根県","Shimane",35.183,133.0],["323861","飯南町","いいなんちょう","Iinan","島根県","Shimane",35.0,132.7],["324418","川本町","かわもとまち","Kawamoto","島根県","Shimane",34.983,132.483],["324485","美郷町","みさとちょう","Misato","島根県","Shimane",35.067,132.583],["324493","邑南町","おおなんちょう","Onan","島根県","Shimane",34.883,132.433],["325015","津和野町","つわのちょう","Tsuwano","島根県","Shimane",34.533,131.833],["325058","吉賀町","よしかちょう","Yoshika","島根県","Shimane",34.35,131.933],["325252","海士町","あまちょう","Ama","島根県","Shimane",36.083,133.083],["325261","西ノ島町","にしのしまちょう","Nishinoshima","島根県","Shimane",36.083,132.983],["325279","知夫村","ちぶむら","Chibu","島根県","Shimane",36.0,133.033],["325287","隠岐の島町","おきのしまちょう","Okinoshima","島根県","Shimane",36.2,133.317],["331007","岡山市","おかやまし","Okayama","岡山県","Okayama",34.65,133.917],["332020","倉敷市","くらしきし","Kurashiki","岡山県","Okayama",34.583,133.767],["332038","津山市","つやまし","Tsuyama","岡山県","Okayama",35.067,134.0],["332046","玉野市","たまのし","Tamano","岡山県","Okayama",34.483,133.933],["332054","笠岡市","かさおかし","Kasaoka","岡山県","Okayama",34.5,133.5],["332071","井原市","いばらし","Ibara","岡山県","Okayama",34.583,133.45],["332089","総社市","そうじゃし","Soja","岡山県","Okayama",34.667,133.733],["332097","高梁市","たかはしし","Takahashi","岡山県","Okayama",34.783,133.617],["332101","新見市","にいみし","Niimi","岡山県","Okayama",34.967,133.467],["332119","備前市","びぜんし","Bizen","岡山県","Okayama",34.733,134.183],["332127","瀬戸内市","せとうちし","Setouchi","岡山県","Okayama",34.65,134.083],["332135","赤磐市","あかいわし","Akaiwa","岡山県","Okayama",34.75,134.017],["332143","真庭市","まにわし","Maniwa","岡山県","Okayama",35.083,133.683],["332151","美作市","みまさかし","Mimasaka","岡山県","Okayama",35.0,134.133],["332160","浅口市","あさくちし","Asakuchi","岡山県","Okayama",34.517,133.583],["333468","和気町","わけちょう","Wake","岡山県","Okayama",34.8,134.15],["334235","早島町","はやしまちょう","Hayashima","岡山県","Okayama",34.6,133.817],["334456","里庄町","さとしょうちょう","Satosho","岡山県","Okayama",34.5,133.55],["334618","矢掛町","やかげちょう","Yakage","岡山県","Okayama",34.617,133.583],["335860","新庄村","しんじょうそん","Shinjo","岡山県","Okayama",35.167,133.567],["336068","鏡野町","かがみのちょう","Kagamino","岡山県","Okayama",35.083,133.917],["336220","勝央町","しょうおうちょう","Shoo","岡山県","Okayama",35.033,134.1],["336238","奈義町","なぎちょう","Nagi","岡山県","Okayama",35.117,134.167],["336432","西粟倉村","にしあわくらそん","Nishiawakura","岡山県","Okayama",35.167,134.333],["336637","久米南町","くめなんちょう","Kumenan","岡山県","Okayama",34.917,133.95],["336661","美咲町","みさきちょう","Misaki","岡山県","Okayama",34.983,133.95],["336815","吉備中央町","きびちゅうおうちょう","Kibichuo","岡山県","Okayama",34.85,133.683],["341002","広島市","ひろしまし","Hiroshima","広島県","Hiroshima",34.383,132.45],["342025","呉市","くれし","Kure","広島県","Hiroshima",34.233,132.55],["342033","竹原市","たけはらし","Takehara","広島県","Hiroshima",34.333,132.9],["342041","三原市","みはらし","Mihara","広島県","Hiroshima",34.383,133.067],["342050","尾道市","おのみちし","Onomichi","広島県","Hiroshima",34.4,133.2],["342076","福山市","ふくやまし","Fukuyama","広島県","Hiroshima",34.483,133.35],["342084","府中市","ふちゅうし","Fuchu","広島県","Hiroshima",34.567,133.233],["342092","三次市","みよしし","Miyoshi","広島県","Hiroshima",34.8,132.85],["342106","庄原市","しょうばらし","Shobara","広島県","Hiroshima",34.85,133.017],["342114","大竹市","おおたけし","Otake","広島県","Hiroshima",34.233,132.217],["342122","東広島市","ひがしひろしまし","Higashihiroshima","広島県","Hiroshima",34.417,132.733],["342131","廿日市市","はつかいちし","Hatsukaichi","広島県","Hiroshima",34.333,132.317],["342149","安芸高田市","あきたかたし","Aki-takata","広島県","Hiroshima",34.65,132.7],["342157","江田島市","えたじまし","Etajima","広島県","Hiroshima",34.217,132.433],["343021","府中町","ふちゅうちょう","Fuchu","広島県","Hiroshima",34.383,132.5],["343048","海田町","かいたちょう","Kaita","広島県","Hiroshima",34.367,132.533],["343072","熊野町","くまのちょう","Kumano","広島県","Hiroshima",34.333,132.583],["343099","坂町","さかちょう","Saka","広島県","Hiroshima",34.333,132.5],["343684","安芸太田町","あきおおたちょう","Akiota","広島県","Hiroshima",34.567,132.217],["343692","北広島町","きたひろしまちょう","Kitahiroshima","広島県","Hiroshima",34.667,132.533],["344311","大崎上島町","おおさきかみじまちょう","Osakikamijima","広島県","Hiroshima",34.267,132.9],["344621","世羅町","せらちょう","Sera","広島県","Hiroshima",34.583,133.05],["345458","神石高原町","じんせきこうげんちょう","Jinsekikogen","広島県","Hiroshima",34.7,133.233],["352012","下関市","しものせきし","Shimonoseki","山口県","Yamaguchi",33.95,130.933],["352021","宇部市","うべし","Ube","山口県","Yamaguchi",33.95,131.233],["352039","山口市","やまぐちし","Yamaguchi","山口県","Yamaguchi",34.167,131.467],["352047","萩市","はぎし","Hagi","山口県","Yamaguchi",34.4,131.383],["352063","防府市","ほうふし","Hofu","山口県","Yamaguchi",34.05,131.55],["352071","下松市","くだまつし","Kudamatsu","山口県","Yamaguchi",34.0,131.867],["352080","岩国市","いわくにし","Iwakuni","山口県","Yamaguchi",34.167,132.217],["352101","光市","ひかりし","Hikari","山口県","Yamaguchi",33.95,131.933],["352110","長門市","ながとし","Nagato","山口県","Yamaguchi",34.367,131.167],["352128","柳井市","やないし","Yanai","山口県","Yamaguchi",33.95,132.1],["352136","美祢市","みねし","Mine","山口県","Yamaguchi",34.167,131.2],["352152","周南市","しゅうなんし","Shunan","山口県","Yamaguchi",34.05,131.8],["352161","山陽小野田市","さんようおのだし","San-yo-onoda","山口県","Yamaguchi",34.0,131.167],["353051","周防大島町","すおうおおしまちょう","Suo-oshima","山口県","Yamaguchi",33.917,132.183],["353213","和木町","わきちょう","Waki","山口県","Yamaguchi",34.2,132.217],["353418","上関町","かみのせきちょう","Kaminoseki","山口県","Yamaguchi",33.817,132.1],["353434","田布施町","たぶせちょう","Tabuse","山口県","Yamaguchi",33.95,132.033],["353442","平生町","ひらおちょう","Hirao","山口県","Yamaguchi",33.933,132.067],["355020","阿武町","あぶちょう","Abu","山口県","Yamaguchi",34.5,131.467],["362018","徳島市","とくしまし","Tokushima","徳島県","Tokushima",34.067,134.55],["362026","鳴門市","なるとし","Naruto","徳島県","Tokushima",34.167,134.6],["362034","小松島市","こまつしまし","Komatsushima","徳島県","Tokushima",34.0,134.583],["362042","阿南市","あなんし","Anan","徳島県","Tokushima",33.917,134.65],["362051","吉野川市","よしのがわし","Yoshinogawa","徳島県","Tokushima",34.05,134.35],["362069","阿波市","あわし","Awa","徳島県","Tokushima",34.067,134.233],["362077","美馬市","みまし","Mima","徳島県","Tokushima",34.05,134.167],["362085","三好市","みよしし","Miyoshi","徳島県","Tokushima",34.017,133.8],["363014","勝浦町","かつうらちょう","Katsuura","徳島県","Tokushima",33.917,134.5],["363022","上勝町","かみかつちょう","Kamikatsu","徳島県","Tokushima",33.883,134.4],["363219","佐那河内村","さなごうちそん","Sanagochi","徳島県","Tokushima",33.983,134.45],["363413","石井町","いしいちょう","Ishii","徳島県","Tokushima",34.067,134.433],["363421","神山町","かみやまちょう","Kamiyama","徳島県","Tokushima",33.967,134.35],["363685","那賀町","なかちょう","Naka","徳島県","Tokushima",33.85,134.483],["363839","牟岐町","むぎちょう","Mugi","徳島県","Tokushima",33.667,134.417],["363871","美波町","みなみちょう","Minami","徳島県","Tokushima",33.733,134.533],["363880","海陽町","かいようちょう","Kaiyo","徳島県","Tokushima",33.583,134.35],["364011","松茂町","まつしげちょう","Matsushige","徳島県","Tokushima",34.133,134.567],["364029","北島町","きたじまちょう","Kitajima","徳島県","Tokushima",34.117,134.533],["364037","藍住町","あいずみちょう","Aizumi","徳島県","Tokushima",34.117,134.483],["364045","板野町","いたのちょう","Itano","徳島県","Tokushima",34.133,134.45],["364053","上板町","かみいたちょう","Kamiita","徳島県","Tokushima",34.117,134.4],["364681","つるぎ町","つるぎちょう","Tsurugi","徳島県","Tokushima",34.033,134.05],["364894","東みよし町","ひがしみよしちょう","Higashimiyoshi","徳島県","Tokushima",34.033,133.933],["372013","高松市","たかまつし","Takamatsu","香川県","Kagawa",34.333,134.033],["372021","丸亀市","まるがめし","Marugame","香川県","Kagawa",34.283,133.783],["372030","坂出市","さかいでし","Sakaide","香川県","Kagawa",34.3,133.85],["372048","善通寺市","ぜんつうじし","Zentsuji","香川県","Kagawa",34.217,133.783],["372056","観音寺市","かんおんじし","Kan-onji","香川県","Kagawa",34.117,133.65],["372064","さぬき市","さぬきし","Sanuki","香川県","Kagawa",34.317,134.167],["372072","東かがわ市","ひがしかがわし","Higashikagawa","香川県","Kagawa",34.233,134.35],["372081","三豊市","みとよし","Mitoyo","香川県","Kagawa",34.133,133.683],["373222","土庄町","とのしょうちょう","Tonosho","香川県","Kagawa",34.483,134.183],["373249","小豆島町","しょうどしまちょう","Shodoshima","香川県","Kagawa",34.467,134.233],["373419","三木町","みきちょう","Miki","香川県","Kagawa",34.267,134.133],["373648","直島町","なおしまちょう","Naoshima","香川県","Kagawa",34.45,133.983],["373869","宇多津町","うたづちょう","Utazu","香川県","Kagawa",34.3,133.817],["373877","綾川町","あやがわちょう","Ayagawa","香川県","Kagawa",34.233,133.917],["374032","琴平町","ことひらちょう","Kotohira","香川県","Kagawa",34.183,133.817],["374041","多度津町","たどつちょう","Tadotsu","香川県","Kagawa",34.267,133.75],["374067","まんのう町","まんのうちょう","Manno","香川県","Kagawa",34.183,133.833],["382019","松山市","まつやまし","Matsuyama","愛媛県","Ehime",33.833,132.75],["382027","今治市","いまばりし","Imabari","愛媛県","Ehime",34.05,132.983],["382035","宇和島市","うわじまし","Uwajima","愛媛県","Ehime",33.217,132.55],["382043","八幡浜市","やわたはまし","Yawatahama","愛媛県","Ehime",33.45,132.417],["382051","新居浜市","にいはまし","Niihama","愛媛県","Ehime",33.95,133.283],["382060","西条市","さいじょうし","Saijo","愛媛県","Ehime",33.917,133.167],["382078","大洲市","おおずし","Ozu","愛媛県","Ehime",33.5,132.533],["382108","伊予市","いよし","Iyo","愛媛県","Ehime",33.75,132.7],["382132","四国中央市","しこくちゅうおうし","Shikokuchuo","愛媛県","Ehime",33.967,133.533],["382141","西予市","せいよし","Seiyo","愛媛県","Ehime",33.35,132.5],["382159","東温市","とうおんし","Toon","愛媛県","Ehime",33.783,132.867],["383562","上島町","かみじまちょう","Kamijima","愛媛県","Ehime",34.25,133.2],["383864","久万高原町","くまこうげんちょう","Kumakogen","愛媛県","Ehime",33.65,132.9],["384011","松前町","まさきちょう","Masaki","愛媛県","Ehime",33.783,132.7],["384020","砥部町","とべちょう","Tobe","愛媛県","Ehime",33.733,132.783],["384224","内子町","うちこちょう","Uchiko","愛媛県","Ehime",33.517,132.65],["384429","伊方町","いかたちょう","Ikata","愛媛県","Ehime",33.483,132.35],["384844","松野町","まつのちょう","Matsuno","愛媛県","Ehime",33.217,132.7],["384887","鬼北町","きほくちょう","Kihoku","愛媛県","Ehime",33.25,132.683],["385069","愛南町","あいなんちょう","Ainan","愛媛県","Ehime",32.95,132.583],["392014","高知市","こうちし","Kochi","高知県","Kōchi",33.55,133.517],["392022","室戸市","むろとし","Muroto","高知県","Kōchi",33.283,134.15],["392031","安芸市","あきし","Aki","高知県","Kōchi",33.5,133.9],["392049","南国市","なんこくし","Nankoku","高知県","Kōchi",33.567,133.633],["392057","土佐市","とさし","Tosa","高知県","Kōchi",33.483,133.417],["392065","須崎市","すさきし","Susaki","高知県","Kōchi",33.4,133.267],["392081","宿毛市","すくもし","Sukumo","高知県","Kōchi",32.933,132.717],["392090","土佐清水市","とさしみずし","Tosashimizu","高知県","Kōchi",32.767,132.95],["392103","四万十市","しまんとし","Shimanto","高知県","Kōchi",32.983,132.933],["392111","香南市","こうなんし","Konan","高知県","Kōchi",33.55,133.7],["392120","香美市","かみし","Kami","高知県","Kōchi",33.6,133.683],["393011","東洋町","とうようちょう","Toyo","高知県","Kōchi",33.517,134.267],["393029","奈半利町","なはりちょう","Nahari","高知県","Kōchi",33.417,134.017],["393037","田野町","たのちょう","Tano","高知県","Kōchi",33.417,134.0],["393045","安田町","やすだちょう","Yasuda","高知県","Kōchi",33.433,133.967],["393053","北川村","きたがわむら","Kitagawa","高知県","Kōchi",33.433,134.033],["393061","馬路村","うまじむら","Umaji","高知県","Kōchi",33.55,134.033],["393070","芸西村","げいせいむら","Geisei","高知県","Kōchi",33.517,133.8],["393410","本山町","もとやまちょう","Motoyama","高知県","Kōchi",33.75,133.583],["393444","大豊町","おおとよちょう","Otoyo","高知県","Kōchi",33.75,133.65],["393631","土佐町","とさちょう","Tosa","高知県","Kōchi",33.733,133.517],["393649","大川村","おおかわむら","Okawa","高知県","Kōchi",33.783,133.467],["393860","いの町","いのちょう","Ino","高知県","Kōchi",33.533,133.417],["393878","仁淀川町","によどがわちょう","Niyodogawa","高知県","Kōchi",33.567,133.167],["394017","中土佐町","なかとさちょう","Nakatosa","高知県","Kōchi",33.317,133.217],["394025","佐川町","さかわちょう","Sakawa","高知県","Kōchi",33.5,133.283],["394033","越知町","おちちょう","Ochi","高知県","Kōchi",33.517,133.25],["394050","梼原町","","Yusuhara","高知県","Kōchi",33.4,132.933],["394106","日高村","ひだかむら","Hidaka","高知県","Kōchi",33.533,133.367],["394114","津野町","つのちょう","Tsuno","高知県","Kōchi",33.433,133.183],["394122","四万十町","しまんとちょう","Shimanto","高知県","Kōchi",33.2,133.133],["394246","大月町","おおつきちょう","Otsuki","高知県","Kōchi",32.833,132.7],["394271","三原村","みはらむら","Mihara","高知県","Kōchi",32.9,132.833],["394289","黒潮町","くろしおちょう","Kuroshio","高知県","Kōchi",33.017,133.0],["401005","北九州市","きたきゅうしゅうし","Kitakyushu","福岡県","Fukuoka",33.883,130.867],["401307","福岡市","ふくおかし","Fukuoka","福岡県","Fukuoka",33.583,130.4],["402028","大牟田市","おおむたし","Omuta","福岡県","Fukuoka",33.017,130.433],["402036","久留米市","くるめし","Kurume","福岡県","Fukuoka",33.317,130.5],["402044","直方市","のおがたし","Nogata","福岡県","Fukuoka",33.733,130.717],["402052","飯塚市","いいづかし","Iizuka","福岡県","Fukuoka",33.633,130.683],["402061","田川市","たがわし","Tagawa","福岡県","Fukuoka",33.633,130.8],["402079","柳川市","やながわし","Yanagawa","福岡県","Fukuoka",33.15,130.4],["402109","八女市","やめし","Yame","福岡県","Fukuoka",33.2,130.55],["402117","筑後市","ちくごし","Chikugo","福岡県","Fukuoka",33.2,130.5],["402125","大川市","おおかわし","Okawa","福岡県","Fukuoka",33.2,130.383],["402133","行橋市","ゆくはしし","Yukuhashi","福岡県","Fukuoka",33.717,130.967],["402141","豊前市","ぶぜんし","Buzen","福岡県","Fukuoka",33.6,131.117],["402150","中間市","なかまし","Nakama","福岡県","Fukuoka",33.817,130.7],["402168","小郡市","おごおりし","Ogori","福岡県","Fukuoka",33.383,130.55],["402176","筑紫野市","ちくしのし","Chikushino","福岡県","Fukuoka",33.483,130.5],["402184","春日市","かすがし","Kasuga","福岡県","Fukuoka",33.517,130.467],["402192","大野城市","おおのじょうし","Onojo","福岡県","Fukuoka",33.533,130.467],["402206","宗像市","むなかたし","Munakata","福岡県","Fukuoka",33.8,130.533],["402214","太宰府市","だざいふし","Dazaifu","福岡県","Fukuoka",33.5,130.517],["402231","古賀市","こがし","Koga","福岡県","Fukuoka",33.717,130.467],["402249","福津市","ふくつし","Fukutsu","福岡県","Fukuoka",33.767,130.483],["402257","うきは市","うきはし","Ukiha","福岡県","Fukuoka",33.333,130.75],["402265","宮若市","みやわかし","Miyawaka","福岡県","Fukuoka",33.717,130.667],["402273","嘉麻市","かまし","Kama","福岡県","Fukuoka",33.55,130.7],["402281","朝倉市","あさくらし","Asakura","福岡県","Fukuoka",33.417,130.65],["402290","みやま市","みやまし","Miyama","福岡県","Fukuoka",33.15,130.467],["402303","糸島市","いとしまし","Itoshima","福岡県","Fukuoka",33.55,130.183],["403059","那珂川町","なかがわまち","Nakagawa","福岡県","Fukuoka",33.483,130.417],["403415","宇美町","うみまち","Umi","福岡県","Fukuoka",33.567,130.5],["403423","篠栗町","ささぐりまち","Sasaguri","福岡県","Fukuoka",33.617,130.517],["403431","志免町","しめまち","Shime","福岡県","Fukuoka",33.583,130.467],["403440","須恵町","すえまち","Sue","福岡県","Fukuoka",33.583,130.5],["403458","新宮町","しんぐうまち","Shingu","福岡県","Fukuoka",33.7,130.433],["403482","久山町","ひさやままち","Hisayama","福岡県","Fukuoka",33.633,130.5],["403491","粕屋町","かすやまち","Kasuya","福岡県","Fukuoka",33.6,130.467],["403814","芦屋町","あしやまち","Ashiya","福岡県","Fukuoka",33.883,130.65],["403822","水巻町","みずまきまち","Mizumaki","福岡県","Fukuoka",33.85,130.683],["403831","岡垣町","おかがきまち","Okagaki","福岡県","Fukuoka",33.85,130.6],["403849","遠賀町","おんがちょう","Onga","福岡県","Fukuoka",33.833,130.667],["404012","小竹町","こたけまち","Kotake","福岡県","Fukuoka",33.683,130.7],["404021","鞍手町","くらてまち","Kurate","福岡県","Fukuoka",33.783,130.667],["404217","桂川町","けいせんまち","Keisen","福岡県","Fukuoka",33.567,130.667],["404471","筑前町","ちくぜんまち","Chikuzen","福岡県","Fukuoka",33.45,130.583],["404489","東峰村","とうほうむら","Toho","福岡県","Fukuoka",33.383,130.867],["405035","大刀洗町","たちあらいまち","Tachiarai","福岡県","Fukuoka",33.367,130.617],["405221","大木町","おおきまち","Oki","福岡県","Fukuoka",33.2,130.433],["405442","広川町","ひろかわまち","Hirokawa","福岡県","Fukuoka",33.233,130.55],["406015","香春町","かわらまち","Kawara","福岡県","Fukuoka",33.667,130.833],["406023","添田町","そえだまち","Soeda","福岡県","Fukuoka",33.567,130.85],["406040","糸田町","いとだまち","Itoda","福岡県","Fukuoka",33.65,130.767],["406058","川崎町","かわさきまち","Kawasaki","福岡県","Fukuoka",33.583,130.8],["406082","大任町","おおとうまち","Oto","福岡県","Fukuoka",33.6,130.85],["406091","赤村","あかむら","Akamura","福岡県","Fukuoka",33.6,130.867],["406104","福智町","ふくちまち","Fukuchi","福岡県","Fukuoka",33.667,130.767],["406210","苅田町","かんだまち","Kanda","福岡県","Fukuoka",33.767,130.967],["406252","みやこ町","みやこまち","Miyako","福岡県","Fukuoka",33.683,130.917],["406422","吉富町","よしとみまち","Yoshitomi","福岡県","Fukuoka",33.6,131.167],["406465","上毛町","こうげまち","Koge","福岡県","Fukuoka",33.567,131.15],["406473","築上町","ちくじょうまち","Chikujo","福岡県","Fukuoka",33.65,131.05],["412015","佐賀市","さがし","Saga","佐賀県","Saga",33.25,130.3],["412023","唐津市","からつし","Karatsu","佐賀県","Saga",33.45,129.967],["412031","鳥栖市","とすし","Tosu","佐賀県","Saga",33.367,130.5],["412040","多久市","たくし","Taku","佐賀県","Saga",33.283,130.1],["412058","伊万里市","いまりし","Imari","佐賀県","Saga",33.25,129.867],["412066","武雄市","たけおし","Takeo","佐賀県","Saga",33.183,130.017],["412074","鹿島市","かしまし","Kashima","佐賀県","Saga",33.1,130.083],["412082","小城市","おぎし","Ogi","佐賀県","Saga",33.25,130.2],["412091","嬉野市","うれしのし","Ureshino","佐賀県","Saga",33.117,130.05],["412104","神埼市","かんざきし","Kanzaki","佐賀県","Saga",33.3,130.367],["413275","吉野ヶ里町","よしのがりちょう","Yoshinogari","佐賀県","Saga",33.317,130.383],["413411","基山町","きやまちょう","Kiyama","佐賀県","Saga",33.417,130.517],["413453","上峰町","かみみねちょう","Kamimine","佐賀県","Saga",33.317,130.417],["413461","みやき町","みやきちょう","Miyaki","佐賀県","Saga",33.317,130.45],["413879","玄海町","げんかいちょう","Genkai","佐賀県","Saga",33.467,129.867],["414018","有田町","ありたちょう","Arita","佐賀県","Saga",33.2,129.833],["414239","大町町","おおまちちょう","Omachi","佐賀県","Saga",33.2,130.1],["414247","江北町","こうほくまち","Kohoku","佐賀県","Saga",33.217,130.15],["414255","白石町","しろいしちょう","Shiroishi","佐賀県","Saga",33.133,130.117],["414417","太良町","たらちょう","Tara","佐賀県","Saga",33.017,130.167],["422011","長崎市","ながさきし","Nagasaki","長崎県","Nagasaki",32.75,129.867],["422029","佐世保市","させぼし","Sasebo","長崎県","Nagasaki",33.167,129.7],["422037","島原市","しまばらし","Shimabara","長崎県","Nagasaki",32.783,130.367],["422045","諫早市","いさはやし","Isahaya","長崎県","Nagasaki",32.833,130.05],["422053","大村市","おおむらし","Omura","長崎県","Nagasaki",32.9,129.95],["422070","平戸市","ひらどし","Hirado","長崎県","Nagasaki",33.367,129.55],["422088","松浦市","まつうらし","Matsuura","長崎県","Nagasaki",33.333,129.7],["422096","対馬市","つしまし","Tsushima","長崎県","Nagasaki",34.2,129.283],["422100","壱岐市","いきし","Iki","長崎県","Nagasaki",33.733,129.683],["422118","五島市","ごとうし","Goto","長崎県","Nagasaki",32.683,128.833],["422126","西海市","さいかいし","Saikai","長崎県","Nagasaki",32.917,129.633],["422134","雲仙市","うんぜんし","Unzen","長崎県","Nagasaki",32.833,130.183],["422142","南島原市","みなみしまばらし","Minamishimabara","長崎県","Nagasaki",32.65,130.283],["423076","長与町","ながよちょう","Nagayo","長崎県","Nagasaki",32.817,129.867],["423084","時津町","とぎつちょう","Togitsu","長崎県","Nagasaki",32.817,129.833],["423211","東彼杵町","ひがしそのぎちょう","Higashisonogi","長崎県","Nagasaki",33.033,129.917],["423220","川棚町","かわたなちょう","Kawatana","長崎県","Nagasaki",33.067,129.85],["423238","波佐見町","はさみちょう","Hasami","長崎県","Nagasaki",33.133,129.883],["423831","小値賀町","おぢかちょう","Ojika","長崎県","Nagasaki",33.183,129.05],["423912","佐々町","さざちょう","Saza","長崎県","Nagasaki",33.233,129.65],["424111","新上五島町","しんかみごとうちょう","Shinkamigoto","長崎県","Nagasaki",32.983,129.067],["431001","熊本市","くまもとし","Kumamoto","熊本県","Kumamoto",32.8,130.7],["432024","八代市","やつしろし","Yatsushiro","熊本県","Kumamoto",32.5,130.6],["432032","人吉市","ひとよしし","Hitoyoshi","熊本県","Kumamoto",32.2,130.75],["432041","荒尾市","あらおし","Arao","熊本県","Kumamoto",32.983,130.433],["432059","水俣市","みなまたし","Minamata","熊本県","Kumamoto",32.2,130.4],["432067","玉名市","たまなし","Tamana","熊本県","Kumamoto",32.917,130.55],["432083","山鹿市","やまがし","Yamaga","熊本県","Kumamoto",33.017,130.683],["432105","菊池市","きくちし","Kikuchi","熊本県","Kumamoto",32.967,130.8],["432113","宇土市","うとし","Uto","熊本県","Kumamoto",32.683,130.65],["432121","上天草市","かみあまくさし","Kamiamakusa","熊本県","Kumamoto",32.583,130.417],["432130","宇城市","うきし","Uki","熊本県","Kumamoto",32.633,130.683],["432148","阿蘇市","あそし","Aso","熊本県","Kumamoto",32.95,131.117],["432156","天草市","あまくさし","Amakusa","熊本県","Kumamoto",32.45,130.183],["432164","合志市","こうしし","Koshi","熊本県","Kumamoto",32.883,130.783],["433489","美里町","みさとまち","Misato","熊本県","Kumamoto",32.633,130.783],["433641","玉東町","ぎょくとうまち","Gyokuto","熊本県","Kumamoto",32.917,130.617],["433675","南関町","なんかんまち","Nankan","熊本県","Kumamoto",33.05,130.533],["433683","長洲町","ながすまち","Nagasu","熊本県","Kumamoto",32.917,130.45],["433691","和水町","なごみまち","Nagomi","熊本県","Kumamoto",32.967,130.6],["434035","大津町","おおづまち","Ozu","熊本県","Kumamoto",32.867,130.867],["434043","菊陽町","きくようまち","Kikuyo","熊本県","Kumamoto",32.85,130.817],["434230","南小国町","みなみおぐにまち","Minamioguni","熊本県","Kumamoto",33.083,131.067],["434248","小国町","おぐにまち","Oguni","熊本県","Kumamoto",33.117,131.067],["434256","産山村","うぶやまむら","Ubuyama","熊本県","Kumamoto",32.983,131.217],["434281","高森町","たかもりまち","Takamori","熊本県","Kumamoto",32.817,131.117],["434329","西原村","にしはらむら","Nishihara","熊本県","Kumamoto",32.833,130.9],["434337","南阿蘇村","みなみあそむら","Minamiaso","熊本県","Kumamoto",32.817,131.017],["434418","御船町","みふねまち","Mifune","熊本県","Kumamoto",32.7,130.8],["434426","嘉島町","かしままち","Kashima","熊本県","Kumamoto",32.733,130.75],["434434","益城町","ましきまち","Mashiki","熊本県","Kumamoto",32.783,130.8],["434442","甲佐町","こうさまち","Kosa","熊本県","Kumamoto",32.65,130.8],["434477","山都町","やまとちょう","Yamato","熊本県","Kumamoto",32.683,130.983],["434680","氷川町","ひかわちょう","Hikawa","熊本県","Kumamoto",32.567,130.667],["434825","芦北町","あしきたまち","Ashikita","熊本県","Kumamoto",32.283,130.483],["434841","津奈木町","つなぎまち","Tsunagi","熊本県","Kumamoto",32.233,130.433],["435015","錦町","にしきまち","Nishiki","熊本県","Kumamoto",32.2,130.833],["435058","多良木町","たらぎまち","Taragi","熊本県","Kumamoto",32.25,130.933],["435066","湯前町","ゆのまえまち","Yunomae","熊本県","Kumamoto",32.267,130.967],["435074","水上村","みずかみむら","Mizukami","熊本県","Kumamoto",32.3,131.0],["435104","相良村","さがらむら","Sagara","熊本県","Kumamoto",32.233,130.783],["435112","五木村","いつきむら","Itsuki","熊本県","Kumamoto",32.383,130.817],["435121","山江村","やまえむら","Yamae","熊本県","Kumamoto",32.233,130.767],["435139","球磨村","くまむら","Kuma","熊本県","Kumamoto",32.25,130.65],["435147","あさぎり町","あさぎりちょう","Asagiri","熊本県","Kumamoto",32.233,130.883],["435317","苓北町","れいほくまち","Reihoku","熊本県","Kumamoto",32.5,130.05],["442011","大分市","おおいたし","Oita","大分県","Ōita",33.233,131.6],["442020","別府市","べっぷし","Beppu","大分県","Ōita",33.283,131.483],["442038","中津市","なかつし","Nakatsu","大分県","Ōita",33.583,131.183],["442046","日田市","ひたし","Hita","大分県","Ōita",33.317,130.933],["442054","佐伯市","さいきし","Saiki","大分県","Ōita",32.95,131.883],["442062","臼杵市","うすきし","Usuki","大分県","Ōita",33.117,131.8],["442071","津久見市","つくみし","Tsukumi","大分県","Ōita",33.067,131.85],["442089","竹田市","たけたし","Taketa","大分県","Ōita",32.967,131.383],["442097","豊後高田市","ぶんごたかだし","Bungotakada","大分県","Ōita",33.55,131.433],["442101","杵築市","きつきし","Kitsuki","大分県","Ōita",33.417,131.6],["442119","宇佐市","うさし","Usa","大分県","Ōita",33.517,131.333],["442127","豊後大野市","ぶんごおおのし","Bungoono","大分県","Ōita",32.967,131.583],["442135","由布市","ゆふし","Yufu","大分県","Ōita",33.167,131.417],["442143","国東市","くにさきし","Kunisaki","大分県","Ōita",33.55,131.717],["443221","姫島村","ひめしまむら","Himeshima","大分県","Ōita",33.717,131.633],["443417","日出町","ひじまち","Hiji","大分県","Ōita",33.367,131.517],["444618","九重町","ここのえまち","Kokonoe","大分県","Ōita",33.217,131.183],["444626","玖珠町","くすまち","Kusu","大分県","Ōita",33.283,131.15],["452017","宮崎市","みやざきし","Miyazaki","宮崎県","Miyazaki",31.9,131.417],["452025","都城市","みやこのじょうし","Miyakonojo","宮崎県","Miyazaki",31.717,131.05],["452033","延岡市","のべおかし","Nobeoka","宮崎県","Miyazaki",32.567,131.65],["452041","日南市","にちなんし","Nichinan","宮崎県","Miyazaki",31.6,131.367],["452050","小林市","こばやしし","Kobayashi","宮崎県","Miyazaki",31.983,130.967],["452068","日向市","ひゅうがし","Hyuga","宮崎県","Miyazaki",32.417,131.617],["452076","串間市","くしまし","Kushima","宮崎県","Miyazaki",31.45,131.217],["452084","西都市","さいとし","Saito","宮崎県","Miyazaki",32.1,131.4],["452092","えびの市","えびのし","Ebino","宮崎県","Miyazaki",32.033,130.8],["453412","三股町","みまたちょう","Mimata","宮崎県","Miyazaki",31.717,131.117],["453617","高原町","たかはるちょう","Takaharu","宮崎県","Miyazaki",31.917,131.0],["453820","国富町","くにとみちょう","Kunitomi","宮崎県","Miyazaki",31.983,131.317],["453838","綾町","あやちょう","Aya","宮崎県","Miyazaki",31.983,131.25],["454010","高鍋町","たかなべちょう","Takanabe","宮崎県","Miyazaki",32.117,131.5],["454028","新富町","しんとみちょう","Shintomi","宮崎県","Miyazaki",32.067,131.483],["454036","西米良村","にしめらそん","Nishimera","宮崎県","Miyazaki",32.217,131.15],["454044","木城町","きじょうちょう","Kijo","宮崎県","Miyazaki",32.15,131.467],["454052","川南町","かわみなみちょう","Kawaminami","宮崎県","Miyazaki",32.183,131.517],["454061","都農町","つのちょう","Tsuno","宮崎県","Miyazaki",32.25,131.55],["454214","門川町","かどがわちょう","Kadogawa","宮崎県","Miyazaki",32.467,131.633],["454290","諸塚村","もろつかそん","Morotsuka","宮崎県","Miyazaki",32.5,131.317],["454303","椎葉村","しいばそん","Shiiba","宮崎県","Miyazaki",32.467,131.15],["454311","美郷町","みさとちょう","Misato","宮崎県","Miyazaki",32.433,131.417],["454419","高千穂町","たかちほちょう","Takachiho","宮崎県","Miyazaki",32.7,131.3],["454427","日之影町","ひのかげちょう","Hinokage","宮崎県","Miyazaki",32.65,131.383],["454435","五ヶ瀬町","ごかせちょう","Gokase","宮崎県","Miyazaki",32.667,131.183],["462012","鹿児島市","かごしまし","Kagoshima","鹿児島県","Kagoshima",31.583,130.55],["462039","鹿屋市","かのやし","Kanoya","鹿児島県","Kagoshima",31.367,130.85],["462047","枕崎市","まくらざきし","Makurazaki","鹿児島県","Kagoshima",31.267,130.283],["462063","阿久根市","あくねし","Akune","鹿児島県","Kagoshima",32.0,130.183],["462080","出水市","いずみし","Izumi","鹿児島県","Kagoshima",32.083,130.35],["462101","指宿市","いぶすきし","Ibusuki","鹿児島県","Kagoshima",31.25,130.617],["462136","西之表市","にしのおもてし","Nishinoomote","鹿児島県","Kagoshima",30.717,130.983],["462144","垂水市","たるみずし","Tarumizu","鹿児島県","Kagoshima",31.483,130.7],["462152","薩摩川内市","さつませんだいし","Satsumasendai","鹿児島県","Kagoshima",31.8,130.3],["462161","日置市","ひおきし","Hioki","鹿児島県","Kagoshima",31.633,130.4],["462179","曽於市","そおし","Soo","鹿児島県","Kagoshima",31.65,131.017],["462187","霧島市","きりしまし","Kirishima","鹿児島県","Kagoshima",31.733,130.75],["462195","いちき串木野市","いちきくしきのし","Ichikikushikino","鹿児島県","Kagoshima",31.7,130.267],["462209","南さつま市","みなみさつまし","Minamisatsuma","鹿児島県","Kagoshima",31.417,130.317],["462217","志布志市","しぶしし","Shibushi","鹿児島県","Kagoshima",31.483,131.033],["462225","奄美市","あまみし","Amami","鹿児島県","Kagoshima",28.367,129.483],["462233","南九州市","みなみきゅうしゅうし","Minamikyushu","鹿児島県","Kagoshima",31.367,130.433],["462241","伊佐市","いさし","Isa","鹿児島県","Kagoshima",32.05,130.6],["462250","姶良市","あいらし","Aira","鹿児島県","Kagoshima",31.717,130.617],["463035","三島村","みしまむら","Mishima","鹿児島県","Kagoshima",31.583,130.55],["463043","十島村","としまむら","Toshima","鹿児島県","Kagoshima",31.583,130.55],["463922","さつま町","さつまちょう","Satsuma","鹿児島県","Kagoshima",31.9,130.45],["464040","長島町","ながしまちょう","Nagashima","鹿児島県","Kagoshima",32.183,130.167],["464520","湧水町","ゆうすいちょう","Yusui","鹿児島県","Kagoshima",31.95,130.717],["464686","大崎町","おおさきちょう","Osaki","鹿児島県","Kagoshima",31.417,131.0],["464821","東串良町","ひがしくしらちょう","Higashikushira","鹿児島県","Kagoshima",31.383,130.967],["464902","錦江町","きんこうちょう","Kinko","鹿児島県","Kagoshima",31.233,130.783],["464911","南大隅町","みなみおおすみちょう","Minamiosumi","鹿児島県","Kagoshima",31.217,130.767],["464929","肝付町","きもつきちょう","Kimotsuki","鹿児島県","Kagoshima",31.333,130.933],["465011","中種子町","なかたねちょう","Nakatane","鹿児島県","Kagoshima",30.517,130.95],["465020","南種子町","みなみたねちょう","Minamitane","鹿児島県","Kagoshima",30.4,130.9],["465054","屋久島町","やくしまちょう","Yakushima","鹿児島県","Kagoshima",30.367,130.65],["465232","大和村","やまとそん","Yamato","鹿児島県","Kagoshima",28.35,129.383],["465241","宇検村","うけんそん","Uken","鹿児島県","Kagoshima",28.267,129.283],["465259","瀬戸内町","せとうちちょう","Setouchi","鹿児島県","Kagoshima",28.133,129.3],["465275","龍郷町","たつごうちょう","Tatsugo","鹿児島県","Kagoshima",28.4,129.583],["465291","喜界町","きかいちょう","Kikai","鹿児島県","Kagoshima",28.317,129.933],["465305","徳之島町","とくのしまちょう","Tokunoshima","鹿児島県","Kagoshima",27.717,129.017],["465313","天城町","あまぎちょう","Amagi","鹿児島県","Kagoshima",27.8,128.883],["465321","伊仙町","いせんちょう","Isen","鹿児島県","Kagoshima",27.667,128.933],["465330","和泊町","わどまりちょう","Wadomari","鹿児島県","Kagoshima",27.383,128.65],["465348","知名町","ちなちょう","China","鹿児島県","Kagoshima",27.333,128.567],["465356","与論町","よろんちょう","Yoron","鹿児島県","Kagoshima",27.033,128.4],["472018","那覇市","なはし","Naha","沖縄県","Okinawa",26.2,127.667],["472051","宜野湾市","ぎのわんし","Ginowan","沖縄県","Okinawa",26.267,127.767],["472077","石垣市","いしがきし","Ishigaki","沖縄県","Okinawa",24.333,124.15],["472085","浦添市","うらそえし","Urasoe","沖縄県","Okinawa",26.233,127.717],["472093","名護市","なごし","Nago","沖縄県","Okinawa",26.583,127.967],["472107","糸満市","いとまんし","Itoman","沖縄県","Okinawa",26.117,127.65],["472115","沖縄市","おきなわし","Okinawa","沖縄県","Okinawa",26.333,127.8],["472123","豊見城市","とみぐすくし","Tomigusuku","沖縄県","Okinawa",26.15,127.667],["472131","うるま市","うるまし","Uruma","沖縄県","Okinawa",26.367,127.85],["472140","宮古島市","みやこじまし","Miyakojima","沖縄県","Okinawa",24.8,125.267],["472158","南城市","なんじょうし","Nanjo","沖縄県","Okinawa",26.133,127.767],["473014","国頭村","くにがみそん","Kunigami","沖縄県","Okinawa",26.733,128.167],["473022","大宜味村","おおぎみそん","Ogimi","沖縄県","Okinawa",26.7,128.117],["473031","東村","ひがしそん","Higashison","沖縄県","Okinawa",26.617,128.15],["473065","今帰仁村","なきじんそん","Nakijin","沖縄県","Okinawa",26.667,127.967],["473081","本部町","もとぶちょう","Motobu","沖縄県","Okinawa",26.65,127.883],["473111","恩納村","おんなそん","Onna","沖縄県","Okinawa",26.483,127.85],["473138","宜野座村","ぎのざそん","Ginoza","沖縄県","Okinawa",26.467,127.967],["473146","金武町","きんちょう","Kin","沖縄県","Okinawa",26.45,127.917],["473154","伊江村","いえそん","Ie","沖縄県","Okinawa",26.7,127.8],["473243","読谷村","よみたんそん","Yomitan","沖縄県","Okinawa",26.383,127.733],["473251","嘉手納町","かでなちょう","Kadena","沖縄県","Okinawa",26.35,127.75],["473260","北谷町","ちゃたんちょう","Chatan","沖縄県","Okinawa",26.317,127.75],["473278","北中城村","きたなかぐすくそん","Kitanakagusuku","沖縄県","Okinawa",26.3,127.783],["473286","中城村","なかぐすくそん","Nakagusuku","沖縄県","Okinawa",26.267,127.783],["473294","西原町","にしはらちょう","Nishihara","沖縄県","Okinawa",26.217,127.75],["473481","与那原町","よなばるちょう","Yonabaru","沖縄県","Okinawa",26.183,127.75],["473502","南風原町","はえばるちょう","Haebaru","沖縄県","Okinawa",26.183,127.717],["473537","渡嘉敷村","とかしきそん","Tokashiki","沖縄県","Okinawa",26.183,127.35],["473545","座間味村","ざまみそん","Zamami","沖縄県","Okinawa",26.217,127.3],["473553","粟国村","あぐにそん","Aguni","沖縄県","Okinawa",26.567,127.217],["473561","渡名喜村","となきそん","Tonaki","沖縄県","Okinawa",26.367,127.133],["473570","南大東村","みなみだいとうそん","Minamidaito","沖縄県","Okinawa",25.817,131.217],["473588","北大東村","きただいとうそん","Kitadaito","沖縄県","Okinawa",25.933,131.283],["473596","伊平屋村","いへやそん","Iheya","沖縄県","Okinawa",27.033,127.967],["473600","伊是名村","いぜなそん","Izena","沖縄県","Okinawa",26.917,127.933],["473618","久米島町","くめじまちょう","Kumejima","沖縄県","Okinawa",26.333,126.8],["473626","八重瀬町","やえせちょう","Yaese","沖縄県","Okinawa",26.117,127.733],["473758","多良間村","たらまそん","Tarama","沖縄県","Okinawa",24.667,124.7],["473812","竹富町","たけとみちょう","Taketomi","沖縄県","Okinawa",24.333,124.15],["473821","与那国町","よなぐにちょう","Yonaguni","沖縄県","Okinawa",24.467,123.0]];
+  var MU = MUNI.map(function(a){ return { code:a[0], ja:a[1], kana:a[2]||"", rb:a[3]||"", pj:a[4]||"", pr:a[5]||"", lat:a[6], lon:a[7] }; });
+  var BY_JA = {}; MU.forEach(function(m){ if(!(m.ja in BY_JA)) BY_JA[m.ja] = m; });
+  var PREFS = []; (function(){ var seen={}; MU.forEach(function(m){ if(m.pj && !seen[m.pj]){ seen[m.pj]=1; PREFS.push({pj:m.pj,pr:m.pr}); } }); })();
+  var PREF_ROMAJI = {}; PREFS.forEach(function(p){ PREF_ROMAJI[p.pj]=p.pr; });
+
   var $ = function(id){ return document.getElementById(id); };
 
-  // ---------- i18n ----------
   var I18N = {
-    ja: {
-      dir:"ja", wiki:"https://ja.wikipedia.org",
-      kicker:"どの土地にも、物語がある",
-      headline:'すべての町に、<em>物語</em>がある。',
-      sub:"市町村や名所の名前を入力すると、地名の由来・歴史・見どころ・名物を Wikipedia から集めてお見せします。",
-      placeholder:"例：箱根町、金沢市、白川村…",
-      go:"調べる", chips:"試してみる：",
+    ja: { dir:"ja", wiki:"https://ja.wikipedia.org",
+      kicker:"日本全国 1,736 の市区町村",
+      headline:'この町の、<em>物語</em>をひらく。',
+      sub:"市区町村を検索すると、地名の由来・歴史・見どころ・名物を Wikipedia から集めてお見せします。日本の市区町村のみ検索できます。",
+      placeholder:"市区町村を検索（例：箱根町・はこね・Hakone）",
+      go:"調べる", chips:"例：",
       steps:["地名の由来を読み込み中","歴史をたどっています","見どころを探しています","名物を確認中","資料をまとめています"],
       stop:"◼ 中止",
-      typeFirst:"まず地名を入力してください。",
-      notFound:"その地名は Wikipedia で見つかりませんでした。表記を確認するか、正式名称（例：市・町・村）でお試しください。",
+      pick:"リストから市区町村を選んでください。",
+      notFound:"この市区町村の記事が Wikipedia で見つかりませんでした。",
       netErr:"通信に問題が発生しました。少し待ってから、もう一度お試しください。",
-      thin:"この地名の記事はまだ情報が少ないようです。別の表記や近隣の市町村でお試しください。",
+      thin:"この市区町村の記事はまだ情報が少ないようです。",
+      offline:"オフラインです。保存済みの市区町村のみ表示できます。",
+      near:"📍 近くの市区町村", locating:"現在地を取得しています…", nearErr:"現在地を取得できませんでした。位置情報の許可をご確認ください。", nearHead:"現在地から近い順", browsePref:"都道府県から探す", closeb:"閉じる", count:"件",
       overview:"概要", name:"地名の由来", history:"歴史", sights:"見どころ", food:"名物・特産",
       approx:"おおよその位置", contOn:"Wikipedia で続きを読む",
-      source:"出典：Wikipedia（", license:"CC BY-SA 4.0", sourceEnd:"）", another:"別の町を調べる",
-      cached:"保存済み", refresh:"最新に更新", offline:"オフラインです。保存済みの町のみ表示できます。",
-      untitled:"不明"
-    },
-    en: {
-      dir:"en", wiki:"https://en.wikipedia.org",
-      kicker:"field notes from any town",
-      headline:'Every town keeps<br>a <em>story</em>.',
-      sub:"Type a town, city, or landmark. Meridian gathers the origin of its name, its history, what to see, and what to eat — live from Wikipedia.",
-      placeholder:"Try Hakone, Kanazawa, Shirakawa…",
-      go:"Trace it", chips:"or start with",
+      source:"出典：Wikipedia（", license:"CC BY-SA 4.0", sourceEnd:"）",
+      cached:"保存済み", refresh:"最新に更新", another:"別の市区町村を調べる", untitled:"不明", more:"件" },
+    en: { dir:"en", wiki:"https://en.wikipedia.org",
+      kicker:"every municipality in Japan · 1,736",
+      headline:'Open the <em>story</em><br>of any Japanese town.',
+      sub:"Search a city, town, or village and Meridian gathers its name origin, history, sights, and local food — live from Wikipedia. Japanese municipalities only.",
+      placeholder:"Search a town or city (e.g. Hakone, はこね, 箱根町)",
+      go:"Trace it", chips:"try",
       steps:["reading the name origin","tracing the history","finding what's worth seeing","checking the local food","compiling the notes"],
       stop:"◼ stop",
-      typeFirst:"Type a place first.",
-      notFound:"Couldn't find that place on Wikipedia. Check the spelling, or try its official name.",
+      pick:"Pick a municipality from the list.",
+      notFound:"Couldn't find a Wikipedia article for that municipality.",
       netErr:"Something went wrong reaching Wikipedia. Wait a moment and try again.",
-      thin:"There's little on Wikipedia for that place yet. Try another spelling or a nearby town.",
+      thin:"There's little on Wikipedia for that municipality yet.",
+      offline:"You're offline — only saved municipalities are available.",
+      near:"📍 Near me", locating:"Getting your location…", nearErr:"Couldn't get your location. Check that location access is allowed.", nearHead:"Nearest to you", browsePref:"Browse by prefecture", closeb:"close", count:"places",
       overview:"Overview", name:"The name", history:"History", sights:"Worth seeing", food:"Local food",
       approx:"Approx. position", contOn:"Continue on Wikipedia",
-      source:"Source: Wikipedia (", license:"CC BY-SA 4.0", sourceEnd:")", another:"Trace another town",
-      cached:"saved", refresh:"refresh", offline:"You're offline — only saved towns are available.",
-      untitled:"Unknown"
-    }
+      source:"Source: Wikipedia (", license:"CC BY-SA 4.0", sourceEnd:")",
+      cached:"saved", refresh:"refresh", another:"Trace another municipality", untitled:"Unknown", more:"more" }
   };
-  var EXAMPLES = {
-    ja:["箱根町","金沢市","高山市","白川村","直島","内子町"],
-    en:["Hakone","Kanazawa","Takayama","Shirakawa","Naoshima","Uchiko"]
-  };
+  var EXAMPLE_JA = ["箱根町","金沢市","高山市","白川村","直島町","内子町"];
   var SECT = {
-    ja:{ name:["地名の由来","名称の由来","名前の由来","由来","語源"],
-         history:["歴史","沿革","あゆみ"],
-         sights:["観光","名所","旧跡","見どころ","文化財","名所・旧跡","観光スポット"],
-         food:["名物","特産","名産","郷土料理","グルメ","食文化","産業"] },
-    en:{ name:["etymology","toponymy","origin of the name","name"],
-         history:["history"],
+    ja:{ name:["地名の由来","名称の由来","名前の由来","由来","語源"], history:["歴史","沿革","あゆみ"],
+         sights:["観光","名所","旧跡","見どころ","文化財","名所・旧跡","観光スポット"], food:["名物","特産","名産","郷土料理","グルメ","食文化","産業"] },
+    en:{ name:["etymology","toponymy","origin of the name","name"], history:["history"],
          sights:["tourism","sights","landmark","points of interest","attractions","places of interest","main sights","culture"],
          food:["cuisine","food","local special","specialit","gastronomy","delicac"] }
   };
 
-  // ---------- cache (localStorage + in-memory fallback) ----------
+  // ---------- cache ----------
   var CACHE = (function(){
-    var PREFIX = "meridian.v1:";
-    var mem = {};
-    var ls = null;
-    try { ls = window.localStorage; ls.setItem(PREFIX+"__t","1"); ls.removeItem(PREFIX+"__t"); }
-    catch(e){ ls = null; }
-    function norm(l, q){ return PREFIX + l + "|" + String(q||"").trim().toLowerCase().replace(/\s+/g," "); }
-    function prune(){
-      if(!ls) return;
-      try{
-        var items = [];
-        for(var i=0;i<ls.length;i++){ var k = ls.key(i); if(k && k.indexOf(PREFIX)===0){
-          var ts = 0; try{ ts = (JSON.parse(ls.getItem(k))||{}).ts||0; }catch(e){}
-          items.push([k, ts]);
-        } }
-        items.sort(function(a,b){ return a[1]-b[1]; });
-        var drop = Math.max(1, Math.ceil(items.length/3));
-        for(var j=0;j<drop && j<items.length;j++){ ls.removeItem(items[j][0]); }
-      }catch(e){}
-    }
+    var PREFIX="meridian.v2:", mem={}, ls=null;
+    try{ ls=window.localStorage; ls.setItem(PREFIX+"__t","1"); ls.removeItem(PREFIX+"__t"); }catch(e){ ls=null; }
+    function key(l,code){ return PREFIX+l+"|"+code; }
+    function prune(){ if(!ls) return; try{ var items=[]; for(var i=0;i<ls.length;i++){ var k=ls.key(i); if(k&&k.indexOf(PREFIX)===0){ var ts=0; try{ ts=(JSON.parse(ls.getItem(k))||{}).ts||0; }catch(e){} items.push([k,ts]); } } items.sort(function(a,b){return a[1]-b[1];}); var drop=Math.max(1,Math.ceil(items.length/3)); for(var j=0;j<drop&&j<items.length;j++) ls.removeItem(items[j][0]); }catch(e){} }
     return {
-      get: function(l, q){
-        var key = norm(l,q);
-        if(mem[key]) return mem[key];
-        if(ls){ try{ var raw = ls.getItem(key); if(raw){ var v = JSON.parse(raw); mem[key]=v; return v; } }catch(e){} }
-        return null;
-      },
-      put: function(l, q, dossier){
-        var entry = { d: dossier, ts: Date.now() };
-        var keys = [ norm(l,q) ];
-        if(dossier && dossier.place){ var nk = norm(l, dossier.place); if(keys.indexOf(nk)===-1) keys.push(nk); }
-        keys.forEach(function(key){
-          mem[key] = entry;
-          if(ls){ try{ ls.setItem(key, JSON.stringify(entry)); }
-                  catch(e){ prune(); try{ ls.setItem(key, JSON.stringify(entry)); }catch(e2){} } }
-        });
-      }
+      get:function(l,code){ var k=key(l,code); if(mem[k])return mem[k]; if(ls){ try{ var raw=ls.getItem(k); if(raw){ var v=JSON.parse(raw); mem[k]=v; return v; } }catch(e){} } return null; },
+      put:function(l,code,d){ var entry={d:d,ts:Date.now()}, k=key(l,code); mem[k]=entry; if(ls){ try{ ls.setItem(k,JSON.stringify(entry)); }catch(e){ prune(); try{ ls.setItem(k,JSON.stringify(entry)); }catch(e2){} } } }
     };
   })();
 
-  var lang = "ja";
-  var busy = false, controller = null, stepTimer = null, lastQuery = "";
+  var lang="ja", busy=false, controller=null, stepTimer=null, current=null;
 
-  function applyLang(){
-    var t = I18N[lang];
-    document.documentElement.setAttribute("lang", t.dir);
-    $("kicker").textContent = t.kicker;
-    $("headline").innerHTML = t.headline;
-    $("sub").textContent = t.sub;
-    $("q").placeholder = t.placeholder; $("q2").placeholder = t.placeholder;
-    $("go").textContent = t.go; $("go2").textContent = t.go;
-    $("chipsLbl").textContent = t.chips;
-    $("stop").textContent = t.stop;
-    $("langJa").setAttribute("aria-pressed", lang==="ja");
-    $("langEn").setAttribute("aria-pressed", lang==="en");
-    buildChips();
-  }
-  function buildChips(){
-    var box = $("chips");
-    box.querySelectorAll(".chip").forEach(function(c){ c.remove(); });
-    EXAMPLES[lang].forEach(function(name){
-      var c = document.createElement("button");
-      c.className="chip"; c.type="button"; c.textContent=name;
-      c.addEventListener("click", function(){ $("q").value=name; run(name); });
-      box.appendChild(c);
-    });
-  }
+  function kata2hira(s){ return String(s||"").replace(/[\u30a1-\u30f6]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); }); }
 
-  // ---------- Wikipedia API ----------
-  function api(params){
-    var t = I18N[lang];
-    var u = new URL(t.wiki + "/w/api.php");
-    params.format="json"; params.origin="*";
-    Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
-    return fetch(u.toString(), { signal: controller.signal }).then(function(r){
-      if(!r.ok) throw { code:"net", status:r.status };
-      return r.json();
-    });
-  }
-
-  function cleanText(s){
-    return (s||"").replace(/\[\d+\]/g,"").replace(/\[edit\]/gi,"").replace(/\u00a0/g," ")
-      .replace(/\s+\n/g,"\n").replace(/[ \t]{2,}/g," ").trim();
-  }
-
-  // Extract intro + labelled sections from rendered article HTML
-  function extractSections(html){
-    var doc = new DOMParser().parseFromString(html, "text/html");
-    var root = doc.querySelector(".mw-parser-output") || doc.body;
-    root.querySelectorAll(
-      "sup.reference, .mw-editsection, .reference, style, .noprint, .navbox, .infobox, .thumb, "
-      + ".hatnote, .dablink, .ambox, .metadata, .mbox-text, table, .gallery, .toc, .mw-empty-elt, "
-      + "ol.references, .reflist, .shortdescription, #coordinates, .geo-inline, figure"
-    ).forEach(function(e){ e.remove(); });
-
-    var buckets = {};      // headingText -> {items:[{type,text}], anchor}
-    var order = [];
-    var cur = "__intro__";
-    buckets[cur] = { items:[], anchor:null }; order.push(cur);
-
-    function headingOf(node){
-      if(node.classList && node.classList.contains("mw-heading"))
-        return node.querySelector("h1,h2,h3,h4,h5,h6");
-      if(/^H[1-6]$/.test(node.tagName)) return node;
-      return null;
+  function searchMuni(q){
+    q=(q||"").trim(); if(!q) return [];
+    var ql=q.toLowerCase(), qh=kata2hira(q), res=[];
+    for(var i=0;i<MU.length;i++){
+      var m=MU[i], ja=m.ja, kana=m.kana, rbl=m.rb.toLowerCase(), sc=-1;
+      if(ja.indexOf(q)===0) sc=0;
+      else if(rbl.indexOf(ql)===0) sc=1;
+      else if(kana && kana.indexOf(qh)===0) sc=1;
+      else if(ja.indexOf(q)>-1) sc=2;
+      else if(rbl.indexOf(ql)>-1) sc=3;
+      else if(kana && kana.indexOf(qh)>-1) sc=3;
+      if(sc>=0) res.push([sc, ja.length, m]);
     }
-    Array.prototype.forEach.call(root.children, function(node){
-      var h = headingOf(node);
-      if(h){
-        cur = cleanText(h.textContent) || ("§"+order.length);
-        if(!buckets[cur]){ buckets[cur] = { items:[], anchor: h.id || null }; order.push(cur); }
-        return;
-      }
-      if(node.tagName === "P"){
-        var t = cleanText(node.textContent);
-        if(t && t.length > 1) buckets[cur].items.push({ type:"p", text:t });
-      } else if(node.tagName === "UL" || node.tagName === "OL"){
-        Array.prototype.forEach.call(node.children, function(li){
-          if(li.tagName !== "LI") return;
-          var t = cleanText(li.textContent);
-          if(t && t.length > 1 && t.length < 240) buckets[cur].items.push({ type:"li", text:t });
-        });
-      }
+    res.sort(function(a,b){ return a[0]-b[0] || a[1]-b[1]; });
+    return res.slice(0,8).map(function(x){ return x[2]; });
+  }
+
+  function display(m){ return lang==="ja" ? m.ja : (m.rb || m.ja); }
+  function subLabel(m){ return lang==="ja" ? m.pj : m.pr; }
+
+  // ---------- autocomplete ----------
+  function attachAC(input, listEl, goBtn){
+    var state={ items:[], active:-1 };
+    function hide(){ listEl.classList.remove("on"); input.setAttribute("aria-expanded","false"); state.active=-1; }
+    function draw(){
+      if(!state.items.length){ listEl.innerHTML=""; hide(); return; }
+      listEl.innerHTML = state.items.map(function(m,i){
+        return '<li class="ac-item'+(i===state.active?' active':'')+'" role="option" data-i="'+i+'">'
+          + '<span class="aj">'+esc(display(m))+'</span>'
+          + '<span class="am">'+esc(subLabel(m))+' · '+esc(lang==="ja"?m.rb:m.ja)+'</span></li>';
+      }).join("");
+      listEl.classList.add("on"); input.setAttribute("aria-expanded","true");
+    }
+    function move(d){ if(!state.items.length) return; state.active=(state.active+d+state.items.length)%state.items.length; draw();
+      var a=listEl.querySelector(".ac-item.active"); if(a&&a.scrollIntoView) a.scrollIntoView({block:"nearest"}); }
+    function choose(i){ var m=state.items[i]; if(!m) return; hide(); lookup(m,false); }
+    input.addEventListener("input", function(){ state.items=searchMuni(input.value); state.active=-1; draw(); setHint(""); });
+    input.addEventListener("focus", function(){ if(input.value.trim()){ state.items=searchMuni(input.value); draw(); } });
+    input.addEventListener("keydown", function(e){
+      if(e.key==="ArrowDown"){ e.preventDefault(); if(!listEl.classList.contains("on")){ state.items=searchMuni(input.value); draw(); } move(1); }
+      else if(e.key==="ArrowUp"){ e.preventDefault(); move(-1); }
+      else if(e.key==="Enter"){ e.preventDefault(); if(state.active>=0) choose(state.active); else { var r=searchMuni(input.value); if(r.length) choose0(r); else setHint(I18N[lang].pick,true); } }
+      else if(e.key==="Escape"){ hide(); }
+    });
+    function choose0(r){ hide(); lookup(r[0],false); }
+    listEl.addEventListener("mousedown", function(e){ var li=e.target.closest(".ac-item"); if(!li) return; e.preventDefault(); choose(parseInt(li.getAttribute("data-i"),10)); });
+    input.addEventListener("blur", function(){ setTimeout(hide, 120); });
+    goBtn.addEventListener("click", function(){ var r=searchMuni(input.value); if(r.length){ hide(); lookup(r[0],false); } else setHint(I18N[lang].pick,true); });
+    return { hide:hide, refilter:function(){ if(input.value.trim()){ state.items=searchMuni(input.value); draw(); } } };
+  }
+
+  // ---------- Wikipedia ----------
+  function api(params){
+    var u=new URL(I18N[lang].wiki+"/w/api.php"); params.format="json"; params.origin="*";
+    Object.keys(params).forEach(function(k){ u.searchParams.set(k,params[k]); });
+    return fetch(u.toString(),{signal:controller.signal}).then(function(r){ if(!r.ok) throw {code:"net",status:r.status}; return r.json(); });
+  }
+  function cleanText(s){ return (s||"").replace(/\[\d+\]/g,"").replace(/\[edit\]/gi,"").replace(/\u00a0/g," ").replace(/[ \t]{2,}/g," ").trim(); }
+
+  function extractSections(html){
+    var doc=new DOMParser().parseFromString(html,"text/html");
+    var root=doc.querySelector(".mw-parser-output")||doc.body;
+    root.querySelectorAll("sup.reference, .mw-editsection, .reference, style, .noprint, .navbox, .infobox, .thumb, .hatnote, .dablink, .ambox, .metadata, .mbox-text, table, .gallery, .toc, .mw-empty-elt, ol.references, .reflist, .shortdescription, #coordinates, .geo-inline, figure").forEach(function(e){ e.remove(); });
+    var buckets={}, order=[], cur="__intro__"; buckets[cur]={items:[],anchor:null}; order.push(cur);
+    function headingOf(n){ if(n.classList&&n.classList.contains("mw-heading")) return n.querySelector("h1,h2,h3,h4,h5,h6"); if(/^H[1-6]$/.test(n.tagName)) return n; return null; }
+    Array.prototype.forEach.call(root.children, function(n){
+      var h=headingOf(n);
+      if(h){ cur=cleanText(h.textContent)||("§"+order.length); if(!buckets[cur]){ buckets[cur]={items:[],anchor:h.id||null}; order.push(cur); } return; }
+      if(n.tagName==="P"){ var t=cleanText(n.textContent); if(t&&t.length>1) buckets[cur].items.push({type:"p",text:t}); }
+      else if(n.tagName==="UL"||n.tagName==="OL"){ Array.prototype.forEach.call(n.children,function(li){ if(li.tagName!=="LI")return; var t=cleanText(li.textContent); if(t&&t.length>1&&t.length<240) buckets[cur].items.push({type:"li",text:t}); }); }
     });
     return { buckets:buckets, order:order };
   }
-
-  function matchSection(data, keywords){
-    for(var i=0;i<data.order.length;i++){
-      var key = data.order[i];
-      if(key === "__intro__") continue;
-      var low = key.toLowerCase();
-      for(var j=0;j<keywords.length;j++){
-        if(low.indexOf(keywords[j].toLowerCase()) !== -1){
-          var b = data.buckets[key];
-          if(b.items.length) return { heading:key, anchor:b.anchor, items:b.items };
-        }
-      }
-    }
+  function matchSection(data,kw){
+    for(var i=0;i<data.order.length;i++){ var key=data.order[i]; if(key==="__intro__")continue; var low=key.toLowerCase();
+      for(var j=0;j<kw.length;j++){ if(low.indexOf(kw[j].toLowerCase())!==-1){ var b=data.buckets[key]; if(b.items.length) return {heading:key,anchor:b.anchor,items:b.items}; } } }
     return null;
   }
 
-  // ---------- flow ----------
-  function show(state){
-    $("hero").style.display = state==="idle" ? "" : "none";
-    $("scope").classList.toggle("on", state==="thinking");
-    $("sheet").classList.toggle("on", state==="result");
-  }
-  function setHint(msg, err){ $("hint").textContent = msg||""; $("hint").classList.toggle("err", !!err); }
-
-  function startSteps(place){
-    var t = I18N[lang]; $("scopePlace").textContent = place; var i=0;
-    var render = function(){ $("status").innerHTML = '<span class="dim">›</span> ' + t.steps[i % t.steps.length] + "…"; i++; };
-    render(); stepTimer = setInterval(render, 1600);
-  }
+  function show(state){ $("hero").style.display=state==="idle"?"":"none"; $("scope").classList.toggle("on",state==="thinking"); $("sheet").classList.toggle("on",state==="result"); }
+  function setHint(msg,err){ $("hint").textContent=msg||""; $("hint").classList.toggle("err",!!err); }
+  function startSteps(name){ var t=I18N[lang]; $("scopePlace").textContent=name; var i=0; var r=function(){ $("status").innerHTML='<span class="dim">›</span> '+t.steps[i%t.steps.length]+"…"; i++; }; r(); stepTimer=setInterval(r,1600); }
   function stopSteps(){ if(stepTimer){ clearInterval(stepTimer); stepTimer=null; } }
 
-  async function run(place, force){
-    place = (place||"").trim();
-    var t = I18N[lang];
-    if(!place){ setHint(t.typeFirst); $("q").focus(); return; }
+  async function lookup(m, force){
+    if(!m) return;
+    current=m; var t=I18N[lang];
+    var disp=display(m); $("q").value=disp; $("q2").value=disp; setHint("");
+    if(!force){ var c=CACHE.get(lang,m.code); if(c&&c.d){ render(c.d,true); show("result"); window.scrollTo({top:0,behavior:"smooth"}); return; } }
+    if(navigator && navigator.onLine===false){ setHint(t.offline,true); return; }
     if(busy) return;
-
-    // cache-first: instant, and works with no connection (skipped on a forced refresh)
-    if(!force){
-      var cachedEntry = CACHE.get(lang, place);
-      if(cachedEntry && cachedEntry.d){
-        lastQuery = place; $("q2").value = place; setHint("");
-        render(cachedEntry.d, true);
-        show("result");
-        window.scrollTo({ top:0, behavior:"smooth" });
-        return;
-      }
-    }
-    // offline with no saved copy: don't spin on a request that can't succeed
-    if(navigator && navigator.onLine === false){ setHint(t.offline, true); return; }
-
-    busy = true; lastQuery = place; setHint("");
-    $("go").disabled = true; $("go2").disabled = true;
-    $("q2").value = place;
-    controller = new AbortController();
-    show("thinking"); startSteps(place);
-
+    busy=true; $("go").disabled=true; $("go2").disabled=true;
+    controller=new AbortController(); show("thinking"); startSteps(disp);
     try{
-      // 1) resolve the best-matching title
-      var s = await api({ action:"query", list:"search", srsearch:place, srlimit:1, srnamespace:0, srqiprofile:"classic_noboostlinks" });
-      var hit = s && s.query && s.query.search && s.query.search[0];
-      if(!hit){ stopSteps(); show("idle"); setHint(t.notFound, true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
-      var title = hit.title;
-
-      // 2) full rendered article (+ section index) and 3) metadata, in parallel
-      var pPromise = api({ action:"parse", page:title, prop:"text|displaytitle", redirects:1 });
-      var mPromise = api({ action:"query", prop:"coordinates|pageimages|pageterms|info", inprop:"url",
-                           piprop:"thumbnail", pithumbsize:640, wbptterms:"description", titles:title, redirects:1 });
-      var pRes = await pPromise;
-      var mRes = await mPromise;
-
-      var html = pRes && pRes.parse && pRes.parse.text ? pRes.parse.text["*"] : "";
-      var displaytitle = pRes && pRes.parse && pRes.parse.displaytitle ? cleanText(new DOMParser().parseFromString(pRes.parse.displaytitle,"text/html").body.textContent) : title;
-
-      var page = null;
-      if(mRes && mRes.query && mRes.query.pages){ var pk = Object.keys(mRes.query.pages)[0]; page = mRes.query.pages[pk]; }
-      var coords = page && page.coordinates && page.coordinates[0];
-      var thumb = page && page.thumbnail && page.thumbnail.source;
-      var desc = page && page.terms && page.terms.description && page.terms.description[0];
-      var pageUrl = (page && page.fullurl) || (t.wiki + "/wiki/" + encodeURIComponent(title.replace(/ /g,"_")));
-
-      var data = extractSections(html);
-      var intro = data.buckets["__intro__"].items.filter(function(x){ return x.type==="p"; });
-
-      if(!intro.length){ stopSteps(); show("idle"); setHint(t.thin, true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
-
-      var dossier = {
-        place: displaytitle || title,
-        region: desc || "",
-        coords: coords ? fmtCoord(coords) : "",
-        overview: intro.slice(0,2),
-        name: matchSection(data, SECT[lang].name),
-        history: matchSection(data, SECT[lang].history),
-        sights: matchSection(data, SECT[lang].sights),
-        food: matchSection(data, SECT[lang].food),
-        thumb: thumb || "",
-        url: pageUrl
-      };
-
-      CACHE.put(lang, place, dossier);
+      var srsearch = lang==="ja" ? (m.ja+" "+m.pj) : (m.rb+" "+m.pr);
+      var s=await api({ action:"query", list:"search", srsearch:srsearch, srlimit:1, srnamespace:0, srqiprofile:"classic_noboostlinks" });
+      var hit=s&&s.query&&s.query.search&&s.query.search[0];
+      if(!hit){ stopSteps(); show("idle"); setHint(t.notFound,true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
+      var title=hit.title;
+      var pRes=await api({ action:"parse", page:title, prop:"text|displaytitle", redirects:1 });
+      var mRes=await api({ action:"query", prop:"coordinates|pageimages|pageterms|info", inprop:"url", piprop:"thumbnail", pithumbsize:640, wbptterms:"description", titles:title, redirects:1 });
+      var html=pRes&&pRes.parse&&pRes.parse.text?pRes.parse.text["*"]:"";
+      var displaytitle=pRes&&pRes.parse&&pRes.parse.displaytitle?cleanText(new DOMParser().parseFromString(pRes.parse.displaytitle,"text/html").body.textContent):title;
+      var page=null; if(mRes&&mRes.query&&mRes.query.pages){ var pk=Object.keys(mRes.query.pages)[0]; page=mRes.query.pages[pk]; }
+      var coords=page&&page.coordinates&&page.coordinates[0];
+      var thumb=page&&page.thumbnail&&page.thumbnail.source;
+      var desc=page&&page.terms&&page.terms.description&&page.terms.description[0];
+      var pageUrl=(page&&page.fullurl)||(t.wiki+"/wiki/"+encodeURIComponent(title.replace(/ /g,"_")));
+      var data=extractSections(html);
+      var intro=data.buckets["__intro__"].items.filter(function(x){ return x.type==="p"; });
+      if(!intro.length){ stopSteps(); show("idle"); setHint(t.thin,true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
+      var coordStr = coords ? fmtCoord(coords.lat,coords.lon) : (m.lat!=null ? fmtCoord(m.lat,m.lon) : "");
+      var region = desc || (lang==="ja" ? m.pj : m.pr);
+      var dossier={ place:displaytitle||title, region:region, coords:coordStr, overview:intro.slice(0,2),
+        name:matchSection(data,SECT[lang].name), history:matchSection(data,SECT[lang].history),
+        sights:matchSection(data,SECT[lang].sights), food:matchSection(data,SECT[lang].food), thumb:thumb||"", url:pageUrl };
+      CACHE.put(lang,m.code,dossier);
+      stopSteps(); render(dossier,false); show("result"); window.scrollTo({top:0,behavior:"smooth"});
+    }catch(e){
       stopSteps();
-      render(dossier, false);
-      show("result");
-      window.scrollTo({ top:0, behavior:"smooth" });
-    } catch(e){
-      stopSteps();
-      if(e && e.code === "abort"){ show("idle"); }
-      else if(e && e.name === "AbortError"){ show("idle"); }
-      else { show("idle"); setHint(I18N[lang].netErr, true); }
-    } finally {
-      busy = false; $("go").disabled = false; $("go2").disabled = false;
-    }
+      if(e&&(e.code==="abort"||e.name==="AbortError")){ show("idle"); }
+      else { show("idle"); setHint(I18N[lang].netErr,true); }
+    }finally{ busy=false; $("go").disabled=false; $("go2").disabled=false; }
   }
 
-  function fmtCoord(c){
-    var la = c.lat, lo = c.lon;
-    var ns = la>=0 ? "N" : "S", ew = lo>=0 ? "E" : "W";
-    return Math.abs(la).toFixed(3) + "\u00b0 " + ns + ", " + Math.abs(lo).toFixed(3) + "\u00b0 " + ew;
-  }
+  function fmtCoord(la,lo){ var ns=la>=0?"N":"S", ew=lo>=0?"E":"W"; return Math.abs(la).toFixed(3)+"\u00b0 "+ns+", "+Math.abs(lo).toFixed(3)+"\u00b0 "+ew; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
-
-  function renderSection(sec, eyebrow, url){
-    if(!sec) return "";
-    var t = I18N[lang];
-    var body;
-    var lis = sec.items.filter(function(x){ return x.type==="li"; });
-    var ps  = sec.items.filter(function(x){ return x.type==="p"; });
-    if(lis.length >= 2 && lis.length >= ps.length){
-      body = '<ul class="wlist">' + lis.slice(0,8).map(function(x){ return "<li>"+esc(x.text)+"</li>"; }).join("") + "</ul>";
-    } else {
-      body = '<div class="prose">' + ps.slice(0,3).map(function(x){ return "<p>"+esc(x.text)+"</p>"; }).join("") + "</div>";
-    }
-    var link = sec.anchor ? '<div class="srcline"><a href="'+esc(url)+"#"+esc(sec.anchor)+'" target="_blank" rel="noopener">'+t.contOn+"</a></div>" : "";
+  function renderSection(sec,eyebrow,url){
+    if(!sec) return ""; var t=I18N[lang]; var body;
+    var lis=sec.items.filter(function(x){return x.type==="li";}), ps=sec.items.filter(function(x){return x.type==="p";});
+    if(lis.length>=2 && lis.length>=ps.length){ body='<ul class="wlist">'+lis.slice(0,8).map(function(x){return "<li>"+esc(x.text)+"</li>";}).join("")+"</ul>"; }
+    else { body='<div class="prose">'+ps.slice(0,3).map(function(x){return "<p>"+esc(x.text)+"</p>";}).join("")+"</div>"; }
+    var link=sec.anchor?'<div class="srcline"><a href="'+esc(url)+"#"+esc(sec.anchor)+'" target="_blank" rel="noopener">'+t.contOn+"</a></div>":"";
     return '<div class="block"><div class="sec-eyebrow">'+esc(eyebrow)+'</div>'+body+link+"</div>";
   }
-
-  function render(d, fromCache){
-    var t = I18N[lang];
-    var photo = d.thumb ? '<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(d.place)+'" loading="lazy">' : "";
-    var coord = d.coords ? '<div class="coord"><b>'+t.approx+"</b>"+esc(d.coords)+"</div>" : "";
-
-    var head =
-      '<div class="doc-head">' +
-        '<div class="titles">' +
-          (d.region ? '<div class="loc">'+esc(d.region)+"</div>" : "") +
-          '<h1 class="place">'+esc(d.place)+"</h1>" +
-          coord +
-        "</div>" + photo +
-        '<p class="essence">'+esc(d.overview[0] ? d.overview[0].text : "")+"</p>" +
-      "</div>";
-
-    var overviewExtra = d.overview[1]
-      ? '<div class="block"><div class="sec-eyebrow">'+t.overview+'</div><div class="prose"><p>'+esc(d.overview[1].text)+"</p></div></div>"
-      : "";
-
-    var mainCol = overviewExtra
-      + renderSection(d.history, t.history, d.url);
-    var asideCol = renderSection(d.name, t.name, d.url)
-      + renderSection(d.food, t.food, d.url)
-      + renderSection(d.sights, t.sights, d.url);
-
-    var badge = fromCache
-      ? '<span class="cachetag">\u2913 '+t.cached+' · <button type="button" id="refresh">'+t.refresh+"</button></span>"
-      : "";
-    var foot = '<div class="doc-foot">'+badge+'<span class="stamp">'+t.source+
-      '<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.place)+"</a> · "+
-      '<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+
-      '</span><button class="again" id="again">'+t.another+"</button></div>";
-
-    var html = head + '<hr class="rule">' +
-      '<div class="cols"><div class="main">'+mainCol+'</div><div class="aside">'+asideCol+"</div></div>" + foot;
-
-    var paper = $("paper");
-    paper.innerHTML = html;
+  function render(d,fromCache){
+    var t=I18N[lang];
+    var photo=d.thumb?'<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(d.place)+'" loading="lazy">':"";
+    var coord=d.coords?'<div class="coord"><b>'+t.approx+"</b>"+esc(d.coords)+"</div>":"";
+    var head='<div class="doc-head"><div class="titles">'+(d.region?'<div class="loc">'+esc(d.region)+"</div>":"")+'<h1 class="place">'+esc(d.place)+"</h1>"+coord+"</div>"+photo+'<p class="essence">'+esc(d.overview[0]?d.overview[0].text:"")+"</p></div>";
+    var overviewExtra=d.overview[1]?'<div class="block"><div class="sec-eyebrow">'+t.overview+'</div><div class="prose"><p>'+esc(d.overview[1].text)+"</p></div></div>":"";
+    var mainCol=overviewExtra+renderSection(d.history,t.history,d.url);
+    var asideCol=renderSection(d.name,t.name,d.url)+renderSection(d.food,t.food,d.url)+renderSection(d.sights,t.sights,d.url);
+    var badge=fromCache?'<span class="cachetag">\u2913 '+t.cached+' · <button type="button" id="refresh">'+t.refresh+"</button></span>":"";
+    var foot='<div class="doc-foot">'+badge+'<span class="stamp">'+t.source+'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.place)+"</a> · "+'<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+'</span><button class="again" id="again">'+t.another+"</button></div>";
+    var paper=$("paper"); paper.innerHTML=head+'<hr class="rule"><div class="cols"><div class="main">'+mainCol+'</div><div class="aside">'+asideCol+"</div></div>"+foot;
     paper.classList.remove("reveal"); void paper.offsetWidth; paper.classList.add("reveal");
     $("again").addEventListener("click", function(){ show("idle"); setHint(""); $("q").value=""; $("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); });
-    var rf = $("refresh"); if(rf){ rf.addEventListener("click", function(){ run(lastQuery || d.place, true); }); }
+    var rf=$("refresh"); if(rf){ rf.addEventListener("click", function(){ if(current) lookup(current,true); }); }
   }
 
-  // ---------- wire up ----------
-  $("langJa").addEventListener("click", function(){ if(lang==="ja")return; lang="ja"; applyLang(); if(lastQuery){ $("q").value=lastQuery; run(lastQuery); } });
-  $("langEn").addEventListener("click", function(){ if(lang==="en")return; lang="en"; applyLang(); if(lastQuery){ $("q").value=lastQuery; run(lastQuery); } });
-  $("go").addEventListener("click", function(){ run($("q").value); });
-  $("go2").addEventListener("click", function(){ run($("q2").value); });
-  $("q").addEventListener("keydown", function(e){ if(e.key==="Enter") run($("q").value); });
-  $("q2").addEventListener("keydown", function(e){ if(e.key==="Enter") run($("q2").value); });
+  // ---------- nearby + prefecture browse ----------
+  var browseItems=[];
+  function fmtKm(d){ return d<10 ? d.toFixed(1)+" km" : Math.round(d)+" km"; }
+  function distKm(la1,lo1,la2,lo2){ var R=6371,r=Math.PI/180;
+    var dla=(la2-la1)*r, dlo=(lo2-lo1)*r;
+    var a=Math.sin(dla/2)*Math.sin(dla/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dlo/2)*Math.sin(dlo/2);
+    return 2*R*Math.asin(Math.min(1,Math.sqrt(a))); }
+  function closeBrowse(){ var p=$("browsePanel"); p.classList.remove("on"); p.innerHTML=""; browseItems=[]; }
+  function openBrowse(items, head, withDist){
+    document.querySelectorAll(".ac-list").forEach(function(el){ el.classList.remove("on"); });
+    browseItems=items; var t=I18N[lang];
+    var rows=items.map(function(o,i){
+      var m=o.m||o;
+      var right = withDist ? ('<span class="dist">'+esc(fmtKm(o.d))+"</span> · "+esc(subLabel(m)))
+                           : esc(lang==="ja" ? m.rb : m.ja);
+      return '<div class="ac-item" data-i="'+i+'"><span class="aj">'+esc(display(m))+'</span><span class="am">'+right+"</span></div>";
+    }).join("");
+    $("browsePanel").innerHTML='<div class="bhead"><span>'+esc(head)+'</span><button type="button" id="bclose">'+t.closeb+"</button></div>"+rows;
+    $("browsePanel").classList.add("on");
+    $("bclose").addEventListener("click", closeBrowse);
+  }
+  function populatePrefs(){
+    var t=I18N[lang], sel=$("prefSel"), cur=sel.value;
+    var opts='<option value="">'+esc(t.browsePref)+"</option>";
+    PREFS.forEach(function(p){ opts+='<option value="'+esc(p.pj)+'">'+esc(lang==="ja"?p.pj:p.pr)+"</option>"; });
+    sel.innerHTML=opts; sel.value=cur||"";
+  }
+  function runNearby(){
+    var t=I18N[lang];
+    if(!navigator.geolocation){ setHint(t.nearErr,true); return; }
+    setHint(t.locating); $("nearBtn").disabled=true;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      $("nearBtn").disabled=false; setHint("");
+      var la=pos.coords.latitude, lo=pos.coords.longitude, arr=[];
+      for(var i=0;i<MU.length;i++){ var m=MU[i]; if(m.lat==null) continue; arr.push({ m:m, d:distKm(la,lo,m.lat,m.lon) }); }
+      arr.sort(function(a,b){ return a.d-b.d; });
+      openBrowse(arr.slice(0,10), t.nearHead, true);
+    }, function(){ $("nearBtn").disabled=false; setHint(t.nearErr,true); },
+    { enableHighAccuracy:false, timeout:8000, maximumAge:300000 });
+  }
+
+  // ---------- language + chips ----------
+  function applyLang(){
+    var t=I18N[lang]; document.documentElement.setAttribute("lang",t.dir);
+    $("kicker").textContent=t.kicker; $("headline").innerHTML=t.headline; $("sub").textContent=t.sub;
+    $("q").placeholder=t.placeholder; $("q2").placeholder=t.placeholder;
+    $("go").textContent=t.go; $("go2").textContent=t.go; $("chipsLbl").textContent=t.chips; $("stop").textContent=t.stop;
+    $("langJa").setAttribute("aria-pressed",lang==="ja"); $("langEn").setAttribute("aria-pressed",lang==="en");
+    $("nearBtn").textContent=t.near; populatePrefs();
+    buildChips();
+    if(current){ var disp=display(current); $("q").value=disp; $("q2").value=disp; }
+  }
+  function buildChips(){
+    var box=$("chips"); box.querySelectorAll(".chip").forEach(function(c){ c.remove(); });
+    EXAMPLE_JA.forEach(function(name){ var m=BY_JA[name]; if(!m) return;
+      var c=document.createElement("button"); c.className="chip"; c.type="button"; c.textContent=display(m);
+      c.addEventListener("click", function(){ lookup(m,false); }); box.appendChild(c); });
+  }
+
+  // ---------- wire ----------
+  attachAC($("q"), $("acHero"), $("go"));
+  attachAC($("q2"), $("acReprise"), $("go2"));
+  $("nearBtn").addEventListener("click", runNearby);
+  $("prefSel").addEventListener("change", function(){
+    var pj=this.value; if(!pj){ closeBrowse(); return; }
+    var items=MU.filter(function(m){ return m.pj===pj; });
+    var head=(lang==="ja"?pj:(PREF_ROMAJI[pj]||pj))+" · "+items.length+" "+I18N[lang].count;
+    openBrowse(items, head, false);
+  });
+  $("browsePanel").addEventListener("click", function(e){
+    var it=e.target.closest(".ac-item"); if(!it) return;
+    var o=browseItems[parseInt(it.getAttribute("data-i"),10)]; if(!o) return;
+    var m=o.m||o; closeBrowse(); lookup(m,false);
+  });
+  $("q").addEventListener("input", closeBrowse);
+  $("langJa").addEventListener("click", function(){ if(lang==="ja")return; lang="ja"; closeBrowse(); applyLang(); if(current) lookup(current,false); });
+  $("langEn").addEventListener("click", function(){ if(lang==="en")return; lang="en"; closeBrowse(); applyLang(); if(current) lookup(current,false); });
   $("stop").addEventListener("click", function(){ if(controller) controller.abort(); stopSteps(); show("idle"); busy=false; $("go").disabled=false; $("go2").disabled=false; });
 
-  applyLang();
-  $("q").focus();
+  applyLang(); $("q").focus();
 })();
 </script>
 </body>
