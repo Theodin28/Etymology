@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meridian — 土地の物語 / a place explorer</title>
+<meta name="description" content="Look up any town's name origin, history, sights, and local food — live from Wikipedia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --ink:#0e1b18; --ink-2:#13241f; --ink-3:#1b302a; --ink-line:#26433a;
+    --paper:#ece3d0; --paper-2:#e4d9c2; --paper-line:#cdbf9d; --paper-line-soft:#dccfb2;
+    --on-paper:#22302a; --on-paper-soft:#586459;
+    --brass:#c69749; --brass-bright:#e0b666; --brass-deep:#9a7327;
+    --sea:#7cb4a8; --fog:#94a89b; --fog-dim:#61756a;
+    --shadow: 0 30px 70px -30px rgba(0,0,0,.75), 0 8px 24px -12px rgba(0,0,0,.6);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *,*::before,*::after{ box-sizing:inherit; }
+  html{ scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust:100%; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family:"Instrument Sans","Noto Serif JP", system-ui, sans-serif;
+    color:var(--fog);
+    background: radial-gradient(120% 90% at 50% -10%, #14261f 0%, var(--ink) 55%, #0a1512 100%);
+    min-height:100%; position:relative; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:-20%;
+    background: repeating-radial-gradient(circle at 78% 18%, transparent 0 38px, rgba(198,151,73,.045) 38px 39px, transparent 39px 78px);
+    pointer-events:none; z-index:0;
+    -webkit-mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%);
+            mask-image: radial-gradient(80% 70% at 78% 18%, #000 0%, transparent 70%);
+  }
+  body::after{
+    content:""; position:fixed; inset:0;
+    background: radial-gradient(120% 120% at 50% 120%, transparent 55%, rgba(0,0,0,.35) 100%);
+    pointer-events:none; z-index:0;
+  }
+  .wrap{ position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 22px 90px; }
+
+  header.bar{ display:flex; align-items:center; gap:12px; padding:22px 2px 0; max-width:1080px; margin:0 auto; position:relative; z-index:2; }
+  .mark{ display:flex; align-items:center; gap:10px; }
+  .mark svg{ width:26px; height:26px; display:block; color:var(--brass); }
+  .mark .name{ font-family:"Fraunces", serif; font-weight:500; font-size:19px; letter-spacing:.01em; color:var(--paper); }
+  .mark .name b{ color:var(--brass-bright); font-weight:600; }
+
+  .lang{ margin-left:auto; display:inline-flex; border:1px solid var(--ink-line); border-radius:999px; overflow:hidden; background:rgba(124,180,168,.05); }
+  .lang button{ font-family:"Spline Sans Mono", monospace; font-size:12px; letter-spacing:.03em; color:var(--fog-dim); background:none; border:none; padding:7px 13px; cursor:pointer; transition:all .2s; }
+  .lang button[aria-pressed="true"]{ color:#20180a; background:linear-gradient(180deg,var(--brass-bright),var(--brass)); }
+
+  .hero{ text-align:center; padding: clamp(38px, 8vh, 88px) 0 18px; }
+  .hero .kicker{ font-family:"Spline Sans Mono", monospace; font-size:12px; color:var(--sea); letter-spacing:.06em; margin:0 0 18px; display:inline-flex; align-items:center; gap:9px; }
+  .hero .kicker::before, .hero .kicker::after{ content:""; width:26px; height:1px; background:linear-gradient(90deg,transparent,var(--fog-dim)); }
+  .hero .kicker::after{ background:linear-gradient(90deg,var(--fog-dim),transparent); }
+  .hero h1{ font-family:"Fraunces","Noto Serif JP", serif; font-weight:400; font-variation-settings:"opsz" 108; font-size: clamp(34px, 7.6vw, 68px); line-height:1.08; letter-spacing:-.01em; color:var(--paper); margin:0 auto; max-width:18ch; }
+  .hero h1 em{ font-style:italic; color:var(--brass-bright); }
+  html[lang="ja"] .hero h1{ font-weight:500; letter-spacing:.01em; line-height:1.28; }
+  html[lang="ja"] .hero h1 em{ font-style:normal; }
+  .hero p.sub{ margin:22px auto 0; max-width:54ch; font-size:16px; line-height:1.7; color:var(--fog); }
+
+  .finder{ max-width:600px; margin:32px auto 0; }
+  .field{ display:flex; align-items:center; gap:10px; background:linear-gradient(180deg, var(--ink-3), var(--ink-2)); border:1px solid var(--ink-line); border-radius:15px; padding:8px 8px 8px 18px; box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -26px #000; transition:border-color .25s, box-shadow .25s; }
+  .field:focus-within{ border-color:var(--brass-deep); box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 0 0 3px rgba(198,151,73,.16), 0 18px 40px -26px #000; }
+  .field svg.loc{ width:19px; height:19px; color:var(--sea); flex:none; }
+  .field input{ flex:1; min-width:0; background:none; border:none; outline:none; color:var(--paper); font-family:inherit; font-size:17px; padding:12px 2px; }
+  .field input::placeholder{ color:#63776b; }
+  .field button.go{ flex:none; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:15px; color:#20180a; background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:10px; padding:12px 20px; cursor:pointer; box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 8px 18px -8px rgba(198,151,73,.6); transition:transform .12s ease, filter .2s; }
+  .field button.go:hover{ filter:brightness(1.05); }
+  .field button.go:active{ transform:translateY(1px); }
+  .field button.go:disabled{ opacity:.5; cursor:default; filter:grayscale(.3); }
+
+  .chips{ display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin:20px 0 0; }
+  .chips .lbl{ font-size:13px; color:var(--fog-dim); align-self:center; margin-right:2px; }
+  .chip{ font-family:inherit; font-size:13.5px; color:var(--fog); background:rgba(124,180,168,.06); border:1px solid var(--ink-line); border-radius:999px; padding:7px 14px; cursor:pointer; transition:all .2s; }
+  .chip:hover{ color:var(--paper); border-color:var(--sea); background:rgba(124,180,168,.12); }
+  .hint{ text-align:center; margin-top:16px; font-size:13.5px; color:var(--fog-dim); min-height:18px; }
+  .hint.err{ color:#e0a05f; }
+
+  .scope{ display:none; flex-direction:column; align-items:center; padding: clamp(30px,7vh,66px) 0 10px; }
+  .scope.on{ display:flex; }
+  .radar{ width:148px; height:148px; }
+  .radar svg{ width:100%; height:100%; display:block; }
+  .sweep{ transform-origin:100px 100px; animation:spin 2.1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .ping{ transform-origin:100px 100px; animation:ping 2.1s ease-out infinite; }
+  @keyframes ping{ 0%{ r:4; opacity:.9; } 70%{ opacity:0; } 100%{ r:70; opacity:0; } }
+  .scope .place{ font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-size:22px; color:var(--paper); margin:24px 0 4px; }
+  html[lang="ja"] .scope .place{ font-style:normal; }
+  .status{ font-family:"Spline Sans Mono", monospace; font-size:13px; color:var(--sea); min-height:20px; }
+  .status .dim{ color:var(--fog-dim); }
+  .stop{ margin-top:24px; background:none; border:1px solid var(--ink-line); color:var(--fog); font-family:"Spline Sans Mono",monospace; font-size:12px; letter-spacing:.04em; padding:8px 16px; border-radius:8px; cursor:pointer; transition:all .2s; }
+  .stop:hover{ color:var(--paper); border-color:var(--fog); }
+
+  .sheet{ display:none; margin:30px auto 0; }
+  .sheet.on{ display:block; }
+  .reprise{ margin:0 auto 20px; max-width:600px; }
+  .paper{ background:linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); color:var(--on-paper); border-radius:6px; box-shadow: var(--shadow); padding: clamp(26px, 4.4vw, 54px); position:relative; border:1px solid #d9ccaf; }
+  html[lang="ja"] .paper{ font-family:"Noto Serif JP", serif; }
+  .paper::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:linear-gradient(90deg,var(--brass-deep),var(--brass-bright),var(--brass-deep)); border-radius:6px 6px 0 0; }
+
+  .doc-head{ display:grid; grid-template-columns:1fr auto; gap:20px 24px; align-items:start; }
+  .doc-head .loc{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--brass-deep); letter-spacing:.03em; }
+  .doc-head .place{ font-family:"Fraunces","Noto Serif JP",serif; font-weight:500; font-variation-settings:"opsz" 120; font-size: clamp(30px, 6vw, 52px); line-height:1.05; letter-spacing:-.01em; color:var(--on-paper); margin:6px 0 0; }
+  .doc-head .coord{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--on-paper-soft); line-height:1.6; margin-top:12px; }
+  .doc-head .coord b{ color:var(--brass-deep); font-weight:500; display:block; font-size:10.5px; letter-spacing:.06em; }
+  .photo{ grid-row:1 / span 3; width:clamp(96px,20vw,150px); aspect-ratio:4/5; object-fit:cover; border:5px solid #fbf6ea; border-radius:3px; box-shadow:0 10px 22px -12px rgba(20,15,5,.55); transform:rotate(1.4deg); background:#d8cbac; }
+  .essence{ grid-column:1 / -1; font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-weight:400; font-size: clamp(16px,2.3vw,20px); line-height:1.6; color:#3a473f; margin:6px 0 0; max-width:60ch; }
+  html[lang="ja"] .essence{ font-style:normal; }
+  .rule{ height:1px; background:linear-gradient(90deg,var(--paper-line),transparent); margin:26px 0; border:0; }
+
+  .cols{ display:grid; grid-template-columns: 1.5fr 1fr; gap: clamp(28px,4vw,52px); }
+  .sec-eyebrow{ font-family:"Spline Sans Mono",monospace; font-size:11.5px; letter-spacing:.06em; color:var(--brass-deep); margin:0 0 10px; display:flex; align-items:center; gap:10px; }
+  html[lang="ja"] .sec-eyebrow{ font-family:"Noto Serif JP",serif; font-weight:600; font-size:13px; letter-spacing:.02em; }
+  .sec-eyebrow::after{ content:""; flex:1; height:1px; background:var(--paper-line-soft); }
+  .block{ margin:0 0 30px; }
+  .block:last-child{ margin-bottom:0; }
+  .prose p{ font-size:15.5px; line-height:1.75; color:#333f37; margin:0 0 13px; max-width:66ch; }
+  .prose p:last-child{ margin-bottom:0; }
+  .wlist{ list-style:none; margin:0; padding:0; }
+  .wlist li{ position:relative; padding:8px 0 8px 20px; border-bottom:1px solid var(--paper-line-soft); font-size:15px; line-height:1.6; color:#333f37; }
+  .wlist li:last-child{ border-bottom:0; }
+  .wlist li::before{ content:""; position:absolute; left:2px; top:16px; width:6px; height:6px; border:1px solid var(--brass-deep); transform:rotate(45deg); }
+  .aside .block{ margin-bottom:26px; }
+  .srcline{ margin-top:10px; font-size:12.5px; }
+  .srcline a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.35); padding-bottom:1px; }
+  .srcline a:hover{ color:#7c5c1c; border-color:#7c5c1c; }
+
+  .doc-foot{ display:flex; align-items:center; gap:14px; margin-top:32px; padding-top:20px; border-top:1px solid var(--paper-line); flex-wrap:wrap; }
+  .stamp{ font-size:12px; color:var(--on-paper-soft); line-height:1.6; }
+  .stamp a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.4); }
+  .again{ margin-left:auto; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:14px; color:var(--ink); background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:9px; padding:10px 18px; cursor:pointer; box-shadow:0 6px 14px -8px rgba(154,115,39,.7); }
+  .again:hover{ filter:brightness(1.05); }
+
+  @media (max-width: 720px){
+    .cols{ grid-template-columns:1fr; gap:6px; }
+    .doc-head{ grid-template-columns:1fr; }
+    .photo{ grid-row:auto; order:-1; width:clamp(120px,42vw,190px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sweep{ animation:none; } .ping{ animation:none; opacity:0; } .reveal{ animation:none !important; }
+  }
+  .reveal{ animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="mark">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10.2" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M12 3.4 L14.1 11 L12 20.6 L9.9 11 Z" fill="currentColor" opacity=".85"/>
+      <circle cx="12" cy="12" r="1.5" fill="#0e1b18"/>
+    </svg>
+    <span class="name"><b>Meridian</b></span>
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button id="langJa" aria-pressed="true">日本語</button>
+    <button id="langEn" aria-pressed="false">EN</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero" id="hero">
+    <p class="kicker" id="kicker"></p>
+    <h1 id="headline"></h1>
+    <p class="sub" id="sub"></p>
+    <div class="finder">
+      <div class="field">
+        <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <input id="q" type="text" autocomplete="off" spellcheck="false" aria-label="place">
+        <button class="go" id="go"></button>
+      </div>
+      <div class="chips" id="chips"><span class="lbl" id="chipsLbl"></span></div>
+      <p class="hint" id="hint"></p>
+    </div>
+  </section>
+
+  <section class="scope" id="scope" aria-live="polite">
+    <div class="radar">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs><linearGradient id="sw" x1="100" y1="100" x2="190" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#c69749" stop-opacity="0"/><stop offset="1" stop-color="#e0b666" stop-opacity=".9"/>
+        </linearGradient></defs>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#26433a" stroke-width="1.2"/>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="#26433a" stroke-width="1.2"/>
+        <circle cx="100" cy="100" r="32" fill="none" stroke="#26433a" stroke-width="1.2"/>
+        <line x1="12" y1="100" x2="188" y2="100" stroke="#1e372f" stroke-width="1"/>
+        <line x1="100" y1="12" x2="100" y2="188" stroke="#1e372f" stroke-width="1"/>
+        <g class="sweep"><path d="M100 100 L188 100 A88 88 0 0 0 152 38 Z" fill="url(#sw)"/></g>
+        <circle class="ping" cx="100" cy="100" r="4" fill="none" stroke="#7cb4a8" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="3" fill="#e0b666"/>
+      </svg>
+    </div>
+    <div class="place" id="scopePlace"></div>
+    <div class="status" id="status"></div>
+    <button class="stop" id="stop"></button>
+  </section>
+
+  <section class="sheet" id="sheet">
+    <div class="reprise">
+      <div class="field">
+        <svg class="loc" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <input id="q2" type="text" autocomplete="off" spellcheck="false" aria-label="place">
+        <button class="go" id="go2"></button>
+      </div>
+    </div>
+    <article class="paper" id="paper"></article>
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---------- i18n ----------
+  var I18N = {
+    ja: {
+      dir:"ja", wiki:"https://ja.wikipedia.org",
+      kicker:"どの土地にも、物語がある",
+      headline:'すべての町に、<em>物語</em>がある。',
+      sub:"市町村や名所の名前を入力すると、地名の由来・歴史・見どころ・名物を Wikipedia から集めてお見せします。",
+      placeholder:"例：箱根町、金沢市、白川村…",
+      go:"調べる", chips:"試してみる：",
+      steps:["地名の由来を読み込み中","歴史をたどっています","見どころを探しています","名物を確認中","資料をまとめています"],
+      stop:"◼ 中止",
+      typeFirst:"まず地名を入力してください。",
+      notFound:"その地名は Wikipedia で見つかりませんでした。表記を確認するか、正式名称（例：市・町・村）でお試しください。",
+      netErr:"通信に問題が発生しました。少し待ってから、もう一度お試しください。",
+      thin:"この地名の記事はまだ情報が少ないようです。別の表記や近隣の市町村でお試しください。",
+      overview:"概要", name:"地名の由来", history:"歴史", sights:"見どころ", food:"名物・特産",
+      approx:"おおよその位置", contOn:"Wikipedia で続きを読む",
+      source:"出典：Wikipedia（", license:"CC BY-SA 4.0", sourceEnd:"）", another:"別の町を調べる",
+      untitled:"不明"
+    },
+    en: {
+      dir:"en", wiki:"https://en.wikipedia.org",
+      kicker:"field notes from any town",
+      headline:'Every town keeps<br>a <em>story</em>.',
+      sub:"Type a town, city, or landmark. Meridian gathers the origin of its name, its history, what to see, and what to eat — live from Wikipedia.",
+      placeholder:"Try Hakone, Kanazawa, Shirakawa…",
+      go:"Trace it", chips:"or start with",
+      steps:["reading the name origin","tracing the history","finding what's worth seeing","checking the local food","compiling the notes"],
+      stop:"◼ stop",
+      typeFirst:"Type a place first.",
+      notFound:"Couldn't find that place on Wikipedia. Check the spelling, or try its official name.",
+      netErr:"Something went wrong reaching Wikipedia. Wait a moment and try again.",
+      thin:"There's little on Wikipedia for that place yet. Try another spelling or a nearby town.",
+      overview:"Overview", name:"The name", history:"History", sights:"Worth seeing", food:"Local food",
+      approx:"Approx. position", contOn:"Continue on Wikipedia",
+      source:"Source: Wikipedia (", license:"CC BY-SA 4.0", sourceEnd:")", another:"Trace another town",
+      untitled:"Unknown"
+    }
+  };
+  var EXAMPLES = {
+    ja:["箱根町","金沢市","高山市","白川村","直島","内子町"],
+    en:["Hakone","Kanazawa","Takayama","Shirakawa","Naoshima","Uchiko"]
+  };
+  var SECT = {
+    ja:{ name:["地名の由来","名称の由来","名前の由来","由来","語源"],
+         history:["歴史","沿革","あゆみ"],
+         sights:["観光","名所","旧跡","見どころ","文化財","名所・旧跡","観光スポット"],
+         food:["名物","特産","名産","郷土料理","グルメ","食文化","産業"] },
+    en:{ name:["etymology","toponymy","origin of the name","name"],
+         history:["history"],
+         sights:["tourism","sights","landmark","points of interest","attractions","places of interest","main sights","culture"],
+         food:["cuisine","food","local special","specialit","gastronomy","delicac"] }
+  };
+
+  var lang = "ja";
+  var busy = false, controller = null, stepTimer = null, lastQuery = "";
+
+  function applyLang(){
+    var t = I18N[lang];
+    document.documentElement.setAttribute("lang", t.dir);
+    $("kicker").textContent = t.kicker;
+    $("headline").innerHTML = t.headline;
+    $("sub").textContent = t.sub;
+    $("q").placeholder = t.placeholder; $("q2").placeholder = t.placeholder;
+    $("go").textContent = t.go; $("go2").textContent = t.go;
+    $("chipsLbl").textContent = t.chips;
+    $("stop").textContent = t.stop;
+    $("langJa").setAttribute("aria-pressed", lang==="ja");
+    $("langEn").setAttribute("aria-pressed", lang==="en");
+    buildChips();
+  }
+  function buildChips(){
+    var box = $("chips");
+    box.querySelectorAll(".chip").forEach(function(c){ c.remove(); });
+    EXAMPLES[lang].forEach(function(name){
+      var c = document.createElement("button");
+      c.className="chip"; c.type="button"; c.textContent=name;
+      c.addEventListener("click", function(){ $("q").value=name; run(name); });
+      box.appendChild(c);
+    });
+  }
+
+  // ---------- Wikipedia API ----------
+  function api(params){
+    var t = I18N[lang];
+    var u = new URL(t.wiki + "/w/api.php");
+    params.format="json"; params.origin="*";
+    Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
+    return fetch(u.toString(), { signal: controller.signal }).then(function(r){
+      if(!r.ok) throw { code:"net", status:r.status };
+      return r.json();
+    });
+  }
+
+  function cleanText(s){
+    return (s||"").replace(/\[\d+\]/g,"").replace(/\[edit\]/gi,"").replace(/\u00a0/g," ")
+      .replace(/\s+\n/g,"\n").replace(/[ \t]{2,}/g," ").trim();
+  }
+
+  // Extract intro + labelled sections from rendered article HTML
+  function extractSections(html){
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var root = doc.querySelector(".mw-parser-output") || doc.body;
+    root.querySelectorAll(
+      "sup.reference, .mw-editsection, .reference, style, .noprint, .navbox, .infobox, .thumb, "
+      + ".hatnote, .dablink, .ambox, .metadata, .mbox-text, table, .gallery, .toc, .mw-empty-elt, "
+      + "ol.references, .reflist, .shortdescription, #coordinates, .geo-inline, figure"
+    ).forEach(function(e){ e.remove(); });
+
+    var buckets = {};      // headingText -> {items:[{type,text}], anchor}
+    var order = [];
+    var cur = "__intro__";
+    buckets[cur] = { items:[], anchor:null }; order.push(cur);
+
+    function headingOf(node){
+      if(node.classList && node.classList.contains("mw-heading"))
+        return node.querySelector("h1,h2,h3,h4,h5,h6");
+      if(/^H[1-6]$/.test(node.tagName)) return node;
+      return null;
+    }
+    Array.prototype.forEach.call(root.children, function(node){
+      var h = headingOf(node);
+      if(h){
+        cur = cleanText(h.textContent) || ("§"+order.length);
+        if(!buckets[cur]){ buckets[cur] = { items:[], anchor: h.id || null }; order.push(cur); }
+        return;
+      }
+      if(node.tagName === "P"){
+        var t = cleanText(node.textContent);
+        if(t && t.length > 1) buckets[cur].items.push({ type:"p", text:t });
+      } else if(node.tagName === "UL" || node.tagName === "OL"){
+        Array.prototype.forEach.call(node.children, function(li){
+          if(li.tagName !== "LI") return;
+          var t = cleanText(li.textContent);
+          if(t && t.length > 1 && t.length < 240) buckets[cur].items.push({ type:"li", text:t });
+        });
+      }
+    });
+    return { buckets:buckets, order:order };
+  }
+
+  function matchSection(data, keywords){
+    for(var i=0;i<data.order.length;i++){
+      var key = data.order[i];
+      if(key === "__intro__") continue;
+      var low = key.toLowerCase();
+      for(var j=0;j<keywords.length;j++){
+        if(low.indexOf(keywords[j].toLowerCase()) !== -1){
+          var b = data.buckets[key];
+          if(b.items.length) return { heading:key, anchor:b.anchor, items:b.items };
+        }
+      }
+    }
+    return null;
+  }
+
+  // ---------- flow ----------
+  function show(state){
+    $("hero").style.display = state==="idle" ? "" : "none";
+    $("scope").classList.toggle("on", state==="thinking");
+    $("sheet").classList.toggle("on", state==="result");
+  }
+  function setHint(msg, err){ $("hint").textContent = msg||""; $("hint").classList.toggle("err", !!err); }
+
+  function startSteps(place){
+    var t = I18N[lang]; $("scopePlace").textContent = place; var i=0;
+    var render = function(){ $("status").innerHTML = '<span class="dim">›</span> ' + t.steps[i % t.steps.length] + "…"; i++; };
+    render(); stepTimer = setInterval(render, 1600);
+  }
+  function stopSteps(){ if(stepTimer){ clearInterval(stepTimer); stepTimer=null; } }
+
+  async function run(place){
+    place = (place||"").trim();
+    var t = I18N[lang];
+    if(!place){ setHint(t.typeFirst); $("q").focus(); return; }
+    if(busy) return;
+    busy = true; lastQuery = place; setHint("");
+    $("go").disabled = true; $("go2").disabled = true;
+    $("q2").value = place;
+    controller = new AbortController();
+    show("thinking"); startSteps(place);
+
+    try{
+      // 1) resolve the best-matching title
+      var s = await api({ action:"query", list:"search", srsearch:place, srlimit:1, srnamespace:0, srqiprofile:"classic_noboostlinks" });
+      var hit = s && s.query && s.query.search && s.query.search[0];
+      if(!hit){ stopSteps(); show("idle"); setHint(t.notFound, true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
+      var title = hit.title;
+
+      // 2) full rendered article (+ section index) and 3) metadata, in parallel
+      var pPromise = api({ action:"parse", page:title, prop:"text|displaytitle", redirects:1 });
+      var mPromise = api({ action:"query", prop:"coordinates|pageimages|pageterms|info", inprop:"url",
+                           piprop:"thumbnail", pithumbsize:640, wbptterms:"description", titles:title, redirects:1 });
+      var pRes = await pPromise;
+      var mRes = await mPromise;
+
+      var html = pRes && pRes.parse && pRes.parse.text ? pRes.parse.text["*"] : "";
+      var displaytitle = pRes && pRes.parse && pRes.parse.displaytitle ? cleanText(new DOMParser().parseFromString(pRes.parse.displaytitle,"text/html").body.textContent) : title;
+
+      var page = null;
+      if(mRes && mRes.query && mRes.query.pages){ var pk = Object.keys(mRes.query.pages)[0]; page = mRes.query.pages[pk]; }
+      var coords = page && page.coordinates && page.coordinates[0];
+      var thumb = page && page.thumbnail && page.thumbnail.source;
+      var desc = page && page.terms && page.terms.description && page.terms.description[0];
+      var pageUrl = (page && page.fullurl) || (t.wiki + "/wiki/" + encodeURIComponent(title.replace(/ /g,"_")));
+
+      var data = extractSections(html);
+      var intro = data.buckets["__intro__"].items.filter(function(x){ return x.type==="p"; });
+
+      if(!intro.length){ stopSteps(); show("idle"); setHint(t.thin, true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
+
+      var dossier = {
+        place: displaytitle || title,
+        region: desc || "",
+        coords: coords ? fmtCoord(coords) : "",
+        overview: intro.slice(0,2),
+        name: matchSection(data, SECT[lang].name),
+        history: matchSection(data, SECT[lang].history),
+        sights: matchSection(data, SECT[lang].sights),
+        food: matchSection(data, SECT[lang].food),
+        thumb: thumb || "",
+        url: pageUrl
+      };
+
+      stopSteps();
+      render(dossier);
+      show("result");
+      window.scrollTo({ top:0, behavior:"smooth" });
+    } catch(e){
+      stopSteps();
+      if(e && e.code === "abort"){ show("idle"); }
+      else if(e && e.name === "AbortError"){ show("idle"); }
+      else { show("idle"); setHint(I18N[lang].netErr, true); }
+    } finally {
+      busy = false; $("go").disabled = false; $("go2").disabled = false;
+    }
+  }
+
+  function fmtCoord(c){
+    var la = c.lat, lo = c.lon;
+    var ns = la>=0 ? "N" : "S", ew = lo>=0 ? "E" : "W";
+    return Math.abs(la).toFixed(3) + "\u00b0 " + ns + ", " + Math.abs(lo).toFixed(3) + "\u00b0 " + ew;
+  }
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function renderSection(sec, eyebrow, url){
+    if(!sec) return "";
+    var t = I18N[lang];
+    var body;
+    var lis = sec.items.filter(function(x){ return x.type==="li"; });
+    var ps  = sec.items.filter(function(x){ return x.type==="p"; });
+    if(lis.length >= 2 && lis.length >= ps.length){
+      body = '<ul class="wlist">' + lis.slice(0,8).map(function(x){ return "<li>"+esc(x.text)+"</li>"; }).join("") + "</ul>";
+    } else {
+      body = '<div class="prose">' + ps.slice(0,3).map(function(x){ return "<p>"+esc(x.text)+"</p>"; }).join("") + "</div>";
+    }
+    var link = sec.anchor ? '<div class="srcline"><a href="'+esc(url)+"#"+esc(sec.anchor)+'" target="_blank" rel="noopener">'+t.contOn+"</a></div>" : "";
+    return '<div class="block"><div class="sec-eyebrow">'+esc(eyebrow)+'</div>'+body+link+"</div>";
+  }
+
+  function render(d){
+    var t = I18N[lang];
+    var photo = d.thumb ? '<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(d.place)+'" loading="lazy">' : "";
+    var coord = d.coords ? '<div class="coord"><b>'+t.approx+"</b>"+esc(d.coords)+"</div>" : "";
+
+    var head =
+      '<div class="doc-head">' +
+        '<div class="titles">' +
+          (d.region ? '<div class="loc">'+esc(d.region)+"</div>" : "") +
+          '<h1 class="place">'+esc(d.place)+"</h1>" +
+          coord +
+        "</div>" + photo +
+        '<p class="essence">'+esc(d.overview[0] ? d.overview[0].text : "")+"</p>" +
+      "</div>";
+
+    var overviewExtra = d.overview[1]
+      ? '<div class="block"><div class="sec-eyebrow">'+t.overview+'</div><div class="prose"><p>'+esc(d.overview[1].text)+"</p></div></div>"
+      : "";
+
+    var mainCol = overviewExtra
+      + renderSection(d.history, t.history, d.url);
+    var asideCol = renderSection(d.name, t.name, d.url)
+      + renderSection(d.food, t.food, d.url)
+      + renderSection(d.sights, t.sights, d.url);
+
+    var foot = '<div class="doc-foot"><span class="stamp">'+t.source+
+      '<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.place)+"</a> · "+
+      '<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+
+      '</span><button class="again" id="again">'+t.another+"</button></div>";
+
+    var html = head + '<hr class="rule">' +
+      '<div class="cols"><div class="main">'+mainCol+'</div><div class="aside">'+asideCol+"</div></div>" + foot;
+
+    var paper = $("paper");
+    paper.innerHTML = html;
+    paper.classList.remove("reveal"); void paper.offsetWidth; paper.classList.add("reveal");
+    $("again").addEventListener("click", function(){ show("idle"); setHint(""); $("q").value=""; $("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); });
+  }
+
+  // ---------- wire up ----------
+  $("langJa").addEventListener("click", function(){ if(lang==="ja")return; lang="ja"; applyLang(); if(lastQuery){ $("q").value=lastQuery; run(lastQuery); } });
+  $("langEn").addEventListener("click", function(){ if(lang==="en")return; lang="en"; applyLang(); if(lastQuery){ $("q").value=lastQuery; run(lastQuery); } });
+  $("go").addEventListener("click", function(){ run($("q").value); });
+  $("go2").addEventListener("click", function(){ run($("q2").value); });
+  $("q").addEventListener("keydown", function(e){ if(e.key==="Enter") run($("q").value); });
+  $("q2").addEventListener("keydown", function(e){ if(e.key==="Enter") run($("q2").value); });
+  $("stop").addEventListener("click", function(){ if(controller) controller.abort(); stopSteps(); show("idle"); busy=false; $("go").disabled=false; $("go2").disabled=false; });
+
+  applyLang();
+  $("q").focus();
+})();
+</script>
+</body>
+</html>
