@@ -280,7 +280,7 @@
 
   // ---------- cache ----------
   var CACHE = (function(){
-    var PREFIX="meridian.v2:", mem={}, ls=null;
+    var PREFIX="meridian.v3:", mem={}, ls=null;
     try{ ls=window.localStorage; ls.setItem(PREFIX+"__t","1"); ls.removeItem(PREFIX+"__t"); }catch(e){ ls=null; }
     function key(l,code){ return PREFIX+l+"|"+code; }
     function prune(){ if(!ls) return; try{ var items=[]; for(var i=0;i<ls.length;i++){ var k=ls.key(i); if(k&&k.indexOf(PREFIX)===0){ var ts=0; try{ ts=(JSON.parse(ls.getItem(k))||{}).ts||0; }catch(e){} items.push([k,ts]); } } items.sort(function(a,b){return a[1]-b[1];}); var drop=Math.max(1,Math.ceil(items.length/3)); for(var j=0;j<drop&&j<items.length;j++) ls.removeItem(items[j][0]); }catch(e){} }
@@ -346,10 +346,51 @@
   }
 
   // ---------- Wikipedia ----------
-  function api(params){
-    var u=new URL(I18N[lang].wiki+"/w/api.php"); params.format="json"; params.origin="*";
+  function apiOn(wiki, params){
+    var u=new URL(wiki+"/w/api.php"); params.format="json"; params.origin="*";
     Object.keys(params).forEach(function(k){ u.searchParams.set(k,params[k]); });
     return fetch(u.toString(),{signal:controller.signal}).then(function(r){ if(!r.ok) throw {code:"net",status:r.status}; return r.json(); });
+  }
+  function api(params){ return apiOn(I18N[lang].wiki, params); }
+
+  // Resolve straight to the municipality's own article (never keyword-ranked, so temples/shrines can't win)
+  async function firstExisting(wiki, titles){
+    for(var i=0;i<titles.length;i++){
+      var cand=titles[i]; if(!cand) continue;
+      try{
+        var r=await apiOn(wiki, { action:"query", prop:"pageprops|info", ppprop:"disambiguation", titles:cand, redirects:1 });
+        var pages=r&&r.query&&r.query.pages; if(!pages) continue;
+        var p=pages[Object.keys(pages)[0]];
+        if(p && p.pageid!==undefined && p.missing===undefined && !(p.pageprops && ("disambiguation" in p.pageprops))) return p.title;
+      }catch(e){}
+    }
+    return null;
+  }
+  async function resolveEntity(m){
+    var jaTitle=await firstExisting(I18N.ja.wiki, [ m.ja, m.ja+" ("+m.pj+")" ]);
+    if(lang==="ja"){
+      if(jaTitle) return { wiki:I18N.ja.wiki, title:jaTitle, clang:"ja" };
+    } else {
+      if(jaTitle){
+        try{
+          var ll=await apiOn(I18N.ja.wiki, { action:"query", prop:"langlinks", lllang:"en", lllimit:1, titles:jaTitle, redirects:1 });
+          var lp=ll.query.pages, p=lp[Object.keys(lp)[0]];
+          var en=p&&p.langlinks&&p.langlinks[0]&&p.langlinks[0]["*"];
+          if(en) return { wiki:I18N.en.wiki, title:en, clang:"en" };
+        }catch(e){}
+      }
+      var enTitle=await firstExisting(I18N.en.wiki, [ m.rb+", "+m.pr, m.rb+" ("+m.pr+")", m.rb ]);
+      if(enTitle) return { wiki:I18N.en.wiki, title:enTitle, clang:"en" };
+      if(jaTitle) return { wiki:I18N.ja.wiki, title:jaTitle, clang:"ja" }; // small village with no EN article
+    }
+    // last resort: keyword search, but keep only hits whose title matches the municipality name
+    try{
+      var s=await apiOn(I18N[lang].wiki, { action:"query", list:"search", srsearch:(lang==="ja"?m.ja+" "+m.pj:m.rb+" "+m.pr), srlimit:5, srnamespace:0 });
+      var hits=(s.query&&s.query.search)||[]; var base=lang==="ja"?m.ja:m.rb;
+      var best=hits.filter(function(h){ return h.title.indexOf(base)>-1; })[0]||hits[0];
+      if(best) return { wiki:I18N[lang].wiki, title:best.title, clang:lang };
+    }catch(e){}
+    return null;
   }
   function cleanText(s){ return (s||"").replace(/\[\d+\]/g,"").replace(/\[edit\]/gi,"").replace(/\u00a0/g," ").replace(/[ \t]{2,}/g," ").trim(); }
 
@@ -388,28 +429,26 @@
     busy=true; $("go").disabled=true; $("go2").disabled=true;
     controller=new AbortController(); show("thinking"); startSteps(disp);
     try{
-      var srsearch = lang==="ja" ? (m.ja+" "+m.pj) : (m.rb+" "+m.pr);
-      var s=await api({ action:"query", list:"search", srsearch:srsearch, srlimit:1, srnamespace:0, srqiprofile:"classic_noboostlinks" });
-      var hit=s&&s.query&&s.query.search&&s.query.search[0];
-      if(!hit){ stopSteps(); show("idle"); setHint(t.notFound,true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
-      var title=hit.title;
-      var pRes=await api({ action:"parse", page:title, prop:"text|displaytitle", redirects:1 });
-      var mRes=await api({ action:"query", prop:"coordinates|pageimages|pageterms|info", inprop:"url", piprop:"thumbnail", pithumbsize:640, wbptterms:"description", titles:title, redirects:1 });
+      var res=await resolveEntity(m);
+      if(!res){ stopSteps(); show("idle"); setHint(t.notFound,true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
+      var wiki=res.wiki, title=res.title, clang=res.clang;
+      var pRes=await apiOn(wiki,{ action:"parse", page:title, prop:"text|displaytitle", redirects:1 });
+      var mRes=await apiOn(wiki,{ action:"query", prop:"coordinates|pageimages|pageterms|info", inprop:"url", piprop:"thumbnail", pithumbsize:640, wbptterms:"description", titles:title, redirects:1 });
       var html=pRes&&pRes.parse&&pRes.parse.text?pRes.parse.text["*"]:"";
       var displaytitle=pRes&&pRes.parse&&pRes.parse.displaytitle?cleanText(new DOMParser().parseFromString(pRes.parse.displaytitle,"text/html").body.textContent):title;
       var page=null; if(mRes&&mRes.query&&mRes.query.pages){ var pk=Object.keys(mRes.query.pages)[0]; page=mRes.query.pages[pk]; }
       var coords=page&&page.coordinates&&page.coordinates[0];
       var thumb=page&&page.thumbnail&&page.thumbnail.source;
       var desc=page&&page.terms&&page.terms.description&&page.terms.description[0];
-      var pageUrl=(page&&page.fullurl)||(t.wiki+"/wiki/"+encodeURIComponent(title.replace(/ /g,"_")));
+      var pageUrl=(page&&page.fullurl)||(wiki+"/wiki/"+encodeURIComponent(title.replace(/ /g,"_")));
       var data=extractSections(html);
       var intro=data.buckets["__intro__"].items.filter(function(x){ return x.type==="p"; });
       if(!intro.length){ stopSteps(); show("idle"); setHint(t.thin,true); busy=false; $("go").disabled=false; $("go2").disabled=false; return; }
       var coordStr = coords ? fmtCoord(coords.lat,coords.lon) : (m.lat!=null ? fmtCoord(m.lat,m.lon) : "");
       var region = desc || (lang==="ja" ? m.pj : m.pr);
       var dossier={ place:displaytitle||title, region:region, coords:coordStr, overview:intro.slice(0,2),
-        name:matchSection(data,SECT[lang].name), history:matchSection(data,SECT[lang].history),
-        sights:matchSection(data,SECT[lang].sights), food:matchSection(data,SECT[lang].food), thumb:thumb||"", url:pageUrl };
+        name:matchSection(data,SECT[clang].name), history:matchSection(data,SECT[clang].history),
+        sights:matchSection(data,SECT[clang].sights), food:matchSection(data,SECT[clang].food), thumb:thumb||"", url:pageUrl };
       CACHE.put(lang,m.code,dossier);
       stopSteps(); render(dossier,false); show("result"); window.scrollTo({top:0,behavior:"smooth"});
     }catch(e){
