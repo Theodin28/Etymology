@@ -144,6 +144,9 @@
   .beat .line{ font-size:16px; line-height:1.74; color:#333f37; padding-left:15px; border-left:2px solid var(--paper-line); max-width:64ch; }
   .beat .sd{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:#948b6b; }
   html[lang="ja"] .beat .sd{ font-family:"Noto Serif JP",serif; }
+  .beat .aside{ font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-size:15.5px; line-height:1.62; color:#6c5a2c; background:linear-gradient(180deg,#efe6cf,#eaddc0); border-left:3px solid var(--brass); border-radius:0 5px 5px 0; padding:10px 15px; }
+  html[lang="ja"] .beat .aside{ font-style:normal; }
+  .qa-hint{ font-family:"Spline Sans Mono",monospace; font-size:11.5px; color:var(--on-paper-soft); margin:0 0 16px; letter-spacing:.01em; }
   .qa{ margin-top:30px; padding-top:24px; border-top:2px solid var(--brass); }
   .qa-title{ font-family:"Fraunces","Noto Serif JP",serif; font-weight:600; font-size:24px; color:var(--on-paper); margin:0 0 18px; }
   .qa-item{ margin:0 0 18px; } .qa-item:last-child{ margin-bottom:0; }
@@ -277,9 +280,17 @@
       sayFood:"そして、ぜひ味わっていただきたい地元の名物です。",
       sayClose:"以上で、{place}のご紹介を終わります。ご清聴ありがとうございました。",
       sdMap:"（地図を示す）", sdPhoto:"（写真を見せる）", sdPause:"（少し間をおく）",
-      qaTitle:"想定問答（Q&A）",
-      qName:"地名の由来は何ですか？", qHistory:"どのような歴史がありますか？", qSights:"おすすめの見どころは？", qFood:"名物や特産品は何ですか？", qWhere:"この町はどこにありますか？",
-      aWhere:"{region}にあります。", aWhereCoord:"（おおよその位置：{coord}）" },
+      qaTitle:"わたしの視点（Q&A）", qaHint:"（以下は一例です。ぜひご自身の言葉に置き換えてください。）",
+      qCharm:"この町の魅力は何だと思いますか？", aCharm:"私にとっての{place}の魅力は、なんといっても{highlight}です。実際にその場に立つと、その良さが自然と伝わってきます。",
+      qTop:"一番のおすすめは？", aTop:"まず足を運んでほしいのは{sight}。個人的にいちばん心を惹かれる場所です。",
+      qEat:"何を食べるべき？", aEat:"ぜひ味わってほしいのが{food}。正直、これを目当てに訪れてもいいくらいだと思っています。",
+      qBack:"また訪れたいと思いますか？", aBack:"はい、何度でも。とくに{highlight}が今も忘れられません。",
+      qWho:"どんな人におすすめですか？", aWho:"歴史や土地の物語が好きな方なら、きっと{place}を気に入っていただけると思います。",
+      segOpen:"——正直に言うと、この町には最初から惹きつけられました。",
+      segName:"——個人的には、名前の由来を知るだけで、その土地がぐっと身近に感じられます。",
+      segHistory:"——歴史の話はこのくらいにして。私がいちばん惹かれるのは、今もこの町に流れている空気そのものです。",
+      segSights:"——さて、ここからは私のおすすめをご紹介します。",
+      segFood:"——そして、食いしん坊の私としては、やはり食が気になります。" },
     en: { dir:"en", wiki:"https://en.wikipedia.org",
       kicker:"every municipality in Japan · 1,736",
       headline:'Open the <em>story</em><br>of any Japanese town.',
@@ -307,9 +318,17 @@
       sayFood:"And here is the local food you really shouldn't miss.",
       sayClose:"That brings us to the end of our look at {place}. Thank you for listening.",
       sdMap:"(gesture to the map)", sdPhoto:"(show the photo)", sdPause:"(pause briefly)",
-      qaTitle:"Questions & Answers",
-      qName:"Where does the name come from?", qHistory:"What's the history of this place?", qSights:"What's worth seeing there?", qFood:"What food is it known for?", qWhere:"Where is this town located?",
-      aWhere:"It's in {region}.", aWhereCoord:"(Approx. position: {coord})" }
+      qaTitle:"My take (Q&A)", qaHint:"(These are examples — please put them in your own words.)",
+      qCharm:"What do you think is the charm of this town?", aCharm:"For me, the real charm of {place} is {highlight}. When you actually stand there, you just feel it.",
+      qTop:"What's your top recommendation?", aTop:"I'd send you first to {sight} — personally, my favourite corner of the town.",
+      qEat:"What should we eat?", aEat:"You have to try {food}. Honestly, I'd make the trip just for that.",
+      qBack:"Would you go back?", aBack:"Absolutely — again and again. I still can't forget {highlight}.",
+      qWho:"Who would you recommend it to?", aWho:"Anyone who loves history and a good local story will, I think, fall for {place}.",
+      segOpen:"— Honestly, this town had me from the very start.",
+      segName:"— Personally, just knowing where a name comes from makes a place feel closer.",
+      segHistory:"— I'll keep the history short, though. What really draws me is how the town still feels today.",
+      segSights:"— Now, let me share what I'd personally recommend.",
+      segFood:"— And as someone who loves food, this is the part I care about most." }
   };
   var EXAMPLE_JA = ["箱根町","金沢市","高山市","白川村","直島町","内子町"];
   var SECT = {
@@ -523,6 +542,12 @@
     if(!out.length) out=secLis(sec).slice(0,n);
     return out.join(lang==="ja"?"":" ");
   }
+  function sentencesOf(sec, n){
+    var out=[]; var ps=secParas(sec);
+    for(var i=0;i<ps.length && out.length<n;i++){ splitSentences(ps[i]).forEach(function(s){ if(out.length<n) out.push(s); }); }
+    if(!out.length) out=readItems(sec,n);
+    return out;
+  }
   function joinList(arr){ var t=I18N[lang];
     if(lang!=="ja" && arr.length>1) return arr.slice(0,-1).join(", ")+", "+t.andword+arr[arr.length-1];
     return arr.join(t.listjoin); }
@@ -530,6 +555,7 @@
   function beat(n, label, lines){
     var body=lines.filter(Boolean).map(function(l){
       if(l.stage) return '<p class="sd">'+esc(l.stage)+"</p>";
+      if(l.aside) return '<p class="aside">'+esc(l.aside)+"</p>";
       if(l.say)   return '<p class="say">'+esc(l.say)+"</p>";
       return '<p class="line">'+esc(l.read)+"</p>";
     }).join("");
@@ -544,22 +570,25 @@
     var openLines=[{say:fill(t.sayOpen,{place:pl})},{stage:t.sdMap}];
     if(d.overview[0]) openLines.push({read:d.overview[0].text});
     if(d.overview[1]) openLines.push({read:d.overview[1].text});
+    openLines.push({aside:t.segOpen});
     add(t.cueOpen, openLines);
 
-    if(d.name){ var nl=[{say:fill(t.sayName,{place:pl})}]; readItems(d.name,2).forEach(function(x){ nl.push({read:x}); }); add(t.cueName, nl); }
-    if(d.history){ var hl=[{say:fill(t.sayHistory,{place:pl})}]; (secParas(d.history).length?secParas(d.history):readItems(d.history,3)).slice(0,3).forEach(function(x){ hl.push({read:x}); }); add(t.cueHistory, hl); }
-    if(d.sights){ var sl=[{say:t.saySights},{stage:t.sdPhoto}]; readItems(d.sights,6).forEach(function(x){ sl.push({read:x}); }); add(t.cueSights, sl); }
-    if(d.food){ var fl=[{say:t.sayFood}]; readItems(d.food,5).forEach(function(x){ fl.push({read:x}); }); add(t.cueFood, fl); }
+    if(d.name){ var nl=[{say:fill(t.sayName,{place:pl})}]; readItems(d.name,2).forEach(function(x){ nl.push({read:x}); }); nl.push({aside:t.segName}); add(t.cueName, nl); }
+    if(d.history){ var hl=[{say:fill(t.sayHistory,{place:pl})}]; sentencesOf(d.history,2).forEach(function(x){ hl.push({read:x}); }); hl.push({aside:t.segHistory}); add(t.cueHistory, hl); }
+    if(d.sights){ var sl=[{aside:t.segSights},{stage:t.sdPhoto}]; readItems(d.sights,6).forEach(function(x){ sl.push({read:x}); }); add(t.cueSights, sl); }
+    if(d.food){ var fl=[{aside:t.segFood}]; readItems(d.food,5).forEach(function(x){ fl.push({read:x}); }); add(t.cueFood, fl); }
     add(t.cueClose, [{stage:t.sdPause},{say:fill(t.sayClose,{place:pl})}]);
 
+    var firstSight=(readItems(d.sights,1)[0])||"", firstFood=(readItems(d.food,1)[0])||"";
+    var highlight=firstSight||firstFood||d.region||pl;
+    var vars={place:pl, sight:firstSight, food:firstFood, highlight:highlight};
     var qa=[];
-    if(d.name) qa.push([t.qName, firstSentences(d.name,2)]);
-    if(d.history) qa.push([t.qHistory, firstSentences(d.history,2)]);
-    if(d.sights){ var s4=readItems(d.sights,4); if(s4.length) qa.push([t.qSights, joinList(s4)+(lang==="ja"?"などがあります。":".")]); }
-    if(d.food){ var f4=readItems(d.food,4); if(f4.length) qa.push([t.qFood, joinList(f4)+(lang==="ja"?"などが知られています。":".")]); }
-    var whereA=fill(t.aWhere,{region:d.region||(lang==="ja"?"日本":"Japan")}); if(d.coords) whereA+=" "+fill(t.aWhereCoord,{coord:d.coords});
-    qa.push([t.qWhere, whereA]);
-    var qaHtml=qa.map(function(p){ return '<div class="qa-item"><p class="q">Q. '+esc(p[0])+'</p><p class="a">A. '+esc(p[1])+"</p></div>"; }).join("");
+    qa.push([t.qCharm, fill(t.aCharm,vars)]);
+    if(firstSight) qa.push([t.qTop, fill(t.aTop,vars)]);
+    if(firstFood) qa.push([t.qEat, fill(t.aEat,vars)]);
+    qa.push([t.qBack, fill(t.aBack,vars)]);
+    qa.push([t.qWho, fill(t.aWho,vars)]);
+    var qaHtml='<p class="qa-hint">'+esc(t.qaHint)+"</p>"+qa.map(function(p){ return '<div class="qa-item"><p class="q">Q. '+esc(p[0])+'</p><p class="a">A. '+esc(p[1])+"</p></div>"; }).join("");
 
     var photo=d.thumb?'<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(pl)+'" loading="lazy">':"";
     var mins=Math.max(1,Math.round(chars/(lang==="ja"?300:660)));
