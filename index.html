@@ -132,6 +132,24 @@
   .cachetag button{ font:inherit; color:#7c5c1c; background:none; border:none; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; } .cachetag button:hover{ color:#5f4614; }
   .stamp{ font-size:12px; color:var(--on-paper-soft); line-height:1.6; } .stamp a{ color:var(--brass-deep); text-decoration:none; border-bottom:1px solid rgba(154,115,39,.4); }
   .again{ margin-left:auto; font-family:"Instrument Sans","Noto Serif JP",sans-serif; font-weight:600; font-size:14px; color:var(--ink); background:linear-gradient(180deg,var(--brass-bright),var(--brass)); border:none; border-radius:9px; padding:10px 18px; cursor:pointer; box-shadow:0 6px 14px -8px rgba(154,115,39,.7); } .again:hover{ filter:brightness(1.05); }
+  .smeta{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--brass-deep); letter-spacing:.03em; margin-top:12px; }
+  .beat{ display:grid; grid-template-columns:auto 1fr; gap:14px 20px; padding:20px 0; border-bottom:1px solid var(--paper-line-soft); }
+  .beat:last-of-type{ border-bottom:0; }
+  .beat .cue{ font-family:"Spline Sans Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-deep); white-space:nowrap; padding-top:5px; }
+  html[lang="ja"] .beat .cue{ font-family:"Noto Serif JP",serif; font-weight:600; font-size:13px; letter-spacing:.02em; text-transform:none; }
+  .beat .cue .n{ display:inline-block; min-width:26px; color:#b58c33; }
+  .beat .lines p{ margin:0 0 11px; } .beat .lines p:last-child{ margin-bottom:0; }
+  .beat .say{ font-family:"Fraunces","Noto Serif JP",serif; font-style:italic; font-size:17px; line-height:1.62; color:#2b382f; }
+  html[lang="ja"] .beat .say{ font-style:normal; }
+  .beat .line{ font-size:16px; line-height:1.74; color:#333f37; padding-left:15px; border-left:2px solid var(--paper-line); max-width:64ch; }
+  .beat .sd{ font-family:"Spline Sans Mono",monospace; font-size:12px; color:#948b6b; }
+  html[lang="ja"] .beat .sd{ font-family:"Noto Serif JP",serif; }
+  .qa{ margin-top:30px; padding-top:24px; border-top:2px solid var(--brass); }
+  .qa-title{ font-family:"Fraunces","Noto Serif JP",serif; font-weight:600; font-size:24px; color:var(--on-paper); margin:0 0 18px; }
+  .qa-item{ margin:0 0 18px; } .qa-item:last-child{ margin-bottom:0; }
+  .qa-item .q{ font-family:"Fraunces","Noto Serif JP",serif; font-weight:600; font-size:16.5px; color:#2b382f; margin:0 0 5px; }
+  .qa-item .a{ font-size:15.5px; line-height:1.7; color:#3a473f; margin:0; }
+  @media(max-width:640px){ .beat{ grid-template-columns:1fr; gap:7px; padding:16px 0; } .beat .cue{ padding-top:0; } .beat .line{ padding-left:12px; } }
   @media (max-width: 720px){ .cols{ grid-template-columns:1fr; gap:6px; } .doc-head{ grid-template-columns:1fr; } .photo{ grid-row:auto; order:-1; width:clamp(120px,42vw,190px); } .ac-item .am{ font-size:11.5px; } }
   @media (prefers-reduced-motion: reduce){ .sweep{ animation:none; } .ping{ animation:none; opacity:0; } .reveal{ animation:none !important; } }
   .reveal{ animation: rise .6s cubic-bezier(.2,.7,.2,1) both; } @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
@@ -249,7 +267,19 @@
       overview:"概要", name:"地名の由来", history:"歴史", sights:"見どころ", food:"名物・特産",
       approx:"おおよその位置", contOn:"Wikipedia で続きを読む",
       source:"出典：Wikipedia（", license:"CC BY-SA 4.0", sourceEnd:"）",
-      cached:"保存済み", refresh:"最新に更新", another:"別の市区町村を調べる", untitled:"不明", more:"件" },
+      cached:"保存済み", refresh:"最新に更新", another:"別の市区町村を調べる", untitled:"不明", more:"件",
+      scriptLabel:"発表用スクリプト", minutes:"分", listjoin:"、", andword:"",
+      cueOpen:"導入", cueName:"地名の由来", cueHistory:"歴史", cueSights:"見どころ", cueFood:"名物・グルメ", cueClose:"結び",
+      sayOpen:"皆さん、こんにちは。本日は、{place}についてご紹介します。",
+      sayName:"はじめに、{place}という地名の由来からお話しします。",
+      sayHistory:"続いて、{place}の歴史をたどってみましょう。",
+      saySights:"それでは、見どころをいくつかご紹介します。",
+      sayFood:"そして、ぜひ味わっていただきたい地元の名物です。",
+      sayClose:"以上で、{place}のご紹介を終わります。ご清聴ありがとうございました。",
+      sdMap:"（地図を示す）", sdPhoto:"（写真を見せる）", sdPause:"（少し間をおく）",
+      qaTitle:"想定問答（Q&A）",
+      qName:"地名の由来は何ですか？", qHistory:"どのような歴史がありますか？", qSights:"おすすめの見どころは？", qFood:"名物や特産品は何ですか？", qWhere:"この町はどこにありますか？",
+      aWhere:"{region}にあります。", aWhereCoord:"（おおよその位置：{coord}）" },
     en: { dir:"en", wiki:"https://en.wikipedia.org",
       kicker:"every municipality in Japan · 1,736",
       headline:'Open the <em>story</em><br>of any Japanese town.',
@@ -267,7 +297,19 @@
       overview:"Overview", name:"The name", history:"History", sights:"Worth seeing", food:"Local food",
       approx:"Approx. position", contOn:"Continue on Wikipedia",
       source:"Source: Wikipedia (", license:"CC BY-SA 4.0", sourceEnd:")",
-      cached:"saved", refresh:"refresh", another:"Trace another municipality", untitled:"Unknown", more:"more" }
+      cached:"saved", refresh:"refresh", another:"Trace another municipality", untitled:"Unknown", more:"more",
+      scriptLabel:"Presentation script", minutes:"min", listjoin:", ", andword:"and ",
+      cueOpen:"Opening", cueName:"The name", cueHistory:"History", cueSights:"Points of interest", cueFood:"Local food", cueClose:"Closing",
+      sayOpen:"Hello everyone. Today I'd like to introduce you to {place}.",
+      sayName:"Let's begin with where the name {place} comes from.",
+      sayHistory:"Now, let's trace the history of {place}.",
+      saySights:"Here are a few things that are well worth seeing.",
+      sayFood:"And here is the local food you really shouldn't miss.",
+      sayClose:"That brings us to the end of our look at {place}. Thank you for listening.",
+      sdMap:"(gesture to the map)", sdPhoto:"(show the photo)", sdPause:"(pause briefly)",
+      qaTitle:"Questions & Answers",
+      qName:"Where does the name come from?", qHistory:"What's the history of this place?", qSights:"What's worth seeing there?", qFood:"What food is it known for?", qWhere:"Where is this town located?",
+      aWhere:"It's in {region}.", aWhereCoord:"(Approx. position: {coord})" }
   };
   var EXAMPLE_JA = ["箱根町","金沢市","高山市","白川村","直島町","内子町"];
   var SECT = {
@@ -461,25 +503,73 @@
   function fmtCoord(la,lo){ var ns=la>=0?"N":"S", ew=lo>=0?"E":"W"; return Math.abs(la).toFixed(3)+"\u00b0 "+ns+", "+Math.abs(lo).toFixed(3)+"\u00b0 "+ew; }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 
-  function renderSection(sec,eyebrow,url){
-    if(!sec) return ""; var t=I18N[lang]; var body;
-    var lis=sec.items.filter(function(x){return x.type==="li";}), ps=sec.items.filter(function(x){return x.type==="p";});
-    if(lis.length>=2 && lis.length>=ps.length){ body='<ul class="wlist">'+lis.slice(0,8).map(function(x){return "<li>"+esc(x.text)+"</li>";}).join("")+"</ul>"; }
-    else { body='<div class="prose">'+ps.slice(0,3).map(function(x){return "<p>"+esc(x.text)+"</p>";}).join("")+"</div>"; }
-    var link=sec.anchor?'<div class="srcline"><a href="'+esc(url)+"#"+esc(sec.anchor)+'" target="_blank" rel="noopener">'+t.contOn+"</a></div>":"";
-    return '<div class="block"><div class="sec-eyebrow">'+esc(eyebrow)+'</div>'+body+link+"</div>";
+  // ---------- script builders ----------
+  function splitSentences(text){
+    text=(text||"").trim(); if(!text) return [];
+    var marked = /[。！？]/.test(text) ? text.replace(/([。！？])/g,"$1\u0001") : text.replace(/([.!?])(\s+|$)/g,"$1\u0001");
+    return marked.split("\u0001").map(function(s){return s.trim();}).filter(Boolean);
+  }
+  function secParas(sec){ return sec ? sec.items.filter(function(x){return x.type==="p";}).map(function(x){return x.text;}) : []; }
+  function secLis(sec){ return sec ? sec.items.filter(function(x){return x.type==="li";}).map(function(x){return x.text;}) : []; }
+  function readItems(sec, max){
+    if(!sec) return [];
+    var lis=secLis(sec); if(lis.length>=2) return lis.slice(0,max);
+    var out=[]; secParas(sec).forEach(function(p){ splitSentences(p).forEach(function(s){ out.push(s); }); });
+    return out.slice(0,max);
+  }
+  function firstSentences(sec, n){
+    var out=[]; var ps=secParas(sec);
+    for(var i=0;i<ps.length && out.length<n;i++){ splitSentences(ps[i]).forEach(function(s){ if(out.length<n) out.push(s); }); }
+    if(!out.length) out=secLis(sec).slice(0,n);
+    return out.join(lang==="ja"?"":" ");
+  }
+  function joinList(arr){ var t=I18N[lang];
+    if(lang!=="ja" && arr.length>1) return arr.slice(0,-1).join(", ")+", "+t.andword+arr[arr.length-1];
+    return arr.join(t.listjoin); }
+  function fill(tpl, map){ return String(tpl).replace(/\{(\w+)\}/g, function(_,k){ return map[k]!=null?map[k]:""; }); }
+  function beat(n, label, lines){
+    var body=lines.filter(Boolean).map(function(l){
+      if(l.stage) return '<p class="sd">'+esc(l.stage)+"</p>";
+      if(l.say)   return '<p class="say">'+esc(l.say)+"</p>";
+      return '<p class="line">'+esc(l.read)+"</p>";
+    }).join("");
+    if(!body) return "";
+    return '<section class="beat"><div class="cue"><span class="n">'+("0"+n).slice(-2)+"</span>"+esc(label)+'</div><div class="lines">'+body+"</div></section>";
   }
   function render(d,fromCache){
-    var t=I18N[lang];
-    var photo=d.thumb?'<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(d.place)+'" loading="lazy">':"";
-    var coord=d.coords?'<div class="coord"><b>'+t.approx+"</b>"+esc(d.coords)+"</div>":"";
-    var head='<div class="doc-head"><div class="titles">'+(d.region?'<div class="loc">'+esc(d.region)+"</div>":"")+'<h1 class="place">'+esc(d.place)+"</h1>"+coord+"</div>"+photo+'<p class="essence">'+esc(d.overview[0]?d.overview[0].text:"")+"</p></div>";
-    var overviewExtra=d.overview[1]?'<div class="block"><div class="sec-eyebrow">'+t.overview+'</div><div class="prose"><p>'+esc(d.overview[1].text)+"</p></div></div>":"";
-    var mainCol=overviewExtra+renderSection(d.history,t.history,d.url);
-    var asideCol=renderSection(d.name,t.name,d.url)+renderSection(d.food,t.food,d.url)+renderSection(d.sights,t.sights,d.url);
-    var badge=fromCache?'<span class="cachetag">\u2913 '+t.cached+' · <button type="button" id="refresh">'+t.refresh+"</button></span>":"";
-    var foot='<div class="doc-foot">'+badge+'<span class="stamp">'+t.source+'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.place)+"</a> · "+'<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+'</span><button class="again" id="again">'+t.another+"</button></div>";
-    var paper=$("paper"); paper.innerHTML=head+'<hr class="rule"><div class="cols"><div class="main">'+mainCol+'</div><div class="aside">'+asideCol+"</div></div>"+foot;
+    var t=I18N[lang], pl=d.place;
+    var beats=[], n=1, chars=0;
+    function add(label, lines){ var h=beat(n,label,lines); if(h){ beats.push(h); n++; lines.forEach(function(l){ chars+=((l.say||l.read||"")+"").length; }); } }
+
+    var openLines=[{say:fill(t.sayOpen,{place:pl})},{stage:t.sdMap}];
+    if(d.overview[0]) openLines.push({read:d.overview[0].text});
+    if(d.overview[1]) openLines.push({read:d.overview[1].text});
+    add(t.cueOpen, openLines);
+
+    if(d.name){ var nl=[{say:fill(t.sayName,{place:pl})}]; readItems(d.name,2).forEach(function(x){ nl.push({read:x}); }); add(t.cueName, nl); }
+    if(d.history){ var hl=[{say:fill(t.sayHistory,{place:pl})}]; (secParas(d.history).length?secParas(d.history):readItems(d.history,3)).slice(0,3).forEach(function(x){ hl.push({read:x}); }); add(t.cueHistory, hl); }
+    if(d.sights){ var sl=[{say:t.saySights},{stage:t.sdPhoto}]; readItems(d.sights,6).forEach(function(x){ sl.push({read:x}); }); add(t.cueSights, sl); }
+    if(d.food){ var fl=[{say:t.sayFood}]; readItems(d.food,5).forEach(function(x){ fl.push({read:x}); }); add(t.cueFood, fl); }
+    add(t.cueClose, [{stage:t.sdPause},{say:fill(t.sayClose,{place:pl})}]);
+
+    var qa=[];
+    if(d.name) qa.push([t.qName, firstSentences(d.name,2)]);
+    if(d.history) qa.push([t.qHistory, firstSentences(d.history,2)]);
+    if(d.sights){ var s4=readItems(d.sights,4); if(s4.length) qa.push([t.qSights, joinList(s4)+(lang==="ja"?"などがあります。":".")]); }
+    if(d.food){ var f4=readItems(d.food,4); if(f4.length) qa.push([t.qFood, joinList(f4)+(lang==="ja"?"などが知られています。":".")]); }
+    var whereA=fill(t.aWhere,{region:d.region||(lang==="ja"?"日本":"Japan")}); if(d.coords) whereA+=" "+fill(t.aWhereCoord,{coord:d.coords});
+    qa.push([t.qWhere, whereA]);
+    var qaHtml=qa.map(function(p){ return '<div class="qa-item"><p class="q">Q. '+esc(p[0])+'</p><p class="a">A. '+esc(p[1])+"</p></div>"; }).join("");
+
+    var photo=d.thumb?'<img class="photo" src="'+esc(d.thumb)+'" alt="'+esc(pl)+'" loading="lazy">':"";
+    var mins=Math.max(1,Math.round(chars/(lang==="ja"?300:660)));
+    var meta='<div class="smeta">'+esc(t.scriptLabel)+" · ~"+mins+" "+esc(t.minutes)+(d.coords?" · "+esc(d.coords):"")+"</div>";
+    var head='<div class="doc-head"><div class="titles">'+(d.region?'<div class="loc">'+esc(d.region)+"</div>":"")+'<h1 class="place">'+esc(pl)+"</h1>"+meta+"</div>"+photo+"</div>";
+    var badge=fromCache?'<span class="cachetag">⤓ '+t.cached+' · <button type="button" id="refresh">'+t.refresh+"</button></span>":"";
+    var foot='<div class="doc-foot">'+badge+'<span class="stamp">'+t.source+'<a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(pl)+"</a> · "+'<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">'+t.license+"</a>"+t.sourceEnd+'</span><button class="again" id="again">'+t.another+"</button></div>";
+
+    var paper=$("paper");
+    paper.innerHTML=head+'<hr class="rule"><div class="beats">'+beats.join("")+'</div><section class="qa"><h2 class="qa-title">'+esc(t.qaTitle)+"</h2>"+qaHtml+"</section>"+foot;
     paper.classList.remove("reveal"); void paper.offsetWidth; paper.classList.add("reveal");
     $("again").addEventListener("click", function(){ show("idle"); setHint(""); $("q").value=""; $("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); });
     var rf=$("refresh"); if(rf){ rf.addEventListener("click", function(){ if(current) lookup(current,true); }); }
